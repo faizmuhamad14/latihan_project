@@ -154,7 +154,9 @@ class _SignInPageState extends State<SignInPage> {
                                 side: BorderSide(color: Color(0xFFC2C7CA)),
                                 backgroundColor: Color(0xFFAEC6CF),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                showDialog(context: context, builder: (context) => AlertDialog(title: Text("Berhasil Login"),content: Column(children: [Text("data")],),),)
+                              },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
