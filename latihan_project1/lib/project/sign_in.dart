@@ -1,5 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:latihan_project1/database/preference.dart';
+import 'package:latihan_project1/project/main_screen.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -23,6 +25,9 @@ class _SignInPageState extends State<SignInPage> {
         ),
         child: SingleChildScrollView(
           child: Container(
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height,
+            ),
             margin: EdgeInsets.fromLTRB(20, 28, 20, 0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
@@ -159,7 +164,27 @@ class _SignInPageState extends State<SignInPage> {
                                   context: context,
                                   builder: (context) => AlertDialog(
                                     title: Text("Berhasil Login"),
-                                    content: Column(children: [Text("data")]),
+                                    content: Column(
+                                      children: [Text("berhasil")],
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () async {
+                                          await PreferenceHandler.setLogin(
+                                            true,
+                                          );
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  MainScreen(),
+                                            ),
+                                          );
+                                        },
+
+                                        child: Text("Lanjutkan"),
+                                      ),
+                                    ],
                                   ),
                                 );
                               },
