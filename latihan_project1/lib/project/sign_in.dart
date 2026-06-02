@@ -1,7 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:latihan_project1/database/db_helper.dart';
 import 'package:latihan_project1/database/preference.dart';
-import 'package:latihan_project1/project/main_screen.dart';
+import 'package:latihan_project1/project/home.dart';
+import 'package:latihan_project1/project/sign_up.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -12,6 +14,26 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController kotaController = TextEditingController();
+  final TextEditingController namaController = TextEditingController();
+  void login() async {
+    final email = emailController.text.trim();
+    final pass = passwordController.text;
+
+    final pengguna = await DBHelper().loginUser(email, pass);
+
+    if (!mounted) return;
+    if (pengguna != null) {
+      await PreferenceHandler.setLogin(true);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePageScreen()),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,6 +118,7 @@ class _SignInPageState extends State<SignInPage> {
                               ),
                             ),
                             TextFormField(
+                              controller: emailController,
                               decoration: InputDecoration(
                                 labelText: "Masukkam alamat email",
                                 hintText: "Masukkan alamat email",
@@ -133,6 +156,7 @@ class _SignInPageState extends State<SignInPage> {
                               ],
                             ),
                             TextFormField(
+                              controller: passwordController,
                               decoration: InputDecoration(
                                 labelText: "Masukkan kata sandi",
                                 hintText: "Masukkan kata sandi",
@@ -160,33 +184,36 @@ class _SignInPageState extends State<SignInPage> {
                                 backgroundColor: Color(0xFFAEC6CF),
                               ),
                               onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title: Text("Berhasil Login"),
-                                    content: Column(
-                                      children: [Text("berhasil")],
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () async {
-                                          await PreferenceHandler.setLogin(
-                                            true,
-                                          );
-                                          Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  MainScreen(),
-                                            ),
-                                          );
-                                        },
-
-                                        child: Text("Lanjutkan"),
+                                if (_formKey.currentState!.validate()) {
+                                  login();
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: Text("Berhasil Login"),
+                                      content: Column(
+                                        children: [Text("berhasil")],
                                       ),
-                                    ],
-                                  ),
-                                );
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () async {
+                                            await PreferenceHandler.setLogin(
+                                              true,
+                                            );
+                                            Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    HomePageScreen(),
+                                              ),
+                                            );
+                                          },
+
+                                          child: Text("Lanjutkan"),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
                               },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -213,8 +240,12 @@ class _SignInPageState extends State<SignInPage> {
                           children: [
                             TextSpan(
                               recognizer: TapGestureRecognizer()
-                                ..onTap = () =>
-                                    Navigator.pushNamed(context, '/signup'),
+                                ..onTap = () => Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SignUpPage(),
+                                  ),
+                                ),
                               text: "Daftar Sekarang",
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
