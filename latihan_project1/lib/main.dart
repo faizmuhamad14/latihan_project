@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:latihan_project1/database/preference.dart';
-import 'package:latihan_project1/project/splash.dart';
+import 'package:latihan_project1/pages/splash.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

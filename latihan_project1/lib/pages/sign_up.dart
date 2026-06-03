@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:latihan_project1/database/db_helper.dart';
 import 'package:latihan_project1/models/user_model.dart';
-import 'package:latihan_project1/project/sign_in.dart';
+import 'package:latihan_project1/pages/sign_in.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});

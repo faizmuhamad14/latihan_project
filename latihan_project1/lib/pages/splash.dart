@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:latihan_project1/database/preference.dart';
-import 'package:latihan_project1/project/home.dart';
-import 'package:latihan_project1/project/sign_up.dart';
+import 'package:latihan_project1/pages/home.dart';
+import 'package:latihan_project1/pages/sign_up.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
