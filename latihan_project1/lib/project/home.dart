@@ -56,6 +56,10 @@ class _MyWidgetState extends State<HomePageScreen> {
                         leading: const CircleAvatar(child: Icon(Icons.person)),
                         title: Text(user.email),
                         subtitle: Text('Password: ${user.password}'),
+                        trailing: IconButton(
+                          onPressed: () => _showBottomSheet(context, user),
+                          icon: Icon(Icons.edit_document),
+                        ),
                       ),
                     );
                   },
@@ -75,6 +79,114 @@ class _MyWidgetState extends State<HomePageScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  void _showBottomSheet(BuildContext context, UserModelSQL user) {
+    final emailController = TextEditingController(text: user.email);
+    final passwordController = TextEditingController(text: user.password);
+    final kotaController = TextEditingController(text: user.kota);
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ), // RoundedRectangleBorder
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+            left: 16,
+            right: 16,
+            top: 16,
+          ), // EdgeInsets.only
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Kelola Pengguna',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ), // Text
+              const SizedBox(height: 16),
+              TextField(
+                controller: emailController,
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(),
+                ), // InputDecoration
+              ), // TextField
+              const SizedBox(height: 10),
+              TextField(
+                controller: passwordController,
+                decoration: const InputDecoration(
+                  labelText: 'Password',
+                  border: OutlineInputBorder(),
+                ), // InputDecoration
+              ), // TextField
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                    ),
+                    icon: const Icon(Icons.edit, color: Colors.white),
+                    label: const Text(
+                      'Update',
+                      style: TextStyle(color: Colors.white),
+                    ), // Text
+                    onPressed: () async {
+                      final updatedUser = UserModelSQL(
+                        nama: user.nama,
+                        email: emailController.text.trim(),
+                        password: passwordController.text,
+                        kota: kotaController.text,
+                      ); // UserModelSQL
+
+                      bool success = await DBHelper().updateUser(updatedUser);
+                      if (success && context.mounted) {
+                        Navigator.pop(context);
+                        setState(() {});
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Data berhasil diperbarui'),
+                          ), // SnackBar
+                        );
+                      }
+                    },
+                  ), // ElevatedButton.icon
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                    ),
+                    icon: const Icon(Icons.delete, color: Colors.white),
+                    label: const Text(
+                      'Delete',
+                      style: TextStyle(color: Colors.white),
+                    ), // Text
+                    onPressed: () async {
+                      await DBHelper().deleteUser(user.email);
+                      if (context.mounted) {
+                        Navigator.pop(context);
+                        ();
+                        setState(() {});
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Data berhasil dihapus'),
+                          ), // SnackBar
+                        );
+                      }
+                    },
+                  ), // ElevatedButton.icon
+                ],
+              ), // Row
+              const SizedBox(height: 20),
+            ],
+          ), // Column
+        ); // Padding
+      },
     );
   }
 }

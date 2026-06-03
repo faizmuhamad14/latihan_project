@@ -186,33 +186,33 @@ class _SignInPageState extends State<SignInPage> {
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
                                   login();
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      title: Text("Berhasil Login"),
-                                      content: Column(
-                                        children: [Text("berhasil")],
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () async {
-                                            await PreferenceHandler.setLogin(
-                                              true,
-                                            );
-                                            Navigator.pushReplacement(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    HomePageScreen(),
-                                              ),
-                                            );
-                                          },
+                                  // showDialog(
+                                  //   context: context,
+                                  //   builder: (context) => AlertDialog(
+                                  //     title: Text("Berhasil Login"),
+                                  //     content: Column(
+                                  //       children: [Text("berhasil")],
+                                  //     ),
+                                  //     actions: [
+                                  //       TextButton(
+                                  //         onPressed: () async {
+                                  //           await PreferenceHandler.setLogin(
+                                  //             true,
+                                  //           );
+                                  //           Navigator.pushReplacement(
+                                  //             context,
+                                  //             MaterialPageRoute(
+                                  //               builder: (context) =>
+                                  //                   HomePageScreen(),
+                                  //             ),
+                                  //           );
+                                  //         },
 
-                                          child: Text("Lanjutkan"),
-                                        ),
-                                      ],
-                                    ),
-                                  );
+                                  //         child: Text("Lanjutkan"),
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  // );
                                 }
                               },
                               child: Row(

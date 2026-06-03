@@ -67,8 +67,23 @@ class DBHelper {
     return results.map((map) => UserModelSQL.fromMap(map)).toList();
   }
 
-  Future<void> deleteUser(String nama) async {
+  Future<void> deleteUser(String email) async {
     final db = await database;
-    await db.delete('users', where: 'nama = ?', whereArgs: [nama]);
+    await db.delete('users', where: 'email = ?', whereArgs: [email]);
+  }
+
+  Future<bool> updateUser(UserModelSQL pengguna) async {
+    final db = await database;
+    try {
+      int count = await db.update(
+        'users',
+        pengguna.toMap(),
+        where: 'nama = ?',
+        whereArgs: [pengguna.nama],
+      );
+      return count > 0;
+    } catch (e) {
+      return false;
+    }
   }
 }
