@@ -5,7 +5,8 @@ import 'package:latihan_project1/pages/produk_page.dart';
 import 'package:latihan_project1/pages/profile.dart';
 
 class MainScreenSatu extends StatefulWidget {
-  const MainScreenSatu({super.key});
+  final String nama;
+  const MainScreenSatu({super.key, required this.nama});
 
   @override
   State<MainScreenSatu> createState() => _MainScreenSatuState();
@@ -14,8 +15,8 @@ class MainScreenSatu extends StatefulWidget {
 class _MainScreenSatuState extends State<MainScreenSatu> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    HomePageScreen(),
+  late final List<Widget> _widgetOptions = <Widget>[
+    HomePageScreen(nama: widget.nama),
     ProdukPage(),
     ProfilePage(),
   ];

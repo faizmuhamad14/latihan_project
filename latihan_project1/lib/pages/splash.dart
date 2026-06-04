@@ -4,7 +4,8 @@ import 'package:latihan_project1/pages/home.dart';
 import 'package:latihan_project1/pages/sign_up.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+  final String nama;
+  const SplashScreen({super.key, required this.nama});
   @override
   State<SplashScreen> createState() => _MyWidgetState();
 }
@@ -29,7 +30,9 @@ class _MyWidgetState extends State<SplashScreen> {
     } else {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomePageScreen()),
+        MaterialPageRoute(
+          builder: (context) => HomePageScreen(nama: widget.nama),
+        ),
       );
     }
   }

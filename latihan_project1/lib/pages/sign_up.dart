@@ -55,7 +55,6 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // debugShowCheckedModeBanner: false,
       body: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),

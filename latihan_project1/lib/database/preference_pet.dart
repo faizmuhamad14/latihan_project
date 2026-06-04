@@ -20,14 +20,4 @@ class PreferenceHandler {
   static Future<void> logout() async {
     await _prefs.remove(_keyIsLogin);
   }
-
-  static Future<void> saveNama(String nama) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('nama', nama);
-  }
-
-  static Future<String> getNama() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('nama') ?? '';
-  }
 }

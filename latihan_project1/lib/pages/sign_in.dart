@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:latihan_project1/database/db_helper.dart';
 import 'package:latihan_project1/database/preference.dart';
-import 'package:latihan_project1/pages/home.dart';
+import 'package:latihan_project1/pages/main_screen.dart';
 import 'package:latihan_project1/pages/sign_up.dart';
 
 class SignInPage extends StatefulWidget {
@@ -29,7 +29,9 @@ class _SignInPageState extends State<SignInPage> {
       await PreferenceHandler.setLogin(true);
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomePageScreen()),
+        MaterialPageRoute(
+          builder: (context) => MainScreenSatu(nama: pengguna.nama),
+        ),
       );
     }
   }
@@ -186,33 +188,6 @@ class _SignInPageState extends State<SignInPage> {
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
                                   login();
-                                  // showDialog(
-                                  //   context: context,
-                                  //   builder: (context) => AlertDialog(
-                                  //     title: Text("Berhasil Login"),
-                                  //     content: Column(
-                                  //       children: [Text("berhasil")],
-                                  //     ),
-                                  //     actions: [
-                                  //       TextButton(
-                                  //         onPressed: () async {
-                                  //           await PreferenceHandler.setLogin(
-                                  //             true,
-                                  //           );
-                                  //           Navigator.pushReplacement(
-                                  //             context,
-                                  //             MaterialPageRoute(
-                                  //               builder: (context) =>
-                                  //                   HomePageScreen(),
-                                  //             ),
-                                  //           );
-                                  //         },
-
-                                  //         child: Text("Lanjutkan"),
-                                  //       ),
-                                  //     ],
-                                  //   ),
-                                  // );
                                 }
                               },
                               child: Row(

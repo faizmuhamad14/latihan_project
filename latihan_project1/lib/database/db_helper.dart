@@ -1,3 +1,4 @@
+import 'package:latihan_project1/models/pet_model.dart';
 import 'package:latihan_project1/models/user_model.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -21,7 +22,7 @@ class DBHelper {
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE users(
@@ -31,10 +32,18 @@ class DBHelper {
             kota TEXT
           )
         ''');
+        await db.execute('''
+          CREATE TABLE pets(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nama_pet TEXT,
+            jenis TEXT
+          )
+        ''');
       },
     );
   }
 
+  // CRUD User
   Future<bool> registerUser(UserModelSQL pengguna) async {
     final db = await database;
 
@@ -85,5 +94,31 @@ class DBHelper {
     } catch (e) {
       return false;
     }
+  }
+
+  //CRUD Petshop
+  Future<int> insertPet(PetModel pet) async {
+    final db = await database;
+    return await db.insert('pets', pet.toMap());
+  }
+
+  Future<List<PetModel>> getAllPet() async {
+    final db = await database;
+
+    final result = await db.query('pets');
+
+    return result.map((e) => PetModel.fromMap(e)).toList();
+  }
+
+  Future<void> deletePet(int id) async {
+    final db = await database;
+
+    await db.delete('pets', where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<void> updatePet(PetModel pet) async {
+    final db = await database;
+
+    await db.update('pets', pet.toMap(), where: 'id = ?', whereArgs: [pet.id]);
   }
 }
