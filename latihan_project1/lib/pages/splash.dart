@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:latihan_project1/database/preference.dart';
-import 'package:latihan_project1/pages/home.dart';
-import 'package:latihan_project1/pages/sign_up.dart';
+import 'package:latihan_project1/pages/main_screen.dart';
+import 'package:latihan_project1/pages/sign_in.dart';
 
 class SplashScreen extends StatefulWidget {
   final String nama;
@@ -25,14 +25,15 @@ class _MyWidgetState extends State<SplashScreen> {
     if (!PreferenceHandler.isLogin) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => SignUpPage()),
+        MaterialPageRoute(builder: (context) => SignInPage()),
       );
     } else {
+      print("IS LOGIN = ${PreferenceHandler.isLogin}");
+      print("NAMA = ${await PreferenceHandler.getNama()}");
+      final nama = await PreferenceHandler.getNama();
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
-          builder: (context) => HomePageScreen(nama: widget.nama),
-        ),
+        MaterialPageRoute(builder: (context) => MainScreenSatu(nama: nama)),
       );
     }
   }

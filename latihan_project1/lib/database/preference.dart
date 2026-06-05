@@ -19,6 +19,11 @@ class PreferenceHandler {
 
   static Future<void> logout() async {
     await _prefs.remove(_keyIsLogin);
+    await _prefs.remove('nama');
+    await _prefs.clear();
+    print("LOGOUT DIPANGGIL");
+    print("isLogin = ${_prefs.getBool(_keyIsLogin)}");
+    print("nama = ${_prefs.getString('nama')}");
   }
 
   static Future<void> saveNama(String nama) async {

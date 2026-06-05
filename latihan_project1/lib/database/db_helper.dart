@@ -35,7 +35,7 @@ class DBHelper {
         await db.execute('''
           CREATE TABLE pets(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nama_pet TEXT,
+            nama TEXT,
             jenis TEXT
           )
         ''');
