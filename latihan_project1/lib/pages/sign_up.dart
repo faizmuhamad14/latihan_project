@@ -94,7 +94,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   Text(
                     textAlign: TextAlign.center,
-                    "Bergabunglah dengan Sahabat Bulu untuk merawat hewan peliharaan Anda dengan lebih baik.",
+                    "Bergabunglah dengan Sobat Bulu untuk merawat hewan peliharaan Anda dengan lebih baik.",
                   ),
                   // SizedBox(height: 15),
                   Form(

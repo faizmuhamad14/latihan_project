@@ -12,6 +12,7 @@ class HomePageScreen extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<HomePageScreen> {
+  String? selectedJenis;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -68,6 +69,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                   ),
                 ),
               ),
+              SizedBox(height: 15),
               Expanded(
                 child: FutureBuilder<List<PetModel>>(
                   future: DBHelper().getAllPet(),
@@ -100,26 +102,44 @@ class _MyWidgetState extends State<HomePageScreen> {
                             leading: const CircleAvatar(
                               child: Icon(Icons.pets, color: AppColors.netral),
                             ),
-                            title: Text(
-                              pet.nama,
-                              style: TextStyle(
-                                color: AppColors.netral,
-                                fontSize: 24,
-                                fontWeight: FontWeight.w700,
-                              ),
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  pet.nama,
+                                  style: TextStyle(
+                                    color: AppColors.netral,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    _showBottomSheet(
+                                      context,
+                                      pet,
+                                      // PetModel(
+                                      //   nama: pet.nama,
+                                      //   jenis: pet.jenis,
+                                      // ),
+                                    );
+                                  },
+                                  icon: Icon(Icons.edit_document),
+                                ),
+                              ],
                             ),
                             subtitle: Row(
                               spacing: 10,
                               children: [
                                 Text(
-                                  "Name Pet : ${pet.jenis}",
+                                  "Type : ${pet.jenis}",
                                   style: TextStyle(
                                     fontSize: 18,
                                     color: AppColors.textcard,
                                   ),
                                 ),
                                 Text(
-                                  "Pet Number : ${pet.id}",
+                                  "Pet Number : ${index + 1}",
                                   style: TextStyle(fontSize: 18),
                                 ),
                               ],
@@ -177,73 +197,168 @@ class _MyWidgetState extends State<HomePageScreen> {
   }
 
   void _showBottomSheet(BuildContext context, PetModel pets) {
+    String? selectedJenis = pets.jenis.isNotEmpty ? pets.jenis : null;
+    final isEdit = pets.id != null;
     final namaController = TextEditingController(text: pets.nama);
     final jenisController = TextEditingController(text: pets.jenis);
+
+    Widget buildPetChip({
+      required String emoji,
+      required String label,
+      required bool selected,
+      required VoidCallback onTap,
+    }) {
+      return ChoiceChip(
+        selected: selected,
+        onSelected: (_) => onTap(),
+
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+
+        label: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(emoji, style: const TextStyle(fontSize: 36)),
+
+            const SizedBox(height: 8),
+
+            Text(
+              label,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      );
+    }
 
     showModalBottomSheet(
       backgroundColor: AppColors.backgroundBttn,
       // isScrollControlled: true,
       context: context,
       builder: (context) {
-        return Padding(
-          padding: EdgeInsetsGeometry.fromLTRB(10, 7, 10, 7),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              spacing: 2,
-              children: [
-                const Text("Add New Pet", style: TextStyle(fontSize: 18)),
-                const SizedBox(height: 10),
-                TextFormField(
-                  controller: namaController,
-                  decoration: const InputDecoration(
-                    labelText: "Pet Name",
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                SizedBox(height: 10),
-                TextFormField(
-                  controller: jenisController,
-                  decoration: const InputDecoration(
-                    labelText: "Type",
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                Column(
-                  spacing: 10,
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setModalState) {
+            return Padding(
+              padding: EdgeInsetsGeometry.fromLTRB(10, 7, 10, 7),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  spacing: 2,
                   children: [
-                    ElevatedButton.icon(
-                      onPressed: () async {
-                        if (namaController.text.isEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Pet named cannot be empty"),
-                            ),
-                          );
-                          return;
-                        }
-                        await DBHelper().insertPet(
-                          PetModel(
-                            nama: namaController.text,
-                            jenis: jenisController.text,
-                          ),
-                        );
-                        Navigator.pop(context);
-                        setState(() {});
-                      },
-                      icon: Icon(Icons.check_circle_outline_rounded),
-                      label: Text("Save Pet Profile"),
+                    Text(
+                      isEdit ? "Edit Pet" : "Add New Pet",
+                      style: const TextStyle(fontSize: 18),
                     ),
-                    ElevatedButton.icon(
-                      onPressed: () {},
-                      icon: Icon(Icons.check_circle_outline_rounded),
-                      label: Text("Delete Pet Profile"),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: namaController,
+                      decoration: const InputDecoration(
+                        labelText: "Pet Name",
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: const Text(
+                            "Pet Type",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 12),
+
+                        Center(
+                          child: Wrap(
+                            spacing: 12,
+                            runSpacing: 12,
+                            children: [
+                              buildPetChip(
+                                emoji: "🐱",
+                                label: "Kucing",
+                                selected: selectedJenis == "Kucing",
+                                onTap: () {
+                                  setModalState(() {
+                                    selectedJenis = "Kucing";
+                                  });
+                                },
+                              ),
+
+                              buildPetChip(
+                                emoji: "🐶",
+                                label: "Anjing",
+                                selected: selectedJenis == "Anjing",
+                                onTap: () {
+                                  setModalState(() {
+                                    selectedJenis = "Anjing";
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      spacing: 10,
+                      children: [
+                        ElevatedButton.icon(
+                          onPressed: () async {
+                            if (namaController.text.isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Pet named cannot be empty"),
+                                ),
+                              );
+                              return;
+                            }
+
+                            if (isEdit) {
+                              await DBHelper().updatePet(
+                                PetModel(
+                                  id: pets.id,
+                                  nama: namaController.text,
+                                  jenis: selectedJenis ?? "",
+                                ),
+                              );
+                            } else {
+                              await DBHelper().insertPet(
+                                PetModel(
+                                  nama: namaController.text,
+                                  jenis: jenisController.text,
+                                ),
+                              );
+                            }
+                            Navigator.pop(context);
+                            setState(() {});
+                          },
+                          icon: Icon(Icons.check_circle_outline_rounded),
+                          label: Text("Save Pet Profile"),
+                        ),
+                        if (isEdit)
+                          ElevatedButton.icon(
+                            onPressed: () async {
+                              await DBHelper().deletePet(pets.id!);
+
+                              Navigator.pop(context);
+
+                              setState(() {});
+                            },
+                            icon: const Icon(Icons.delete),
+                            label: const Text("Delete Pet Profile"),
+                          ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );

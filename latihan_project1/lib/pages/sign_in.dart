@@ -91,7 +91,7 @@ class _SignInPageState extends State<SignInPage> {
                         ),
                       ),
                       Text(
-                        "Sahabat Bulu",
+                        "Sobat Bulu",
                         style: TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.w700,
@@ -123,7 +123,7 @@ class _SignInPageState extends State<SignInPage> {
                             TextFormField(
                               controller: emailController,
                               decoration: InputDecoration(
-                                labelText: "Masukkam alamat email",
+                                labelText: "Masukkan alamat email",
                                 hintText: "Masukkan alamat email",
                                 border: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.black),
