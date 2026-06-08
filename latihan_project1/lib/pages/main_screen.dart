@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:latihan_project1/constant/app_color.dart';
 import 'package:latihan_project1/pages/home.dart';
+import 'package:latihan_project1/pages/information.dart';
 import 'package:latihan_project1/pages/produk_page.dart';
 import 'package:latihan_project1/pages/profile.dart';
 
@@ -18,6 +19,7 @@ class _MainScreenSatuState extends State<MainScreenSatu> {
   late final List<Widget> _widgetOptions = <Widget>[
     HomePageScreen(nama: widget.nama),
     ProdukPage(),
+    InformationPage(),
     ProfilePage(),
   ];
 
@@ -37,6 +39,10 @@ class _MainScreenSatuState extends State<MainScreenSatu> {
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_bag_sharp),
             label: "Product",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.medical_information_rounded),
+            label: "Information",
           ),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],

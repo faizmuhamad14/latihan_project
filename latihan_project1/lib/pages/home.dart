@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:latihan_project1/constant/app_color.dart';
 import 'package:latihan_project1/database/db_helper.dart';
+import 'package:latihan_project1/database/preference.dart';
 import 'package:latihan_project1/models/pet_model.dart';
 
 class HomePageScreen extends StatefulWidget {
@@ -14,6 +15,12 @@ class HomePageScreen extends StatefulWidget {
 class _MyWidgetState extends State<HomePageScreen> {
   String? selectedJenis;
   final _formKey = GlobalKey<FormState>();
+  late Future<String> userEmail;
+  Future<List<PetModel>> getUserPets() async {
+    final email = await PreferenceHandler.getEmail();
+
+    return DBHelper().getPetByUser(email);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +42,7 @@ class _MyWidgetState extends State<HomePageScreen> {
         ],
       ),
       body: FutureBuilder<List<PetModel>>(
-        future: DBHelper().getAllPet(),
+        future: getUserPets(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
@@ -72,7 +79,7 @@ class _MyWidgetState extends State<HomePageScreen> {
               SizedBox(height: 15),
               Expanded(
                 child: FutureBuilder<List<PetModel>>(
-                  future: DBHelper().getAllPet(),
+                  future: getUserPets(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
@@ -94,57 +101,172 @@ class _MyWidgetState extends State<HomePageScreen> {
                       itemCount: daftarPengguna.length,
                       itemBuilder: (context, index) {
                         final pet = daftarPengguna[index];
-                        return Card(
-                          elevation: 5,
-                          color: Color(0xFFFFFFFF),
-                          shadowColor: Colors.black,
-                          child: ListTile(
-                            leading: const CircleAvatar(
-                              child: Icon(Icons.pets, color: AppColors.netral),
-                            ),
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  pet.nama,
-                                  style: TextStyle(
-                                    color: AppColors.netral,
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w700,
+                        return Container(
+                          margin: EdgeInsets.only(
+                            left: 7,
+                            right: 7,
+                            bottom: 10,
+                          ),
+                          padding: EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Column(
+                            spacing: 10,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    spacing: 15,
+                                    children: [
+                                      Container(
+                                        child: CircleAvatar(
+                                          radius: 40,
+                                          backgroundImage: AssetImage(
+                                            "assets/images/kucing.jpg",
+                                          ),
+                                        ),
+                                      ),
+                                      Column(
+                                        children: [
+                                          Text(
+                                            pet.nama,
+                                            style: TextStyle(
+                                              color: AppColors.netral,
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Row(
+                                                spacing: 5,
+                                                children: [
+                                                  Text(
+                                                    "${pet.jenis} *",
+                                                    style: TextStyle(
+                                                      fontSize: 18,
+                                                      color: AppColors.textcard,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    "${pet.umur} Years",
+                                                    style: TextStyle(
+                                                      fontSize: 18,
+                                                      color: AppColors.textcard,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              // Text(
+                                              //   "Pet Number : ${index + 1}",
+                                              //   style: TextStyle(fontSize: 18),
+                                              // ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                IconButton(
-                                  onPressed: () {
-                                    _showBottomSheet(
-                                      context,
-                                      pet,
-                                      // PetModel(
-                                      //   nama: pet.nama,
-                                      //   jenis: pet.jenis,
-                                      // ),
-                                    );
-                                  },
-                                  icon: Icon(Icons.edit_document),
-                                ),
-                              ],
-                            ),
-                            subtitle: Row(
-                              spacing: 10,
-                              children: [
-                                Text(
-                                  "Type : ${pet.jenis}",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: AppColors.textcard,
+
+                                  Column(
+                                    children: [
+                                      IconButton(
+                                        onPressed: () {},
+                                        icon: Icon(
+                                          Icons.notification_add_outlined,
+                                        ),
+                                      ),
+                                      IconButton(
+                                        onPressed: () {
+                                          _showBottomSheet(
+                                            context,
+                                            pet,
+                                            // PetModel(
+                                            //   nama: pet.nama,
+                                            //   jenis: pet.jenis,
+                                            // ),
+                                          );
+                                        },
+                                        icon: Icon(Icons.edit_document),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                Text(
-                                  "Pet Number : ${index + 1}",
-                                  style: TextStyle(fontSize: 18),
-                                ),
-                              ],
-                            ),
-                            // Text('Nama Pet: ${pet.nama}'),
+                                ],
+                              ),
+                              Row(
+                                spacing: 10,
+                                children: [
+                                  Expanded(
+                                    child: InkWell(
+                                      onTap: () async {
+                                        await DBHelper().toggleFeed(pet);
+                                        setState(() {});
+                                      },
+                                      child: Container(
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
+                                          color: pet.isFed == 1
+                                              ? AppColors.isFed2
+                                              : AppColors.isFed,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(Icons.restaurant),
+                                            Text(
+                                              pet.isFed == 1 ? "✓ Fed" : "Fed",
+                                              style: TextStyle(fontSize: 18),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: InkWell(
+                                      onTap: () async {
+                                        await DBHelper().toggleDrink(pet);
+                                        setState(() {});
+                                      },
+                                      child: Container(
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
+                                          color: pet.isDrink == 1
+                                              ? AppColors.isDrink
+                                              : AppColors.isFed,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(Icons.restaurant),
+                                            Text(
+                                              pet.isDrink == 1
+                                                  ? "✓ Drink"
+                                                  : "Drink",
+                                              style: TextStyle(fontSize: 18),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 10),
+                            ],
                           ),
                         );
                       },
@@ -157,8 +279,10 @@ class _MyWidgetState extends State<HomePageScreen> {
                 margin: EdgeInsets.only(left: 10, right: 10),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(16),
-                  onTap: () =>
-                      _showBottomSheet(context, PetModel(nama: '', jenis: '')),
+                  onTap: () => _showBottomSheet(
+                    context,
+                    PetModel(nama: '', jenis: '', umur: 0, ownerEmail: ''),
+                  ),
                   child: Container(
                     margin: EdgeInsets.only(left: 10, right: 10),
                     height: 152,
@@ -196,11 +320,17 @@ class _MyWidgetState extends State<HomePageScreen> {
     );
   }
 
+  @override
+  void initState() {
+    super.initState();
+    userEmail = PreferenceHandler.getEmail();
+  }
+
   void _showBottomSheet(BuildContext context, PetModel pets) {
     String? selectedJenis = pets.jenis.isNotEmpty ? pets.jenis : null;
+    int? selectedAge;
     final isEdit = pets.id != null;
     final namaController = TextEditingController(text: pets.nama);
-    final jenisController = TextEditingController(text: pets.jenis);
 
     Widget buildPetChip({
       required String emoji,
@@ -231,6 +361,7 @@ class _MyWidgetState extends State<HomePageScreen> {
     }
 
     showModalBottomSheet(
+      isScrollControlled: true,
       backgroundColor: AppColors.backgroundBttn,
       // isScrollControlled: true,
       context: context,
@@ -256,6 +387,26 @@ class _MyWidgetState extends State<HomePageScreen> {
                         border: OutlineInputBorder(),
                       ),
                     ),
+                    DropdownButtonFormField<int>(
+                      initialValue: selectedAge,
+                      decoration: const InputDecoration(
+                        labelText: "Age",
+                        border: OutlineInputBorder(),
+                      ),
+                      items: const [
+                        DropdownMenuItem(value: 0, child: Text("0 Years")),
+                        DropdownMenuItem(value: 1, child: Text("1 Years")),
+                        DropdownMenuItem(value: 2, child: Text("2 Years")),
+                        DropdownMenuItem(value: 3, child: Text("3 Years")),
+                        DropdownMenuItem(value: 4, child: Text("4 Years")),
+                        DropdownMenuItem(value: 5, child: Text("5 Years >")),
+                      ],
+                      onChanged: (value) {
+                        setModalState(() {
+                          selectedAge = value;
+                        });
+                      },
+                    ),
                     SizedBox(height: 10),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -280,32 +431,33 @@ class _MyWidgetState extends State<HomePageScreen> {
                             children: [
                               buildPetChip(
                                 emoji: "🐱",
-                                label: "Kucing",
-                                selected: selectedJenis == "Kucing",
+                                label: "Cat",
+                                selected: selectedJenis == "Cat",
                                 onTap: () {
                                   setModalState(() {
-                                    selectedJenis = "Kucing";
+                                    selectedJenis = "Cat";
                                   });
                                 },
                               ),
 
                               buildPetChip(
                                 emoji: "🐶",
-                                label: "Anjing",
-                                selected: selectedJenis == "Anjing",
+                                label: "Dog",
+                                selected: selectedJenis == "Dog",
                                 onTap: () {
                                   setModalState(() {
-                                    selectedJenis = "Anjing";
+                                    selectedJenis = "Dog";
                                   });
                                 },
                               ),
                             ],
                           ),
                         ),
+                        SizedBox(height: 15),
                       ],
                     ),
                     Column(
-                      spacing: 10,
+                      spacing: 8,
                       children: [
                         ElevatedButton.icon(
                           onPressed: () async {
@@ -319,18 +471,34 @@ class _MyWidgetState extends State<HomePageScreen> {
                             }
 
                             if (isEdit) {
+                              final email = await PreferenceHandler.getEmail();
                               await DBHelper().updatePet(
                                 PetModel(
                                   id: pets.id,
                                   nama: namaController.text,
                                   jenis: selectedJenis ?? "",
+                                  umur: selectedAge!,
+                                  ownerEmail: email,
+                                  isFed: pets.isFed,
+                                  isDrink: pets.isDrink,
                                 ),
                               );
+                              if (selectedAge == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("Please select pet age"),
+                                  ),
+                                );
+                                return;
+                              }
                             } else {
+                              final email = await PreferenceHandler.getEmail();
                               await DBHelper().insertPet(
                                 PetModel(
                                   nama: namaController.text,
-                                  jenis: jenisController.text,
+                                  jenis: selectedJenis ?? "",
+                                  umur: selectedAge!,
+                                  ownerEmail: email,
                                 ),
                               );
                             }

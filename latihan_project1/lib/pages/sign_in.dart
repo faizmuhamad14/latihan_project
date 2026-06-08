@@ -26,6 +26,7 @@ class _SignInPageState extends State<SignInPage> {
 
     if (!mounted) return;
     if (pengguna != null) {
+      await PreferenceHandler.saveEmail(pengguna.email);
       await PreferenceHandler.setLogin(true);
       await PreferenceHandler.saveNama(pengguna.nama);
       Navigator.pushReplacement(

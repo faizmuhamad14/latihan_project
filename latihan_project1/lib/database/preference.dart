@@ -35,4 +35,14 @@ class PreferenceHandler {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('nama') ?? '';
   }
+
+  static Future<void> saveEmail(String email) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('email', email);
+  }
+
+  static Future<String> getEmail() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('email') ?? '';
+  }
 }

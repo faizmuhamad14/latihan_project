@@ -36,7 +36,12 @@ class DBHelper {
           CREATE TABLE pets(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nama TEXT,
-            jenis TEXT
+            jenis TEXT,
+            umur INTEGER,
+            jenis2 TEXT,
+            isFed INTEGER DEFAULT 0,
+            isDrink INTEGER DEFAULT 0,
+            ownerEmail TEXT
           )
         ''');
       },
@@ -98,6 +103,7 @@ class DBHelper {
 
   //CRUD Petshop
   Future<int> insertPet(PetModel pet) async {
+    print("OWNER EMAIL = ${pet.ownerEmail}");
     final db = await database;
     return await db.insert('pets', pet.toMap());
   }
@@ -120,5 +126,51 @@ class DBHelper {
     final db = await database;
 
     await db.update('pets', pet.toMap(), where: 'id = ?', whereArgs: [pet.id]);
+  }
+
+  Future<void> feedPet(int id) async {
+    final db = await database;
+
+    await db.update('pets', {'isFed': 1}, where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<void> drinkPet(int id) async {
+    final db = await database;
+
+    await db.update('pets', {'isDrink': 1}, where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<void> toggleFeed(PetModel pet) async {
+    final db = await database;
+
+    await db.update(
+      'pets',
+      {'isFed': pet.isFed == 1 ? 0 : 1},
+      where: 'id = ?',
+      whereArgs: [pet.id],
+    );
+  }
+
+  Future<void> toggleDrink(PetModel pet) async {
+    final db = await database;
+
+    await db.update(
+      'pets',
+      {'isDrink': pet.isDrink == 1 ? 0 : 1},
+      where: 'id = ?',
+      whereArgs: [pet.id],
+    );
+  }
+
+  Future<List<PetModel>> getPetByUser(String email) async {
+    final db = await database;
+
+    final result = await db.query(
+      'pets',
+      where: 'ownerEmail = ?',
+      whereArgs: [email],
+    );
+
+    return result.map((e) => PetModel.fromMap(e)).toList();
   }
 }
