@@ -103,12 +103,13 @@ class _MyWidgetState extends State<HomePageScreen> {
                         final pet = daftarPengguna[index];
                         return Container(
                           margin: EdgeInsets.only(
-                            left: 7,
-                            right: 7,
+                            left: 10,
+                            right: 10,
                             bottom: 10,
                           ),
                           padding: EdgeInsets.all(15),
                           decoration: BoxDecoration(
+                            color: Color(0xFFFFFFFF),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Column(
@@ -361,7 +362,7 @@ class _MyWidgetState extends State<HomePageScreen> {
     }
 
     showModalBottomSheet(
-      isScrollControlled: true,
+      isScrollControlled: false,
       backgroundColor: AppColors.backgroundBttn,
       // isScrollControlled: true,
       context: context,

@@ -7,7 +7,8 @@ import 'package:latihan_project1/pages/profile.dart';
 
 class MainScreenSatu extends StatefulWidget {
   final String nama;
-  const MainScreenSatu({super.key, required this.nama});
+  final String email;
+  const MainScreenSatu({super.key, required this.nama, required this.email});
 
   @override
   State<MainScreenSatu> createState() => _MainScreenSatuState();
@@ -20,7 +21,7 @@ class _MainScreenSatuState extends State<MainScreenSatu> {
     HomePageScreen(nama: widget.nama),
     ProdukPage(),
     InformationPage(),
-    ProfilePage(),
+    ProfilePage(nama: widget.nama, email: widget.email),
   ];
 
   void _onItemTapped(int index) {

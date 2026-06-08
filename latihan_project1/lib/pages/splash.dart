@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:latihan_project1/database/preference.dart';
-import 'package:latihan_project1/pages/main_screen.dart';
+import 'package:latihan_project1/pages/main_screen_dpd.dart';
 import 'package:latihan_project1/pages/sign_in.dart';
 
 class SplashScreen extends StatefulWidget {
   final String nama;
-  const SplashScreen({super.key, required this.nama});
+  final String email;
+  const SplashScreen({super.key, required this.nama, required this.email});
   @override
   State<SplashScreen> createState() => _MyWidgetState();
 }
@@ -31,9 +32,12 @@ class _MyWidgetState extends State<SplashScreen> {
       print("IS LOGIN = ${PreferenceHandler.isLogin}");
       print("NAMA = ${await PreferenceHandler.getNama()}");
       final nama = await PreferenceHandler.getNama();
+      final email = await PreferenceHandler.getEmail();
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => MainScreenSatu(nama: nama)),
+        MaterialPageRoute(
+          builder: (context) => MainScreenDpd(nama: nama, email: email),
+        ),
       );
     }
   }

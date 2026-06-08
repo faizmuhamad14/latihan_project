@@ -32,6 +32,7 @@ dependencies:
   dotted_border: ^3.1.0
   flutter:
     sdk: flutter
+  image_picker: ^1.2.2
   intl: ^0.20.2
   path: ^1.9.1
   persistent_bottom_nav_bar_v2: ^6.3.2

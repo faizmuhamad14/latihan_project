@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:latihan_project1/database/db_helper.dart';
 import 'package:latihan_project1/database/preference.dart';
-import 'package:latihan_project1/pages/main_screen.dart';
+import 'package:latihan_project1/pages/main_screen_dpd.dart';
 import 'package:latihan_project1/pages/sign_up.dart';
 
 class SignInPage extends StatefulWidget {
@@ -32,7 +32,8 @@ class _SignInPageState extends State<SignInPage> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => MainScreenSatu(nama: pengguna.nama),
+          builder: (context) =>
+              MainScreenDpd(nama: pengguna.nama, email: pengguna.email),
         ),
       );
     }
