@@ -22,7 +22,7 @@ class DBHelper {
 
     return await openDatabase(
       path,
-      version: 2,
+      version: 3,
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE users(
@@ -37,11 +37,12 @@ class DBHelper {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nama TEXT,
             jenis TEXT,
-            umur INTEGER,
-            jenis2 TEXT,
+            umur TEXT,
+            ras TEXT,
             isFed INTEGER DEFAULT 0,
             isDrink INTEGER DEFAULT 0,
-            ownerEmail TEXT
+            ownerEmail TEXT,
+            gambarPet TEXT
           )
         ''');
       },
@@ -103,6 +104,8 @@ class DBHelper {
 
   //CRUD Petshop
   Future<int> insertPet(PetModel pet) async {
+    print("INSERT DATA = ${pet.toMap()}");
+
     print("OWNER EMAIL = ${pet.ownerEmail}");
     final db = await database;
     return await db.insert('pets', pet.toMap());

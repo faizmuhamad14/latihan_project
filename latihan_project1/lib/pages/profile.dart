@@ -35,13 +35,14 @@ class _ProfilePageState extends State<ProfilePage> {
       body: Column(
         children: [
           Column(
+            spacing: 10,
             children: [
               CircleAvatar(
                 radius: 60,
                 backgroundImage: AssetImage("assets/images/orang.jpg"),
               ),
-              Text(widget.nama),
-              Text(widget.email),
+              Text(widget.nama, style: TextStyle(fontSize: 18)),
+              Text(widget.email, style: TextStyle(fontSize: 18)),
               Container(
                 child: Center(
                   child: ElevatedButton(
@@ -89,13 +90,19 @@ class _ProfilePageState extends State<ProfilePage> {
                             ],
                           ),
                           Row(
-                            spacing: 10,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Icon(Icons.security),
-                              Text(
-                                "Keamanan & Kata Sandi",
-                                style: TextStyle(fontSize: 18),
+                              Row(
+                                spacing: 10,
+                                children: [
+                                  Icon(Icons.security),
+                                  Text(
+                                    "Keamanan & Kata Sandi",
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                ],
                               ),
+                              Icon(Icons.chevron_right_rounded),
                             ],
                           ),
                         ],
@@ -128,13 +135,19 @@ class _ProfilePageState extends State<ProfilePage> {
                             ],
                           ),
                           Row(
-                            spacing: 10,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Icon(Icons.question_answer_rounded),
-                              Text(
-                                "Kebijakan Privasi",
-                                style: TextStyle(fontSize: 18),
+                              Row(
+                                spacing: 10,
+                                children: [
+                                  Icon(Icons.question_answer_rounded),
+                                  Text(
+                                    "Kebijakan Privasi",
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                ],
                               ),
+                              Icon(Icons.chevron_right_rounded),
                             ],
                           ),
                         ],

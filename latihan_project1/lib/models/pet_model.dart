@@ -3,14 +3,16 @@ import 'dart:convert';
 class PetModel {
   int? id;
   String nama;
+  String ras;
   String jenis;
   int isFed;
   int isDrink;
-  int umur;
+  String umur;
   String ownerEmail;
 
   PetModel({
     this.id,
+    required this.ras,
     required this.nama,
     required this.jenis,
     required this.ownerEmail,
@@ -26,6 +28,7 @@ class PetModel {
       'jenis': jenis,
       'isFed': isFed,
       'isDrink': isDrink,
+      'ras': ras,
       'umur': umur,
       'ownerEmail': ownerEmail,
     };
@@ -35,10 +38,11 @@ class PetModel {
     return PetModel(
       id: map['id'],
       nama: map['nama'],
+      ras: map['ras'] ?? '',
       jenis: map['jenis'],
       isFed: map['isFed'] ?? 0,
       isDrink: map['isDrink'] ?? 0,
-      umur: map['umur'] ?? 0,
+      umur: map['umur'] ?? '',
       ownerEmail: map['ownerEmail'] ?? '',
     );
   }

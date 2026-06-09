@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:latihan_project1/constant/app_color.dart';
+import 'package:latihan_project1/data/list_map.dart';
 import 'package:latihan_project1/database/db_helper.dart';
 import 'package:latihan_project1/database/preference.dart';
 import 'package:latihan_project1/models/pet_model.dart';
@@ -120,7 +121,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Row(
-                                    spacing: 15,
+                                    spacing: 10,
                                     children: [
                                       Container(
                                         child: CircleAvatar(
@@ -131,6 +132,9 @@ class _MyWidgetState extends State<HomePageScreen> {
                                         ),
                                       ),
                                       Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        spacing: 5,
                                         children: [
                                           Text(
                                             pet.nama,
@@ -140,34 +144,20 @@ class _MyWidgetState extends State<HomePageScreen> {
                                               fontWeight: FontWeight.w700,
                                             ),
                                           ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Row(
-                                                spacing: 5,
-                                                children: [
-                                                  Text(
-                                                    "${pet.jenis} *",
-                                                    style: TextStyle(
-                                                      fontSize: 18,
-                                                      color: AppColors.textcard,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    "${pet.umur} Years",
-                                                    style: TextStyle(
-                                                      fontSize: 18,
-                                                      color: AppColors.textcard,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              // Text(
-                                              //   "Pet Number : ${index + 1}",
-                                              //   style: TextStyle(fontSize: 18),
-                                              // ),
-                                            ],
+                                          Text(
+                                            ("${pet.jenis} • ${pet.ras}"),
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              color: AppColors.textcard,
+                                            ),
+                                          ),
+                                          Text(
+                                            pet.umur,
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              color: AppColors.textcard,
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -282,7 +272,13 @@ class _MyWidgetState extends State<HomePageScreen> {
                   borderRadius: BorderRadius.circular(16),
                   onTap: () => _showBottomSheet(
                     context,
-                    PetModel(nama: '', jenis: '', umur: 0, ownerEmail: ''),
+                    PetModel(
+                      nama: '',
+                      jenis: '',
+                      umur: '',
+                      ownerEmail: '',
+                      ras: '',
+                    ),
                   ),
                   child: Container(
                     margin: EdgeInsets.only(left: 10, right: 10),
@@ -328,53 +324,29 @@ class _MyWidgetState extends State<HomePageScreen> {
   }
 
   void _showBottomSheet(BuildContext context, PetModel pets) {
-    String? selectedJenis = pets.jenis.isNotEmpty ? pets.jenis : null;
-    int? selectedAge;
     final isEdit = pets.id != null;
     final namaController = TextEditingController(text: pets.nama);
 
-    Widget buildPetChip({
-      required String emoji,
-      required String label,
-      required bool selected,
-      required VoidCallback onTap,
-    }) {
-      return ChoiceChip(
-        selected: selected,
-        onSelected: (_) => onTap(),
+    String? selectedJenis = pets.jenis.isNotEmpty ? pets.jenis : null;
 
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+    String? selectedRas = pets.ras.isNotEmpty ? pets.ras : null;
 
-        label: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(emoji, style: const TextStyle(fontSize: 36)),
-
-            const SizedBox(height: 8),
-
-            Text(
-              label,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-      );
-    }
-
+    String? selectedUmur = pets.umur.isNotEmpty ? pets.umur : null;
     showModalBottomSheet(
-      isScrollControlled: false,
+      isScrollControlled: true,
       backgroundColor: AppColors.backgroundBttn,
+
       // isScrollControlled: true,
       context: context,
       builder: (context) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setModalState) {
             return Padding(
-              padding: EdgeInsetsGeometry.fromLTRB(10, 7, 10, 7),
+              padding: EdgeInsetsGeometry.fromLTRB(15, 10, 15, 7),
               child: Form(
                 key: _formKey,
                 child: Column(
-                  spacing: 2,
+                  spacing: 10,
                   children: [
                     Text(
                       isEdit ? "Edit Pet" : "Add New Pet",
@@ -388,74 +360,101 @@ class _MyWidgetState extends State<HomePageScreen> {
                         border: OutlineInputBorder(),
                       ),
                     ),
-                    DropdownButtonFormField<int>(
-                      initialValue: selectedAge,
-                      decoration: const InputDecoration(
-                        labelText: "Age",
-                        border: OutlineInputBorder(),
-                      ),
-                      items: const [
-                        DropdownMenuItem(value: 0, child: Text("0 Years")),
-                        DropdownMenuItem(value: 1, child: Text("1 Years")),
-                        DropdownMenuItem(value: 2, child: Text("2 Years")),
-                        DropdownMenuItem(value: 3, child: Text("3 Years")),
-                        DropdownMenuItem(value: 4, child: Text("4 Years")),
-                        DropdownMenuItem(value: 5, child: Text("5 Years >")),
-                      ],
-                      onChanged: (value) {
-                        setModalState(() {
-                          selectedAge = value;
-                        });
-                      },
-                    ),
                     SizedBox(height: 10),
                     Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Center(
-                          child: const Text(
-                            "Pet Type",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                        Text(
+                          "Jenis Hewan",
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
 
-                        const SizedBox(height: 12),
+                        SizedBox(height: 10),
 
-                        Center(
-                          child: Wrap(
-                            spacing: 12,
-                            runSpacing: 12,
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: PetData.jenisHewan.map((jenis) {
+                            return ChoiceChip(
+                              label: Text(jenis),
+
+                              selected: selectedJenis == jenis,
+
+                              onSelected: (value) {
+                                setModalState(() {
+                                  selectedJenis = jenis;
+
+                                  // reset ras ketika jenis berubah
+                                  selectedRas = null;
+                                });
+                              },
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
+                    if (selectedJenis != null) ...[
+                      SizedBox(height: 20),
+
+                      Text(
+                        "Ras Hewan",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+
+                      SizedBox(height: 10),
+
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: PetData.petBreeds[selectedJenis]!.map((ras) {
+                          return ChoiceChip(
+                            label: Text(ras),
+
+                            selected: selectedRas == ras,
+
+                            onSelected: (value) {
+                              setModalState(() {
+                                selectedRas = ras;
+                              });
+                            },
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                    SizedBox(height: 10),
+
+                    Text("Umur", style: TextStyle(fontWeight: FontWeight.bold)),
+
+                    SizedBox(height: 5),
+
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: PetData.umurPet.map((umur) {
+                        return ChoiceChip(
+                          label: Column(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              buildPetChip(
-                                emoji: "🐱",
-                                label: "Cat",
-                                selected: selectedJenis == "Cat",
-                                onTap: () {
-                                  setModalState(() {
-                                    selectedJenis = "Cat";
-                                  });
-                                },
+                              Text(
+                                umur["label"]!,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-
-                              buildPetChip(
-                                emoji: "🐶",
-                                label: "Dog",
-                                selected: selectedJenis == "Dog",
-                                onTap: () {
-                                  setModalState(() {
-                                    selectedJenis = "Dog";
-                                  });
-                                },
+                              Text(
+                                umur["desc"]!,
+                                style: const TextStyle(fontSize: 11),
                               ),
                             ],
                           ),
-                        ),
-                        SizedBox(height: 15),
-                      ],
+                          selected: selectedUmur == umur["label"],
+                          onSelected: (value) {
+                            setModalState(() {
+                              selectedUmur = umur["label"];
+                            });
+                          },
+                        );
+                      }).toList(),
                     ),
                     Column(
                       spacing: 8,
@@ -478,28 +477,22 @@ class _MyWidgetState extends State<HomePageScreen> {
                                   id: pets.id,
                                   nama: namaController.text,
                                   jenis: selectedJenis ?? "",
-                                  umur: selectedAge!,
+                                  umur: selectedUmur ?? "",
                                   ownerEmail: email,
                                   isFed: pets.isFed,
                                   isDrink: pets.isDrink,
+                                  ras: selectedRas ?? "",
                                 ),
                               );
-                              if (selectedAge == null) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text("Please select pet age"),
-                                  ),
-                                );
-                                return;
-                              }
                             } else {
                               final email = await PreferenceHandler.getEmail();
                               await DBHelper().insertPet(
                                 PetModel(
                                   nama: namaController.text,
                                   jenis: selectedJenis ?? "",
-                                  umur: selectedAge!,
+                                  umur: selectedUmur ?? "",
                                   ownerEmail: email,
+                                  ras: selectedRas ?? "",
                                 ),
                               );
                             }
