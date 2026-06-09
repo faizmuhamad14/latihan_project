@@ -3,6 +3,7 @@ import 'package:latihan_project1/constant/app_color.dart';
 import 'package:latihan_project1/data/list_data_map.dart';
 import 'package:latihan_project1/data/list_map.dart';
 import 'package:latihan_project1/models/model_data.dart';
+import 'package:latihan_project1/views/detail_produk.dart';
 
 class ProdukPage extends StatefulWidget {
   const ProdukPage({super.key});
@@ -59,9 +60,9 @@ class _ProdukPageState extends State<ProdukPage> {
                     icon: Icon(Icons.filter_alt_rounded),
                   ),
                   Container(
-                    width: 300,
+                    width: 315,
                     height: 50,
-                    margin: EdgeInsets.fromLTRB(5, 5, 5, 5),
+                    margin: EdgeInsets.fromLTRB(5, 20, 5, 5),
                     child: TextField(
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.search),
@@ -184,7 +185,15 @@ class _ProdukPageState extends State<ProdukPage> {
                                         backgroundColor:
                                             AppColors.backgroundBttn,
                                       ),
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                DetailProduk(produk: data),
+                                          ),
+                                        );
+                                      },
                                       child: Text(
                                         "Lihat Detail",
                                         style: TextStyle(
@@ -250,14 +259,40 @@ class _ProdukPageState extends State<ProdukPage> {
                         onSelected: (value) {
                           setModalState(() {
                             selectedJenis = jenis;
+                            selectedRas = null;
                           });
                         },
                       );
                     }).toList(),
                   ),
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
+                  if (selectedJenis != null) ...[
+                    // const SizedBox(height: 20),
+                    const Text(
+                      "Ras Hewan",
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
 
+                    const SizedBox(height: 10),
+
+                    Wrap(
+                      spacing: 8,
+                      children: PetData.petBreeds[selectedJenis]!.map((ras) {
+                        return ChoiceChip(
+                          label: Text(ras),
+
+                          selected: selectedRas == ras,
+
+                          onSelected: (value) {
+                            setModalState(() {
+                              selectedRas = ras;
+                            });
+                          },
+                        );
+                      }).toList(),
+                    ),
+                  ],
                   // UMUR
                   const Text(
                     "Umur",

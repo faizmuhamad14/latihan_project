@@ -345,178 +345,189 @@ class _MyWidgetState extends State<HomePageScreen> {
               padding: EdgeInsetsGeometry.fromLTRB(15, 10, 15, 7),
               child: Form(
                 key: _formKey,
-                child: Column(
-                  spacing: 10,
-                  children: [
-                    Text(
-                      isEdit ? "Edit Pet" : "Add New Pet",
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                    const SizedBox(height: 10),
-                    TextFormField(
-                      controller: namaController,
-                      decoration: const InputDecoration(
-                        labelText: "Pet Name",
-                        border: OutlineInputBorder(),
+                child: Container(
+                  margin: EdgeInsets.only(top: 25),
+                  child: Column(
+                    spacing: 10,
+                    children: [
+                      Text(
+                        isEdit ? "Edit Pet" : "Add New Pet",
+                        style: const TextStyle(fontSize: 18),
                       ),
-                    ),
-                    SizedBox(height: 10),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
+                      const SizedBox(height: 5),
+                      TextFormField(
+                        controller: namaController,
+                        decoration: const InputDecoration(
+                          labelText: "Pet Name",
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Jenis Hewan",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+
+                          SizedBox(height: 5),
+
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: PetData.jenisHewan.map((jenis) {
+                              return ChoiceChip(
+                                label: Text(jenis),
+
+                                selected: selectedJenis == jenis,
+
+                                onSelected: (value) {
+                                  setModalState(() {
+                                    selectedJenis = jenis;
+
+                                    // reset ras ketika jenis berubah
+                                    selectedRas = null;
+                                  });
+                                },
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                      ),
+                      if (selectedJenis != null) ...[
+                        SizedBox(height: 10),
+
                         Text(
-                          "Jenis Hewan",
+                          "Ras Hewan",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
 
-                        SizedBox(height: 10),
+                        SizedBox(height: 5),
 
                         Wrap(
                           spacing: 8,
                           runSpacing: 8,
-                          children: PetData.jenisHewan.map((jenis) {
+                          children: PetData.petBreeds[selectedJenis]!.map((
+                            ras,
+                          ) {
                             return ChoiceChip(
-                              label: Text(jenis),
+                              label: Text(ras),
 
-                              selected: selectedJenis == jenis,
+                              selected: selectedRas == ras,
 
                               onSelected: (value) {
                                 setModalState(() {
-                                  selectedJenis = jenis;
-
-                                  // reset ras ketika jenis berubah
-                                  selectedRas = null;
+                                  selectedRas = ras;
                                 });
                               },
                             );
                           }).toList(),
                         ),
                       ],
-                    ),
-                    if (selectedJenis != null) ...[
-                      SizedBox(height: 20),
+                      SizedBox(height: 10),
 
                       Text(
-                        "Ras Hewan",
+                        "Umur",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
 
-                      SizedBox(height: 10),
+                      SizedBox(height: 5),
 
                       Wrap(
                         spacing: 8,
                         runSpacing: 8,
-                        children: PetData.petBreeds[selectedJenis]!.map((ras) {
+                        children: PetData.umurPet.map((umur) {
                           return ChoiceChip(
-                            label: Text(ras),
-
-                            selected: selectedRas == ras,
-
+                            label: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  umur["label"]!,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  umur["desc"]!,
+                                  style: const TextStyle(fontSize: 11),
+                                ),
+                              ],
+                            ),
+                            selected: selectedUmur == umur["label"],
                             onSelected: (value) {
                               setModalState(() {
-                                selectedRas = ras;
+                                selectedUmur = umur["label"];
                               });
                             },
                           );
                         }).toList(),
                       ),
-                    ],
-                    SizedBox(height: 10),
-
-                    Text("Umur", style: TextStyle(fontWeight: FontWeight.bold)),
-
-                    SizedBox(height: 5),
-
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: PetData.umurPet.map((umur) {
-                        return ChoiceChip(
-                          label: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                umur["label"]!,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                umur["desc"]!,
-                                style: const TextStyle(fontSize: 11),
-                              ),
-                            ],
-                          ),
-                          selected: selectedUmur == umur["label"],
-                          onSelected: (value) {
-                            setModalState(() {
-                              selectedUmur = umur["label"];
-                            });
-                          },
-                        );
-                      }).toList(),
-                    ),
-                    Column(
-                      spacing: 8,
-                      children: [
-                        ElevatedButton.icon(
-                          onPressed: () async {
-                            if (namaController.text.isEmpty) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("Pet named cannot be empty"),
-                                ),
-                              );
-                              return;
-                            }
-
-                            if (isEdit) {
-                              final email = await PreferenceHandler.getEmail();
-                              await DBHelper().updatePet(
-                                PetModel(
-                                  id: pets.id,
-                                  nama: namaController.text,
-                                  jenis: selectedJenis ?? "",
-                                  umur: selectedUmur ?? "",
-                                  ownerEmail: email,
-                                  isFed: pets.isFed,
-                                  isDrink: pets.isDrink,
-                                  ras: selectedRas ?? "",
-                                ),
-                              );
-                            } else {
-                              final email = await PreferenceHandler.getEmail();
-                              await DBHelper().insertPet(
-                                PetModel(
-                                  nama: namaController.text,
-                                  jenis: selectedJenis ?? "",
-                                  umur: selectedUmur ?? "",
-                                  ownerEmail: email,
-                                  ras: selectedRas ?? "",
-                                ),
-                              );
-                            }
-                            Navigator.pop(context);
-                            setState(() {});
-                          },
-                          icon: Icon(Icons.check_circle_outline_rounded),
-                          label: Text("Save Pet Profile"),
-                        ),
-                        if (isEdit)
+                      SizedBox(height: 10),
+                      Column(
+                        spacing: 8,
+                        children: [
                           ElevatedButton.icon(
                             onPressed: () async {
-                              await DBHelper().deletePet(pets.id!);
+                              if (namaController.text.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("Pet named cannot be empty"),
+                                  ),
+                                );
+                                return;
+                              }
 
+                              if (isEdit) {
+                                final email =
+                                    await PreferenceHandler.getEmail();
+                                await DBHelper().updatePet(
+                                  PetModel(
+                                    id: pets.id,
+                                    nama: namaController.text,
+                                    jenis: selectedJenis ?? "",
+                                    umur: selectedUmur ?? "",
+                                    ownerEmail: email,
+                                    isFed: pets.isFed,
+                                    isDrink: pets.isDrink,
+                                    ras: selectedRas ?? "",
+                                  ),
+                                );
+                              } else {
+                                final email =
+                                    await PreferenceHandler.getEmail();
+                                await DBHelper().insertPet(
+                                  PetModel(
+                                    nama: namaController.text,
+                                    jenis: selectedJenis ?? "",
+                                    umur: selectedUmur ?? "",
+                                    ownerEmail: email,
+                                    ras: selectedRas ?? "",
+                                  ),
+                                );
+                              }
                               Navigator.pop(context);
-
                               setState(() {});
                             },
-                            icon: const Icon(Icons.delete),
-                            label: const Text("Delete Pet Profile"),
+                            icon: Icon(Icons.check_circle_outline_rounded),
+                            label: Text("Save Pet Profile"),
                           ),
-                      ],
-                    ),
-                  ],
+                          if (isEdit)
+                            ElevatedButton.icon(
+                              onPressed: () async {
+                                await DBHelper().deletePet(pets.id!);
+
+                                Navigator.pop(context);
+
+                                setState(() {});
+                              },
+                              icon: const Icon(Icons.delete),
+                              label: const Text("Delete Pet Profile"),
+                            ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );

@@ -4,9 +4,11 @@ class ProdukPetshop {
   final int harga;
   final String gambar;
   final double rate;
+  final String deskripsi;
 
   final List<String> jenisHewan;
   final List<String> umur;
+  final List<String> ras;
 
   ProdukPetshop({
     required this.nama,
@@ -16,5 +18,7 @@ class ProdukPetshop {
     required this.rate,
     required this.jenisHewan,
     required this.umur,
+    required this.ras,
+    required this.deskripsi,
   });
 }
