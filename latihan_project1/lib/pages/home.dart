@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:latihan_project1/constant/app_color.dart';
+import 'package:latihan_project1/constant/text_style.dart';
 import 'package:latihan_project1/data/list_map.dart';
 import 'package:latihan_project1/database/db_helper.dart';
 import 'package:latihan_project1/database/preference.dart';
 import 'package:latihan_project1/models/pet_model.dart';
+import 'package:lottie/lottie.dart';
 
 class HomePageScreen extends StatefulWidget {
   final String nama;
@@ -60,19 +62,41 @@ class _MyWidgetState extends State<HomePageScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Halo, ${widget.nama}",
+                        "Halo, ${widget.nama}!",
                         style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.w700,
                           color: AppColors.netral,
                         ),
                       ),
-                      Text(
-                        pets.isEmpty
-                            ? "You haven't added any pets yet."
-                            : "Here is how your companions are doing today",
-                        style: TextStyle(fontSize: 18),
-                      ),
+                      pets.isEmpty
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Kamu belum menambahkan Pet apapun.",
+                                  style: AppTextStyle.subtitle,
+                                ),
+                                SizedBox(height: 100),
+                                Center(
+                                  child: Lottie.asset(
+                                    "assets/lottie/addPet.json",
+                                    width: 250,
+                                    height: 250,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Text(
+                              "Inilah kabar hewan peliharaan Anda hari ini",
+                              style: AppTextStyle.subtitle,
+                            ),
+                      // Text(
+                      //   pets.isEmpty
+                      //       ? "Kamu belum menambahkan Pet apapun."
+                      //       : "Inilah kabar hewan peliharaan Anda hari ini.",
+                      //   style: TextStyle(fontSize: 18),
+                      // ),
                     ],
                   ),
                 ),
@@ -214,7 +238,9 @@ class _MyWidgetState extends State<HomePageScreen> {
                                           children: [
                                             Icon(Icons.restaurant),
                                             Text(
-                                              pet.isFed == 1 ? "✓ Fed" : "Fed",
+                                              pet.isFed == 1
+                                                  ? "✓ Sudah Makan"
+                                                  : "Sudah Makan",
                                               style: TextStyle(fontSize: 18),
                                             ),
                                           ],
@@ -245,8 +271,8 @@ class _MyWidgetState extends State<HomePageScreen> {
                                             Icon(Icons.restaurant),
                                             Text(
                                               pet.isDrink == 1
-                                                  ? "✓ Drink"
-                                                  : "Drink",
+                                                  ? "✓ Sudah Minum"
+                                                  : "Sudah Minum",
                                               style: TextStyle(fontSize: 18),
                                             ),
                                           ],
@@ -293,7 +319,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                     ),
                     padding: EdgeInsets.all(20),
                     child: Column(
-                      spacing: 10,
+                      spacing: 3,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
@@ -303,8 +329,8 @@ class _MyWidgetState extends State<HomePageScreen> {
                           ),
                           child: Icon(Icons.add, size: 50),
                         ),
-                        Text("Add New Pet"),
-                        Text("Bring another companion into your care."),
+                        Text("Tambahkan Pet Baru", style: AppTextStyle.addPet),
+                        Text("Tambahkan hewan peliharaan baru."),
                       ],
                     ),
                   ),
@@ -342,32 +368,71 @@ class _MyWidgetState extends State<HomePageScreen> {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setModalState) {
             return Padding(
-              padding: EdgeInsetsGeometry.fromLTRB(15, 10, 15, 7),
-              child: Form(
-                key: _formKey,
-                child: Container(
-                  margin: EdgeInsets.only(top: 25),
-                  child: Column(
-                    spacing: 10,
-                    children: [
-                      Text(
-                        isEdit ? "Edit Pet" : "Add New Pet",
-                        style: const TextStyle(fontSize: 18),
-                      ),
-                      const SizedBox(height: 5),
-                      TextFormField(
-                        controller: namaController,
-                        decoration: const InputDecoration(
-                          labelText: "Pet Name",
-                          border: OutlineInputBorder(),
+              padding: EdgeInsets.only(
+                left: 15,
+                right: 15,
+                top: 10,
+                bottom: MediaQuery.of(context).viewInsets.bottom + 15,
+              ),
+
+              child: SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
+                  child: Container(
+                    margin: EdgeInsets.only(top: 25),
+                    child: Column(
+                      spacing: 10,
+                      children: [
+                        Text(
+                          isEdit ? "Edit Pet" : "Add New Pet",
+                          style: const TextStyle(fontSize: 18),
                         ),
-                      ),
-                      SizedBox(height: 10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
+                        const SizedBox(height: 5),
+                        TextFormField(
+                          controller: namaController,
+                          decoration: const InputDecoration(
+                            labelText: "Pet Name",
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Jenis Hewan",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+
+                            SizedBox(height: 5),
+
+                            Wrap(
+                              spacing: 8,
+                              runSpacing: 8,
+                              children: PetData.jenisHewan.map((jenis) {
+                                return ChoiceChip(
+                                  label: Text(jenis),
+
+                                  selected: selectedJenis == jenis,
+
+                                  onSelected: (value) {
+                                    setModalState(() {
+                                      selectedJenis = jenis;
+
+                                      // reset ras ketika jenis berubah
+                                      selectedRas = null;
+                                    });
+                                  },
+                                );
+                              }).toList(),
+                            ),
+                          ],
+                        ),
+                        if (selectedJenis != null) ...[
+                          SizedBox(height: 10),
+
                           Text(
-                            "Jenis Hewan",
+                            "Ras Hewan",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
 
@@ -376,30 +441,27 @@ class _MyWidgetState extends State<HomePageScreen> {
                           Wrap(
                             spacing: 8,
                             runSpacing: 8,
-                            children: PetData.jenisHewan.map((jenis) {
+                            children: PetData.petBreeds[selectedJenis]!.map((
+                              ras,
+                            ) {
                               return ChoiceChip(
-                                label: Text(jenis),
+                                label: Text(ras),
 
-                                selected: selectedJenis == jenis,
+                                selected: selectedRas == ras,
 
                                 onSelected: (value) {
                                   setModalState(() {
-                                    selectedJenis = jenis;
-
-                                    // reset ras ketika jenis berubah
-                                    selectedRas = null;
+                                    selectedRas = ras;
                                   });
                                 },
                               );
                             }).toList(),
                           ),
                         ],
-                      ),
-                      if (selectedJenis != null) ...[
                         SizedBox(height: 10),
 
                         Text(
-                          "Ras Hewan",
+                          "Umur",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
 
@@ -408,125 +470,99 @@ class _MyWidgetState extends State<HomePageScreen> {
                         Wrap(
                           spacing: 8,
                           runSpacing: 8,
-                          children: PetData.petBreeds[selectedJenis]!.map((
-                            ras,
-                          ) {
+                          children: PetData.umurPet.map((umur) {
                             return ChoiceChip(
-                              label: Text(ras),
-
-                              selected: selectedRas == ras,
-
+                              label: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    umur["label"]!,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    umur["desc"]!,
+                                    style: const TextStyle(fontSize: 11),
+                                  ),
+                                ],
+                              ),
+                              selected: selectedUmur == umur["label"],
                               onSelected: (value) {
                                 setModalState(() {
-                                  selectedRas = ras;
+                                  selectedUmur = umur["label"];
                                 });
                               },
                             );
                           }).toList(),
                         ),
-                      ],
-                      SizedBox(height: 10),
-
-                      Text(
-                        "Umur",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-
-                      SizedBox(height: 5),
-
-                      Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
-                        children: PetData.umurPet.map((umur) {
-                          return ChoiceChip(
-                            label: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  umur["label"]!,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  umur["desc"]!,
-                                  style: const TextStyle(fontSize: 11),
-                                ),
-                              ],
-                            ),
-                            selected: selectedUmur == umur["label"],
-                            onSelected: (value) {
-                              setModalState(() {
-                                selectedUmur = umur["label"];
-                              });
-                            },
-                          );
-                        }).toList(),
-                      ),
-                      SizedBox(height: 10),
-                      Column(
-                        spacing: 8,
-                        children: [
-                          ElevatedButton.icon(
-                            onPressed: () async {
-                              if (namaController.text.isEmpty) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text("Pet named cannot be empty"),
-                                  ),
-                                );
-                                return;
-                              }
-
-                              if (isEdit) {
-                                final email =
-                                    await PreferenceHandler.getEmail();
-                                await DBHelper().updatePet(
-                                  PetModel(
-                                    id: pets.id,
-                                    nama: namaController.text,
-                                    jenis: selectedJenis ?? "",
-                                    umur: selectedUmur ?? "",
-                                    ownerEmail: email,
-                                    isFed: pets.isFed,
-                                    isDrink: pets.isDrink,
-                                    ras: selectedRas ?? "",
-                                  ),
-                                );
-                              } else {
-                                final email =
-                                    await PreferenceHandler.getEmail();
-                                await DBHelper().insertPet(
-                                  PetModel(
-                                    nama: namaController.text,
-                                    jenis: selectedJenis ?? "",
-                                    umur: selectedUmur ?? "",
-                                    ownerEmail: email,
-                                    ras: selectedRas ?? "",
-                                  ),
-                                );
-                              }
-                              Navigator.pop(context);
-                              setState(() {});
-                            },
-                            icon: Icon(Icons.check_circle_outline_rounded),
-                            label: Text("Save Pet Profile"),
-                          ),
-                          if (isEdit)
+                        SizedBox(height: 10),
+                        Column(
+                          spacing: 8,
+                          children: [
                             ElevatedButton.icon(
                               onPressed: () async {
-                                await DBHelper().deletePet(pets.id!);
+                                if (namaController.text.isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        "Pet named cannot be empty",
+                                      ),
+                                    ),
+                                  );
+                                  return;
+                                }
 
+                                if (isEdit) {
+                                  final email =
+                                      await PreferenceHandler.getEmail();
+                                  await DBHelper().updatePet(
+                                    PetModel(
+                                      id: pets.id,
+                                      nama: namaController.text,
+                                      jenis: selectedJenis ?? "",
+                                      umur: selectedUmur ?? "",
+                                      ownerEmail: email,
+                                      isFed: pets.isFed,
+                                      isDrink: pets.isDrink,
+                                      ras: selectedRas ?? "",
+                                    ),
+                                  );
+                                } else {
+                                  final email =
+                                      await PreferenceHandler.getEmail();
+                                  await DBHelper().insertPet(
+                                    PetModel(
+                                      nama: namaController.text,
+                                      jenis: selectedJenis ?? "",
+                                      umur: selectedUmur ?? "",
+                                      ownerEmail: email,
+                                      ras: selectedRas ?? "",
+                                    ),
+                                  );
+                                }
                                 Navigator.pop(context);
-
                                 setState(() {});
                               },
-                              icon: const Icon(Icons.delete),
-                              label: const Text("Delete Pet Profile"),
+                              icon: Icon(Icons.check_circle_outline_rounded),
+                              label: Text("Save Pet Profile"),
                             ),
-                        ],
-                      ),
-                    ],
+                            if (isEdit)
+                              ElevatedButton.icon(
+                                onPressed: () async {
+                                  await DBHelper().deletePet(pets.id!);
+
+                                  Navigator.pop(context);
+
+                                  setState(() {});
+                                },
+                                icon: const Icon(Icons.delete),
+                                label: const Text("Delete Pet Profile"),
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

@@ -21,28 +21,25 @@ class _MainScreenDpd extends State<MainScreenDpd> {
       tabs: [
         PersistentTabConfig(
           screen: HomePageScreen(nama: widget.nama),
-          item: ItemConfig(icon: Icon(Icons.home), title: "Home"),
+          item: ItemConfig(icon: Icon(Icons.home), title: "Beranda"),
         ),
         PersistentTabConfig(
           screen: ProdukPage(),
           item: ItemConfig(
             icon: Icon(Icons.shopping_bag_rounded),
-            title: "Product",
+            title: "Produk",
           ),
         ),
         PersistentTabConfig(
           screen: InformationPage(),
           item: ItemConfig(
             icon: Icon(Icons.medical_information_rounded),
-            title: "Information",
+            title: "Informasi",
           ),
         ),
         PersistentTabConfig(
           screen: ProfilePage(nama: widget.nama, email: widget.email),
-          item: ItemConfig(
-            icon: Icon(Icons.person_2_rounded),
-            title: "Profile",
-          ),
+          item: ItemConfig(icon: Icon(Icons.person_2_rounded), title: "Profil"),
         ),
       ],
       navBarBuilder: (navBarConfig) =>

@@ -109,8 +109,8 @@ List<ProdukPetshop> produkPetshop = [
     umur: ["Anak", "Dewasa", "Senior"],
     ras: ["Golden Retriever", "Pomeranian", "Husky", "Beagle", "Bulldog"],
     deskripsi:
-        "Suplemen vitamin untuk membantu menjaga kesehatan dan meningkatkan daya tahan tubuh kucing. "
-        "Cocok diberikan secara rutin untuk mendukung pertumbuhan dan aktivitas harian kucing.",
+        "Kalung anjing berbahan kulit sintetis berkualitas yang nyaman digunakan sehari-hari."
+        "Dilengkapi pengait yang kuat dan ukuran yang dapat disesuaikan sehingga aman dan nyaman digunakan saat berjalan maupun beraktivitas.",
   ),
 
   ProdukPetshop(
@@ -150,5 +150,135 @@ List<ProdukPetshop> produkPetshop = [
     deskripsi:
         "Kandang multifungsi yang cocok digunakan untuk kucing maupun anjing. "
         "Memiliki desain kokoh, ventilasi yang baik, serta ruang yang nyaman untuk beristirahat dan bepergian.",
+  ),
+
+  ProdukPetshop(
+    nama: "Me-O Persian Adult",
+    kategori: "Makanan Kucing",
+    harga: 58000,
+    rate: 4.8,
+    gambar: "assets/images/meo.jfif",
+    jenisHewan: ["Kucing"],
+    umur: ["Dewasa"],
+    ras: ["Persia"],
+    deskripsi:
+        "Makanan khusus kucing Persia yang diformulasikan untuk menjaga kesehatan bulu panjang, kulit, dan sistem pencernaan. Mengandung vitamin serta mineral penting untuk kebutuhan harian kucing.",
+  ),
+
+  ProdukPetshop(
+    nama: "Pro Plan Puppy",
+    kategori: "Makanan Anjing",
+    harga: 110000,
+    rate: 4.9,
+    gambar: "assets/images/ppy.jfif",
+    jenisHewan: ["Anjing"],
+    umur: ["Anak"],
+    ras: ["Golden Retriever", "Pomeranian", "Husky", "Beagle"],
+    deskripsi:
+        "Makanan anak anjing dengan kandungan protein tinggi untuk mendukung pertumbuhan tulang, otot, dan daya tahan tubuh selama masa pertumbuhan.",
+  ),
+
+  ProdukPetshop(
+    nama: "Sisir Grooming Premium",
+    kategori: "Perawatan",
+    harga: 28000,
+    rate: 4.6,
+    gambar: "assets/images/sisir.jfif",
+    jenisHewan: ["Kucing", "Anjing"],
+    umur: ["Anak", "Dewasa", "Senior"],
+    ras: ["Persia", "Anggora", "Maine Coon", "Golden Retriever", "Husky"],
+    deskripsi:
+        "Sisir grooming berkualitas yang membantu mengurangi kerontokan bulu dan menjaga penampilan hewan peliharaan tetap rapi dan sehat.",
+  ),
+
+  ProdukPetshop(
+    nama: "Tempat Makan Stainless",
+    kategori: "Aksesoris",
+    harga: 35000,
+    rate: 4.7,
+    gambar: "assets/images/tmpt.jfif",
+    jenisHewan: ["Kucing", "Anjing"],
+    umur: ["Anak", "Dewasa", "Senior"],
+    ras: [],
+    deskripsi:
+        "Tempat makan berbahan stainless steel yang tahan karat, mudah dibersihkan, dan aman digunakan untuk makanan maupun air minum.",
+  ),
+
+  ProdukPetshop(
+    nama: "Tali Tuntun Anjing",
+    kategori: "Aksesoris",
+    harga: 42000,
+    rate: 4.8,
+    gambar: "assets/images/tali.jfif",
+    jenisHewan: ["Anjing"],
+    umur: ["Anak", "Dewasa", "Senior"],
+    ras: ["Golden Retriever", "Pomeranian", "Husky", "Beagle", "Bulldog"],
+    deskripsi:
+        "Tali tuntun yang kuat dan nyaman digunakan saat berjalan bersama anjing. Dilengkapi pegangan ergonomis untuk kenyamanan pemilik.",
+  ),
+
+  ProdukPetshop(
+    nama: "Catnip Toy Mouse",
+    kategori: "Mainan",
+    harga: 18000,
+    rate: 4.5,
+    gambar: "assets/images/catnip.jfif",
+    jenisHewan: ["Kucing"],
+    umur: ["Anak", "Dewasa", "Senior"],
+    ras: ["Persia", "Anggora", "Maine Coon", "British Shorthair", "Kampung"],
+    deskripsi:
+        "Mainan berbentuk tikus dengan aroma catnip yang menarik perhatian kucing dan membantu mengurangi stres serta kebosanan.",
+  ),
+
+  ProdukPetshop(
+    nama: "Obat Kutu Kucing",
+    kategori: "Kesehatan",
+    harga: 65000,
+    rate: 4.8,
+    gambar: "assets/images/obat.jfif",
+    jenisHewan: ["Kucing"],
+    umur: ["Dewasa", "Senior"],
+    ras: ["Persia", "Anggora", "Maine Coon", "British Shorthair", "Kampung"],
+    deskripsi:
+        "Produk perawatan yang membantu mengurangi kutu pada kucing serta menjaga kesehatan kulit dan bulu jika digunakan sesuai petunjuk.",
+  ),
+
+  ProdukPetshop(
+    nama: "Kasur Hewan Premium",
+    kategori: "Aksesoris",
+    harga: 95000,
+    rate: 4.9,
+    gambar: "assets/images/kasur.jpg",
+    jenisHewan: ["Kucing", "Anjing"],
+    umur: ["Anak", "Dewasa", "Senior"],
+    ras: [],
+    deskripsi:
+        "Kasur hewan berbahan lembut dan empuk yang memberikan kenyamanan maksimal saat beristirahat atau tidur.",
+  ),
+
+  ProdukPetshop(
+    nama: "Snack Anjing Chicken Stick",
+    kategori: "Makanan Anjing",
+    harga: 25000,
+    rate: 4.7,
+    gambar: "assets/images/snack.png",
+    jenisHewan: ["Anjing"],
+    umur: ["Dewasa"],
+    ras: ["Golden Retriever", "Pomeranian", "Husky", "Beagle", "Bulldog"],
+    deskripsi:
+        "Camilan berbahan dasar ayam yang lezat dan cocok digunakan sebagai hadiah saat melatih anjing.",
+  ),
+
+  ProdukPetshop(
+    nama: "Snack Kucing Tuna Bite",
+    kategori: "Makanan Kucing",
+    harga: 22000,
+    rate: 4.8,
+    gambar: "assets/images/snackcng.jpg",
+    jenisHewan: ["Kucing"],
+    umur: ["Dewasa"],
+    ras: ["Persia", "Anggora", "Maine Coon", "British Shorthair", "Kampung"],
+    deskripsi:
+        "Camilan rasa tuna yang disukai kucing dan dapat diberikan sebagai makanan selingan untuk menemani aktivitas harian.",
   ),
 ];

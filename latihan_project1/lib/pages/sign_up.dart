@@ -87,7 +87,10 @@ class _SignUpPageState extends State<SignUpPage> {
                       shape: BoxShape.circle,
                       color: Color(0xffaec6cf),
                     ),
-                    child: Icon(Icons.pets),
+                    child: CircleAvatar(
+                      radius: 60,
+                      backgroundImage: AssetImage("assets/images/logo_bg.png"),
+                    ),
                   ),
                   Text(
                     "Buat Akun Baru",

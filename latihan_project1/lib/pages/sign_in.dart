@@ -36,6 +36,12 @@ class _SignInPageState extends State<SignInPage> {
               MainScreenDpd(nama: pengguna.nama, email: pengguna.email),
         ),
       );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Email belum terdaftar atau kata sandi salah"),
+        ),
+      );
     }
   }
 
@@ -86,11 +92,17 @@ class _SignInPageState extends State<SignInPage> {
                           shape: BoxShape.circle,
                           color: Color(0xFFAEC6CF),
                         ),
-                        child: Icon(
-                          Icons.pets,
-                          size: 35,
-                          color: Color(0xFF4B626A),
+                        child: CircleAvatar(
+                          radius: 60,
+                          backgroundImage: AssetImage(
+                            "assets/images/logo_bg.png",
+                          ),
                         ),
+                        // Icon(
+                        //   Icons.pets,
+                        //   size: 35,
+                        //   color: Color(0xFF4B626A),
+                        // ),
                       ),
                       Text(
                         "Sobat Bulu",

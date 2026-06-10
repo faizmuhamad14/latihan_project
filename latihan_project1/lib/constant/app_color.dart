@@ -12,6 +12,8 @@ class AppColors {
   static const Color backgroundItem = Color(0xFFEFEDEE);
   static const Color backgroundBttn = Color(0xFFE9E8E8);
   static const Color item = Color(0xFFC2C7CA);
+  static const Color logout = Color(0xFFFFDAD6);
+  static const Color logoutText = Color(0xFF93000A);
   static const Color textBttn = Color(0xFF4B626A);
   static const Color textcard = Color(0xFF42484A);
 

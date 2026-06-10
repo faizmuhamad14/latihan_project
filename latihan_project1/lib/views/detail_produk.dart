@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:latihan_project1/constant/text_style.dart';
 import 'package:latihan_project1/models/model_data.dart';
 
 class DetailProduk extends StatelessWidget {
@@ -15,7 +16,7 @@ class DetailProduk extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Container(
-          margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
+          margin: EdgeInsets.fromLTRB(15, 5, 15, 10),
           child: Column(
             spacing: 15,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -31,40 +32,69 @@ class DetailProduk extends StatelessWidget {
               ),
               Text(
                 produk.nama,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-              ),
-              Column(children: [Text("Rate"), Text("${produk.rate}")]),
-              Column(children: [Text("Harga"), Text("${produk.harga}")]),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [Text("Kategori"), Text(produk.kategori)],
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
               ),
               Column(
                 children: [
-                  Text("Rekomendasi Jenis Hewan"),
+                  Text("Rate", style: AppTextStyle.produkTitle),
+                  Text("${produk.rate}", style: AppTextStyle.subProduk),
+                ],
+              ),
+              Column(
+                children: [
+                  Text("Kisaran Harga", style: AppTextStyle.produkTitle),
+                  Text("${produk.harga}", style: AppTextStyle.subProduk),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text("Kategori", style: AppTextStyle.produkTitle),
+                  Text(produk.kategori, style: AppTextStyle.subProduk),
+                ],
+              ),
+              Column(
+                children: [
+                  Text(
+                    "Rekomendasi Jenis Hewan",
+                    style: AppTextStyle.produkTitle,
+                  ),
                   Wrap(
                     children: produk.jenisHewan.map((jenis) {
-                      return Chip(label: Text(jenis));
+                      return Chip(
+                        label: Text(jenis, style: AppTextStyle.subProduk),
+                      );
                     }).toList(),
                   ),
                 ],
               ),
               Column(
                 children: [
-                  Text("Rekomendasi Ras Hewan"),
+                  Text(
+                    "Rekomendasi Ras Hewan",
+                    style: AppTextStyle.produkTitle,
+                  ),
                   Wrap(
+                    spacing: 5,
                     children: produk.ras.map((ras) {
-                      return Chip(label: Text(ras));
+                      return Chip(
+                        label: Text(ras, style: AppTextStyle.subProduk),
+                      );
                     }).toList(),
                   ),
                 ],
               ),
               Column(
                 children: [
-                  Text("Rekomendasi Umur Hewan"),
+                  Text(
+                    "Rekomendasi Umur Hewan",
+                    style: AppTextStyle.produkTitle,
+                  ),
                   Wrap(
                     children: produk.umur.map((umur) {
-                      return Chip(label: Text(umur));
+                      return Chip(
+                        label: Text(umur, style: AppTextStyle.subProduk),
+                      );
                     }).toList(),
                   ),
                 ],
@@ -72,8 +102,12 @@ class DetailProduk extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text("Deskripsi"),
-                  Text(produk.deskripsi, textAlign: TextAlign.left),
+                  Text("Deskripsi", style: AppTextStyle.produkTitle),
+                  Text(
+                    produk.deskripsi,
+                    textAlign: TextAlign.left,
+                    style: AppTextStyle.subProduk,
+                  ),
                 ],
               ),
             ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:latihan_project1/database/preference.dart';
 import 'package:latihan_project1/pages/main_screen_dpd.dart';
 import 'package:latihan_project1/pages/sign_in.dart';
+import 'package:lottie/lottie.dart';
 
 class SplashScreen extends StatefulWidget {
   final String nama;
@@ -19,7 +20,7 @@ class _MyWidgetState extends State<SplashScreen> {
   }
 
   Future<void> _checkLoginStatus() async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 3));
 
     if (!mounted) return;
 
@@ -48,9 +49,19 @@ class _MyWidgetState extends State<SplashScreen> {
       body: Container(
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(color: Color(0xFFEBF4F6)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [Image.asset('assets/images/logo1.png')],
+        child: Stack(
+          // mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(child: Image.asset('assets/images/logo1.png')),
+            Align(
+              alignment: AlignmentGeometry.bottomCenter,
+              child: Lottie.asset(
+                'assets/lottie/cat.json',
+                width: 200,
+                height: 200,
+              ),
+            ),
+          ],
         ),
       ),
     );

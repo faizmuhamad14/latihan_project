@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:latihan_project1/models/info_model.dart';
 
 class BeritaPage extends StatelessWidget {
-  const BeritaPage({super.key});
+  final InfoModel infoBerita;
+  const BeritaPage({super.key, required this.infoBerita});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Text(
-              "Selamat datang di ruang informasi eksklusif untuk para pawrents! Memelihara anjing dan kucing tentu bukan sekadar rutinitas memberi makan, tetapi juga tentang memahami keunikan dan cara terbaik untuk membahagiakan mereka.",
-            ),
-          ],
-        ),
-      ),
+      appBar: AppBar(),
+      body: SingleChildScrollView(child: Column(children: [Text("")])),
     );
   }
 }
