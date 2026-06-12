@@ -149,12 +149,12 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                       SizedBox(height: 7),
-                      Center(
+                      SizedBox(
+                        height: 50,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.logout,
                             foregroundColor: AppColors.logoutText,
-                            fixedSize: Size(330, 50),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadiusGeometry.circular(12),
                             ),
@@ -163,6 +163,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             isLogout();
                           },
                           child: Row(
+                            spacing: 10,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(Icons.exit_to_app_rounded, size: 18),

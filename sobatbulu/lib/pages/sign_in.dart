@@ -173,6 +173,7 @@ class _SignInPageState extends State<SignInPage> {
                               ],
                             ),
                             TextFormField(
+                              obscureText: true,
                               controller: passwordController,
                               decoration: InputDecoration(
                                 labelText: "Masukkan kata sandi",

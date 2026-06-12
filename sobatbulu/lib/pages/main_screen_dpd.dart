@@ -42,8 +42,10 @@ class _MainScreenDpd extends State<MainScreenDpd> {
           item: ItemConfig(icon: Icon(Icons.person_2_rounded), title: "Profil"),
         ),
       ],
-      navBarBuilder: (navBarConfig) =>
-          Style9BottomNavBar(navBarConfig: navBarConfig),
+      navBarBuilder: (navBarConfig) => Style9BottomNavBar(
+        navBarConfig: navBarConfig,
+        navBarDecoration: NavBarDecoration(),
+      ),
     );
   }
 }

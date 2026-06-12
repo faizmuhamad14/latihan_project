@@ -167,6 +167,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                         ),
                         TextFormField(
+                          obscureText: true,
                           controller: passwordController,
                           decoration: InputDecoration(
                             enabledBorder: OutlineInputBorder(

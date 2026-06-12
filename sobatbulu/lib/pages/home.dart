@@ -131,12 +131,24 @@ class _MyWidgetState extends State<HomePageScreen> {
                           margin: EdgeInsets.only(
                             left: 10,
                             right: 10,
-                            bottom: 10,
+                            bottom: 26,
                           ),
                           padding: EdgeInsets.all(15),
                           decoration: BoxDecoration(
                             color: Color(0xFFFFFFFF),
                             borderRadius: BorderRadius.circular(8),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.shade500,
+                                blurRadius: 15,
+                                offset: Offset(4, 4),
+                              ),
+                              BoxShadow(
+                                color: Colors.white,
+                                offset: Offset(-4, -4),
+                                spreadRadius: 1,
+                              ),
+                            ],
                           ),
                           child: Column(
                             spacing: 10,
@@ -412,6 +424,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                               runSpacing: 8,
                               children: PetData.jenisHewan.map((jenis) {
                                 return ChoiceChip(
+                                  selectedColor: AppColors.chip,
                                   label: Text(jenis),
 
                                   selected: selectedJenis == jenis,
@@ -446,6 +459,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                               ras,
                             ) {
                               return ChoiceChip(
+                                selectedColor: AppColors.chip,
                                 label: Text(ras),
 
                                 selected: selectedRas == ras,
@@ -473,6 +487,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                           runSpacing: 8,
                           children: PetData.umurPet.map((umur) {
                             return ChoiceChip(
+                              selectedColor: AppColors.chip,
                               label: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -502,6 +517,9 @@ class _MyWidgetState extends State<HomePageScreen> {
                           spacing: 8,
                           children: [
                             ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primary,
+                              ),
                               onPressed: () async {
                                 if (namaController.text.isEmpty) {
                                   ScaffoldMessenger.of(context).showSnackBar(
@@ -545,11 +563,20 @@ class _MyWidgetState extends State<HomePageScreen> {
                                 Navigator.pop(context);
                                 setState(() {});
                               },
-                              icon: Icon(Icons.check_circle_outline_rounded),
-                              label: Text("Save Pet Profile"),
+                              icon: Icon(
+                                Icons.check_circle_outline_rounded,
+                                color: AppColors.teksButton,
+                              ),
+                              label: Text(
+                                "Save Pet Profile",
+                                style: TextStyle(color: AppColors.teksButton),
+                              ),
                             ),
                             if (isEdit)
                               ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.primary,
+                                ),
                                 onPressed: () async {
                                   await DBHelper().deletePet(pets.id!);
 
@@ -557,8 +584,14 @@ class _MyWidgetState extends State<HomePageScreen> {
 
                                   setState(() {});
                                 },
-                                icon: const Icon(Icons.delete),
-                                label: const Text("Delete Pet Profile"),
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: AppColors.teksButton,
+                                ),
+                                label: const Text(
+                                  "Delete Pet Profile",
+                                  style: TextStyle(color: AppColors.teksButton),
+                                ),
                               ),
                           ],
                         ),

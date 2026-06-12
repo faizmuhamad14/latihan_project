@@ -19,6 +19,7 @@ class AppColors {
 
   static const Color isFed = Color(0xFFEFEDEE);
   static const Color isFed2 = Color(0xFFC3EAC3);
+  static const Color teksButton = Color(0xFF3C535B);
   static const Color isDrink = Color(0xFFAEC6CF);
 
   static const Color chip = Color(0xFFCEE7F0);

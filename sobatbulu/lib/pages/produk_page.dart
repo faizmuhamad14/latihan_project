@@ -259,6 +259,7 @@ class _ProdukPageState extends State<ProdukPage> {
                     spacing: 8,
                     children: PetData.jenisHewan.map((jenis) {
                       return ChoiceChip(
+                        selectedColor: AppColors.chip,
                         label: Text(jenis),
                         selected: selectedJenis == jenis,
                         onSelected: (value) {
@@ -285,6 +286,7 @@ class _ProdukPageState extends State<ProdukPage> {
                       spacing: 8,
                       children: PetData.petBreeds[selectedJenis]!.map((ras) {
                         return ChoiceChip(
+                          selectedColor: AppColors.chip,
                           label: Text(ras),
 
                           selected: selectedRas == ras,
@@ -310,6 +312,7 @@ class _ProdukPageState extends State<ProdukPage> {
                     spacing: 8,
                     children: PetData.umurPet.map((umur) {
                       return ChoiceChip(
+                        selectedColor: AppColors.chip,
                         label: Text(umur["label"]!),
                         selected: selectedUmur == umur["label"],
                         onSelected: (value) {
@@ -328,7 +331,7 @@ class _ProdukPageState extends State<ProdukPage> {
                       Expanded(
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.filter,
+                            backgroundColor: AppColors.primary,
                           ),
                           onPressed: () {
                             setState(() {
@@ -350,7 +353,7 @@ class _ProdukPageState extends State<ProdukPage> {
                       Expanded(
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.filter,
+                            backgroundColor: AppColors.primary,
                           ),
                           onPressed: () {
                             setState(() {});
