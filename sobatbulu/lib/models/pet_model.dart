@@ -9,6 +9,7 @@ class PetModel {
   int isDrink;
   String umur;
   String ownerEmail;
+  String? gambarPet;
 
   PetModel({
     this.id,
@@ -19,6 +20,7 @@ class PetModel {
     this.isFed = 0,
     this.isDrink = 0,
     required this.umur,
+    this.gambarPet,
   });
 
   Map<String, dynamic> toMap() {
@@ -31,6 +33,7 @@ class PetModel {
       'ras': ras,
       'umur': umur,
       'ownerEmail': ownerEmail,
+      'gambarPet': gambarPet,
     };
   }
 
@@ -44,6 +47,7 @@ class PetModel {
       isDrink: map['isDrink'] ?? 0,
       umur: map['umur'] ?? '',
       ownerEmail: map['ownerEmail'] ?? '',
+      gambarPet: map['gambarPet'],
     );
   }
   factory PetModel.fromJson(String source) =>

@@ -3,8 +3,11 @@ import 'package:flutter/rendering.dart';
 class AppColors {
   static const Color primary = Color(0xFFaec6cf);
   static const Color secondary = Color(0xFFb2d8b2);
+  static const Color secondary2 = Color(0xFF446648);
   static const Color teritary = Color(0xFFffdab9);
+  static const Color teritary2 = Color(0xFF8F715B);
   static const Color netral = Color(0xFF2c3e50);
+  static const Color netral2 = Color(0xFF4E6073);
   static const Color altTeritary = Color(0xFFdebba1);
   static const Color altNetral = Color(0xFF777777);
 

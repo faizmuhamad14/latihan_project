@@ -20,7 +20,6 @@ class PreferenceHandler {
   static Future<void> logout() async {
     await _prefs.remove(_keyIsLogin);
     await _prefs.remove('nama');
-    await _prefs.clear();
     print("LOGOUT DIPANGGIL");
     print("isLogin = ${_prefs.getBool(_keyIsLogin)}");
     print("nama = ${_prefs.getString('nama')}");
@@ -39,6 +38,18 @@ class PreferenceHandler {
   static Future<void> saveEmail(String email) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('email', email);
+  }
+
+  static Future<void> saveProfileImage(String email, String path) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.setString('profile_image_$email', path);
+  }
+
+  static Future<String?> getProfileImage(String email) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    return prefs.getString('profile_image_$email');
   }
 
   static Future<String> getEmail() async {

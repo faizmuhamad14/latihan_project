@@ -39,6 +39,6 @@ class AppTextStyle {
   static const TextStyle informasiPage = TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.w600,
-    color: Color(0xFFFFFFFF),
+    color: Color(0xffffffff),
   );
 }

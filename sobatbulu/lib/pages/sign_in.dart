@@ -49,6 +49,7 @@ class _SignInPageState extends State<SignInPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        height: double.infinity,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [Color(0xFFaec6cf), Colors.white, Color(0xFFffdab9)],
@@ -58,14 +59,13 @@ class _SignInPageState extends State<SignInPage> {
         ),
         child: SingleChildScrollView(
           child: Container(
-            constraints: BoxConstraints(
-              minHeight: MediaQuery.of(context).size.height,
-            ),
-            margin: EdgeInsets.fromLTRB(20, 28, 20, 0),
+            margin: EdgeInsets.fromLTRB(20, 30, 20, 0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(16),
                 topRight: Radius.circular(16),
+                bottomLeft: Radius.circular(16),
+                bottomRight: Radius.circular(16),
               ),
               color: Colors.white,
             ),
@@ -189,7 +189,7 @@ class _SignInPageState extends State<SignInPage> {
                                 return null;
                               },
                             ),
-                            SizedBox(height: 20),
+                            SizedBox(height: 5),
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
@@ -207,6 +207,7 @@ class _SignInPageState extends State<SignInPage> {
                                 }
                               },
                               child: Row(
+                                spacing: 10,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
@@ -223,7 +224,7 @@ class _SignInPageState extends State<SignInPage> {
                           ],
                         ),
                       ),
-                      SizedBox(height: 60),
+                      SizedBox(height: 20),
                       Text.rich(
                         TextSpan(
                           text: "Belum Punya Akun? ",
@@ -246,6 +247,7 @@ class _SignInPageState extends State<SignInPage> {
                           ],
                         ),
                       ),
+                      SizedBox(height: 20),
                     ],
                   ),
                 ),

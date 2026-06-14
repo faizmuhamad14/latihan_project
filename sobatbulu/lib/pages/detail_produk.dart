@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sobatbulu_app/constant/app_color.dart';
 import 'package:sobatbulu_app/constant/text_style.dart';
 import 'package:sobatbulu_app/models/model_data.dart';
+import 'package:sobatbulu_app/models/rupiah.dart';
 
 class DetailProduk extends StatelessWidget {
   final ProdukPetshop produk;
@@ -19,7 +20,7 @@ class DetailProduk extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Container(
-          margin: EdgeInsets.fromLTRB(15, 5, 15, 10),
+          margin: EdgeInsets.fromLTRB(15, 26, 15, 10),
           child: Column(
             spacing: 15,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -106,14 +107,20 @@ class DetailProduk extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text("Rate", style: AppTextStyle.produkTitle),
-                        Text("${produk.rate}", style: AppTextStyle.subProduk),
+                        Text(
+                          "${produk.rate}/5.0",
+                          style: AppTextStyle.subProduk,
+                        ),
                       ],
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text("Kisaran Harga", style: AppTextStyle.produkTitle),
-                        Text("${produk.harga}", style: AppTextStyle.subProduk),
+                        Text(
+                          CurrencyHelper.format(produk.harga),
+                          style: AppTextStyle.subProduk,
+                        ),
                       ],
                     ),
                     Column(
@@ -133,7 +140,7 @@ class DetailProduk extends StatelessWidget {
                         Wrap(
                           children: produk.jenisHewan.map((jenis) {
                             return Chip(
-                              backgroundColor: AppColors.chip,
+                              backgroundColor: AppColors.secondary,
                               label: Text(jenis, style: AppTextStyle.subProduk),
                             );
                           }).toList(),
@@ -151,7 +158,7 @@ class DetailProduk extends StatelessWidget {
                           spacing: 5,
                           children: produk.ras.map((ras) {
                             return Chip(
-                              backgroundColor: AppColors.chip,
+                              backgroundColor: AppColors.secondary,
                               label: Text(ras, style: AppTextStyle.subProduk),
                             );
                           }).toList(),
@@ -168,7 +175,7 @@ class DetailProduk extends StatelessWidget {
                         Wrap(
                           children: produk.umur.map((umur) {
                             return Chip(
-                              backgroundColor: AppColors.chip,
+                              backgroundColor: AppColors.secondary,
                               label: Text(umur, style: AppTextStyle.subProduk),
                             );
                           }).toList(),

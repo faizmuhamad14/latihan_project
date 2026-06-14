@@ -3,6 +3,7 @@ import 'package:sobatbulu_app/constant/app_color.dart';
 import 'package:sobatbulu_app/data/list_data_map.dart';
 import 'package:sobatbulu_app/data/list_map.dart';
 import 'package:sobatbulu_app/models/model_data.dart';
+import 'package:sobatbulu_app/models/rupiah.dart';
 import 'package:sobatbulu_app/pages/detail_produk.dart';
 
 class ProdukPage extends StatefulWidget {
@@ -66,11 +67,17 @@ class _ProdukPageState extends State<ProdukPage> {
                     margin: EdgeInsets.fromLTRB(5, 20, 5, 5),
                     child: TextField(
                       decoration: InputDecoration(
+                        filled: true,
                         prefixIcon: Icon(Icons.search),
                         hintText: "Royal Canin",
-                        border: OutlineInputBorder(
+                        fillColor: Color(0xffffffff),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
                           borderRadius: BorderRadius.circular(16),
-                          borderSide: BorderSide(color: Colors.lightBlue),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(16),
                         ),
                       ),
                     ),
@@ -162,7 +169,7 @@ class _ProdukPageState extends State<ProdukPage> {
                                   Container(
                                     padding: EdgeInsets.fromLTRB(7, 5, 7, 5),
                                     decoration: BoxDecoration(
-                                      color: AppColors.primary,
+                                      color: AppColors.secondary,
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                     child: Text(data.kategori),
@@ -182,7 +189,7 @@ class _ProdukPageState extends State<ProdukPage> {
                                   Column(
                                     spacing: 8,
                                     children: [
-                                      Text("${data.harga}"),
+                                      Text(CurrencyHelper.format(data.harga)),
                                       ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor:
@@ -259,7 +266,8 @@ class _ProdukPageState extends State<ProdukPage> {
                     spacing: 8,
                     children: PetData.jenisHewan.map((jenis) {
                       return ChoiceChip(
-                        selectedColor: AppColors.chip,
+                        selectedColor: AppColors.primary,
+                        backgroundColor: AppColors.defaultWhite,
                         label: Text(jenis),
                         selected: selectedJenis == jenis,
                         onSelected: (value) {
@@ -286,9 +294,9 @@ class _ProdukPageState extends State<ProdukPage> {
                       spacing: 8,
                       children: PetData.petBreeds[selectedJenis]!.map((ras) {
                         return ChoiceChip(
-                          selectedColor: AppColors.chip,
+                          selectedColor: AppColors.primary,
                           label: Text(ras),
-
+                          backgroundColor: AppColors.defaultWhite,
                           selected: selectedRas == ras,
 
                           onSelected: (value) {
@@ -312,7 +320,8 @@ class _ProdukPageState extends State<ProdukPage> {
                     spacing: 8,
                     children: PetData.umurPet.map((umur) {
                       return ChoiceChip(
-                        selectedColor: AppColors.chip,
+                        selectedColor: AppColors.primary,
+                        backgroundColor: AppColors.defaultWhite,
                         label: Text(umur["label"]!),
                         selected: selectedUmur == umur["label"],
                         onSelected: (value) {

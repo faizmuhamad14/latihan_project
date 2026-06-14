@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:sobatbulu_app/constant/app_color.dart';
 import 'package:sobatbulu_app/database/db_helper.dart';
 import 'package:sobatbulu_app/models/user_model.dart';
 import 'package:sobatbulu_app/pages/sign_in.dart';
@@ -41,6 +42,10 @@ class _SignUpPageState extends State<SignUpPage> {
 
     if (success) {
       if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SignInPage()),
+      );
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('Akun berhasil dibuat')));
@@ -66,6 +71,7 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
         ),
         child: Container(
+          height: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             color: Colors.white,
@@ -217,6 +223,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
                   Container(
+                    margin: EdgeInsets.only(top: 10),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       // color: Color(0xffaec6cf),
@@ -242,11 +249,15 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 24),
+                  SizedBox(height: 10),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      side: BorderSide(color: Colors.black, width: 1),
-                      backgroundColor: Color(0xFFaec6cf),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadiusGeometry.circular(8),
+                      ),
+                      elevation: 0,
+                      side: BorderSide(color: Color(0xFFC2C7CA)),
+                      backgroundColor: Color(0xFFAEC6CF),
                     ),
                     onPressed: register,
 
@@ -256,17 +267,18 @@ class _SignUpPageState extends State<SignUpPage> {
                         Text(
                           "Daftar",
                           style: TextStyle(
-                            color: Color(0xFF777777),
+                            color: AppColors.defaultBlack,
                             fontSize: 16,
                           ),
                         ),
                         Icon(
                           Icons.arrow_right_alt_sharp,
-                          color: Color(0xFF777777),
+                          color: AppColors.defaultBlack,
                         ),
                       ],
                     ),
                   ),
+                  SizedBox(height: 10),
                   Text.rich(
                     TextSpan(
                       text: "Sudah punya akun? ",

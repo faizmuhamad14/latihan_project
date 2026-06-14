@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sobatbulu_app/constant/app_color.dart';
@@ -5,6 +7,7 @@ import 'package:sobatbulu_app/constant/text_style.dart';
 import 'package:sobatbulu_app/data/list_map.dart';
 import 'package:sobatbulu_app/database/db_helper.dart';
 import 'package:sobatbulu_app/database/preference.dart';
+import 'package:sobatbulu_app/models/image_picker.dart';
 import 'package:sobatbulu_app/models/pet_model.dart';
 
 class HomePageScreen extends StatefulWidget {
@@ -16,6 +19,7 @@ class HomePageScreen extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<HomePageScreen> {
+  File? selectedPetImage;
   String? selectedJenis;
   final _formKey = GlobalKey<FormState>();
   late Future<String> userEmail;
@@ -36,14 +40,14 @@ class _MyWidgetState extends State<HomePageScreen> {
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.w700,
-            color: AppColors.textBttn,
+            color: AppColors.netral,
           ),
         ),
         centerTitle: true,
-        leading: Icon(Icons.pets, color: AppColors.textBttn),
-        actions: <Widget>[
-          IconButton(onPressed: () {}, icon: Icon(Icons.notifications_none)),
-        ],
+        leading: Icon(Icons.pets, color: AppColors.netral),
+        // actions: <Widget>[
+        //   IconButton(onPressed: () {}, icon: Icon(Icons.notifications_none)),
+        // ],
       ),
       body: FutureBuilder<List<PetModel>>(
         future: getUserPets(),
@@ -78,12 +82,12 @@ class _MyWidgetState extends State<HomePageScreen> {
                                   "Kamu belum menambahkan Pet apapun.",
                                   style: AppTextStyle.subtitle,
                                 ),
-                                SizedBox(height: 100),
+                                SizedBox(height: 150),
                                 Center(
                                   child: Lottie.asset(
                                     "assets/lottie/addPet.json",
-                                    width: 250,
-                                    height: 250,
+                                    width: 300,
+                                    height: 300,
                                   ),
                                 ),
                               ],
@@ -128,175 +132,90 @@ class _MyWidgetState extends State<HomePageScreen> {
                       itemBuilder: (context, index) {
                         final pet = daftarPengguna[index];
                         return Container(
-                          margin: EdgeInsets.only(
-                            left: 10,
-                            right: 10,
-                            bottom: 26,
-                          ),
-                          padding: EdgeInsets.all(15),
-                          decoration: BoxDecoration(
-                            color: Color(0xFFFFFFFF),
-                            borderRadius: BorderRadius.circular(8),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.shade500,
-                                blurRadius: 15,
-                                offset: Offset(4, 4),
-                              ),
-                              BoxShadow(
-                                color: Colors.white,
-                                offset: Offset(-4, -4),
-                                spreadRadius: 1,
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            spacing: 10,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    spacing: 10,
-                                    children: [
-                                      Container(
-                                        child: CircleAvatar(
-                                          radius: 40,
-                                          backgroundImage: AssetImage(
-                                            "assets/images/kucing.jpg",
-                                          ),
-                                        ),
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        spacing: 5,
-                                        children: [
-                                          Text(
-                                            pet.nama,
-                                            style: TextStyle(
-                                              color: AppColors.netral,
-                                              fontSize: 24,
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                          ),
-                                          Text(
-                                            ("${pet.jenis} • ${pet.ras}"),
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              color: AppColors.textcard,
-                                            ),
-                                          ),
-                                          Text(
-                                            pet.umur,
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              color: AppColors.textcard,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+                          margin: EdgeInsets.fromLTRB(15, 10, 15, 15),
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
+                            decoration: BoxDecoration(
+                              color: Color(0xffE8F2FF),
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.shade500,
+                                  blurRadius: 15,
+                                  offset: Offset(3, 4),
+                                ),
+                              ],
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  spacing: 20,
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 40,
+                                      backgroundImage: pet.gambarPet != null
+                                          ? FileImage(File(pet.gambarPet!))
+                                          : null,
 
-                                  Column(
-                                    children: [
-                                      IconButton(
-                                        onPressed: () {},
-                                        icon: Icon(
-                                          Icons.notification_add_outlined,
-                                        ),
-                                      ),
-                                      IconButton(
-                                        onPressed: () {
-                                          _showBottomSheet(
-                                            context,
-                                            pet,
-                                            // PetModel(
-                                            //   nama: pet.nama,
-                                            //   jenis: pet.jenis,
-                                            // ),
-                                          );
-                                        },
-                                        icon: Icon(Icons.edit_document),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                spacing: 10,
-                                children: [
-                                  Expanded(
-                                    child: InkWell(
-                                      onTap: () async {
-                                        await DBHelper().toggleFeed(pet);
-                                        setState(() {});
-                                      },
-                                      child: Container(
-                                        height: 50,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                            8,
+                                      child: pet.gambarPet == null
+                                          ? const Icon(Icons.pets)
+                                          : null,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          pet.nama,
+                                          style: TextStyle(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w600,
+
+                                            color: Color(0xff2C3E50),
                                           ),
-                                          color: pet.isFed == 1
-                                              ? AppColors.isFed2
-                                              : AppColors.isFed,
                                         ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Icon(Icons.restaurant),
-                                            Text(
-                                              pet.isFed == 1
-                                                  ? "✓ Sudah Makan"
-                                                  : "Sudah Makan",
-                                              style: TextStyle(fontSize: 18),
-                                            ),
-                                          ],
+                                        Text(
+                                          "${pet.jenis} • ${pet.umur}",
+                                          style: TextStyle(fontSize: 16),
                                         ),
+                                        Text(
+                                          pet.ras,
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      onPressed: () {},
+                                      style: IconButton.styleFrom(
+                                        backgroundColor: AppColors.secondary2,
+                                      ),
+                                      icon: Icon(
+                                        Icons.info_outline_rounded,
+                                        color: AppColors.defaultWhite,
                                       ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: InkWell(
-                                      onTap: () async {
-                                        await DBHelper().toggleDrink(pet);
-                                        setState(() {});
+                                    IconButton(
+                                      onPressed: () {
+                                        _showBottomSheet(context, pet);
                                       },
-                                      child: Container(
-                                        height: 50,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                            8,
-                                          ),
-                                          color: pet.isDrink == 1
-                                              ? AppColors.isDrink
-                                              : AppColors.isFed,
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Icon(Icons.restaurant),
-                                            Text(
-                                              pet.isDrink == 1
-                                                  ? "✓ Sudah Minum"
-                                                  : "Sudah Minum",
-                                              style: TextStyle(fontSize: 18),
-                                            ),
-                                          ],
-                                        ),
+                                      style: IconButton.styleFrom(
+                                        backgroundColor: AppColors.netral2,
+                                      ),
+                                      icon: Icon(
+                                        Icons.edit_document,
+                                        color: AppColors.defaultWhite,
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 10),
-                            ],
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         );
                       },
@@ -305,53 +224,17 @@ class _MyWidgetState extends State<HomePageScreen> {
                 ),
               ),
               SizedBox(height: 10),
-              Container(
-                margin: EdgeInsets.only(left: 10, right: 10),
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(16),
-                  onTap: () => _showBottomSheet(
-                    context,
-                    PetModel(
-                      nama: '',
-                      jenis: '',
-                      umur: '',
-                      ownerEmail: '',
-                      ras: '',
-                    ),
-                  ),
-                  child: Container(
-                    margin: EdgeInsets.only(left: 10, right: 10),
-                    height: 152,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: Colors.black,
-                        style: BorderStyle.solid,
-                      ),
-                    ),
-                    padding: EdgeInsets.all(20),
-                    child: Column(
-                      spacing: 3,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.primary,
-                          ),
-                          child: Icon(Icons.add, size: 50),
-                        ),
-                        Text("Tambahkan Pet Baru", style: AppTextStyle.addPet),
-                        Text("Tambahkan hewan peliharaan baru."),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
             ],
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.primary,
+        child: Icon(Icons.add_rounded, color: AppColors.defaultWhite, size: 50),
+        onPressed: () => _showBottomSheet(
+          context,
+          PetModel(ras: '', nama: '', jenis: '', ownerEmail: '', umur: ''),
+        ),
       ),
     );
   }
@@ -371,6 +254,12 @@ class _MyWidgetState extends State<HomePageScreen> {
     String? selectedRas = pets.ras.isNotEmpty ? pets.ras : null;
 
     String? selectedUmur = pets.umur.isNotEmpty ? pets.umur : null;
+
+    File? selectedPetImage;
+
+    if (isEdit && pets.gambarPet != null) {
+      selectedPetImage = File(pets.gambarPet!);
+    }
     showModalBottomSheet(
       isScrollControlled: true,
       backgroundColor: AppColors.backgroundBttn,
@@ -409,6 +298,31 @@ class _MyWidgetState extends State<HomePageScreen> {
                           ),
                         ),
                         SizedBox(height: 10),
+                        Center(
+                          child: GestureDetector(
+                            onTap: () async {
+                              final image =
+                                  await ImagePickerService.pickImageFromGallery();
+
+                              if (image != null) {
+                                setModalState(() {
+                                  selectedPetImage = image;
+                                });
+                              }
+                            },
+
+                            child: CircleAvatar(
+                              radius: 50,
+                              backgroundImage: selectedPetImage != null
+                                  ? FileImage(selectedPetImage!)
+                                  : null,
+
+                              child: selectedPetImage == null
+                                  ? const Icon(Icons.camera_alt, size: 30)
+                                  : null,
+                            ),
+                          ),
+                        ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -424,9 +338,9 @@ class _MyWidgetState extends State<HomePageScreen> {
                               runSpacing: 8,
                               children: PetData.jenisHewan.map((jenis) {
                                 return ChoiceChip(
-                                  selectedColor: AppColors.chip,
+                                  selectedColor: AppColors.primary,
                                   label: Text(jenis),
-
+                                  backgroundColor: AppColors.defaultWhite,
                                   selected: selectedJenis == jenis,
 
                                   onSelected: (value) {
@@ -459,9 +373,9 @@ class _MyWidgetState extends State<HomePageScreen> {
                               ras,
                             ) {
                               return ChoiceChip(
-                                selectedColor: AppColors.chip,
+                                selectedColor: AppColors.primary,
                                 label: Text(ras),
-
+                                backgroundColor: AppColors.defaultWhite,
                                 selected: selectedRas == ras,
 
                                 onSelected: (value) {
@@ -487,7 +401,8 @@ class _MyWidgetState extends State<HomePageScreen> {
                           runSpacing: 8,
                           children: PetData.umurPet.map((umur) {
                             return ChoiceChip(
-                              selectedColor: AppColors.chip,
+                              selectedColor: AppColors.primary,
+                              backgroundColor: AppColors.defaultWhite,
                               label: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -545,6 +460,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                                       isFed: pets.isFed,
                                       isDrink: pets.isDrink,
                                       ras: selectedRas ?? "",
+                                      gambarPet: selectedPetImage?.path,
                                     ),
                                   );
                                 } else {
@@ -557,6 +473,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                                       umur: selectedUmur ?? "",
                                       ownerEmail: email,
                                       ras: selectedRas ?? "",
+                                      gambarPet: selectedPetImage?.path,
                                     ),
                                   );
                                 }

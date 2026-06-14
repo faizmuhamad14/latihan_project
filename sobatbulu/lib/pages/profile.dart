@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:sobatbulu_app/constant/app_color.dart';
 import 'package:sobatbulu_app/constant/text_style.dart';
 import 'package:sobatbulu_app/database/preference.dart';
+import 'package:sobatbulu_app/models/image_picker.dart';
 import 'package:sobatbulu_app/pages/sign_in.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -14,6 +17,23 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  File? selectedImage;
+  @override
+  void initState() {
+    super.initState();
+    loadProfileImage();
+  }
+
+  Future<void> loadProfileImage() async {
+    final imagePath = await PreferenceHandler.getProfileImage(widget.email);
+
+    if (imagePath != null) {
+      setState(() {
+        selectedImage = File(imagePath);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,9 +50,9 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         centerTitle: true,
         leading: Icon(Icons.pets, color: AppColors.textBttn),
-        actions: <Widget>[
-          IconButton(onPressed: () {}, icon: Icon(Icons.notifications_none)),
-        ],
+        // actions: <Widget>[
+        //   IconButton(onPressed: () {}, icon: Icon(Icons.notifications_none)),
+        // ],
       ),
       body: Container(
         margin: EdgeInsets.only(top: 10),
@@ -42,9 +62,17 @@ class _ProfilePageState extends State<ProfilePage> {
             Column(
               spacing: 5,
               children: [
-                CircleAvatar(
-                  radius: 60,
-                  backgroundImage: AssetImage("assets/images/orang.jpg"),
+                GestureDetector(
+                  onTap: () async {
+                    await pickImage();
+                  },
+                  child: CircleAvatar(
+                    radius: 60,
+                    backgroundImage: selectedImage != null
+                        ? FileImage(selectedImage!)
+                        : const AssetImage("assets/images/boxicon.jpg")
+                              as ImageProvider,
+                  ),
                 ),
                 Text(widget.nama, style: AppTextStyle.title),
                 Text(widget.email, style: AppTextStyle.subProduk),
@@ -155,7 +183,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.logout,
                             foregroundColor: AppColors.logoutText,
+
                             shape: RoundedRectangleBorder(
+                              side: BorderSide(color: AppColors.logoutText),
                               borderRadius: BorderRadiusGeometry.circular(12),
                             ),
                           ),
@@ -181,6 +211,18 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
     );
+  }
+
+  Future<void> pickImage() async {
+    final image = await ImagePickerService.pickImageFromGallery();
+
+    if (image != null) {
+      await PreferenceHandler.saveProfileImage(widget.email, image.path);
+
+      setState(() {
+        selectedImage = image;
+      });
+    }
   }
 
   void isLogout() async {
