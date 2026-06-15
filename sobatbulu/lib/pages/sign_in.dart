@@ -162,14 +162,14 @@ class _SignInPageState extends State<SignInPage> {
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
-                                Text(
-                                  "Lupa kata sandi?",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                    color: Color(0xFF4B626A),
-                                  ),
-                                ),
+                                // Text(
+                                //   "Lupa kata sandi?",
+                                //   style: TextStyle(
+                                //     fontSize: 16,
+                                //     fontWeight: FontWeight.w600,
+                                //     color: Color(0xFF4B626A),
+                                //   ),
+                                // ),
                               ],
                             ),
                             TextFormField(

@@ -40,7 +40,7 @@ class _MainScreenDpd extends State<MainScreenDpd> {
         PersistentTabConfig(
           screen: InformationKedua(),
           item: ItemConfig(
-            textStyle: TextStyle(fontSize: 16),
+            textStyle: TextStyle(fontSize: 15),
             icon: Icon(Icons.medical_information_rounded, size: 28),
             title: "Informasi",
             activeForegroundColor: Color(0xFF7D949D),

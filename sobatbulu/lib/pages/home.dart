@@ -154,13 +154,18 @@ class _MyWidgetState extends State<HomePageScreen> {
                                   spacing: 20,
                                   children: [
                                     CircleAvatar(
+                                      backgroundColor: AppColors.defaultWhite,
                                       radius: 40,
                                       backgroundImage: pet.gambarPet != null
                                           ? FileImage(File(pet.gambarPet!))
                                           : null,
 
                                       child: pet.gambarPet == null
-                                          ? const Icon(Icons.pets)
+                                          ? const Icon(
+                                              Icons.pets,
+                                              size: 30,
+                                              color: AppColors.defaultBlack,
+                                            )
                                           : null,
                                     ),
                                     Column(
@@ -312,13 +317,18 @@ class _MyWidgetState extends State<HomePageScreen> {
                             },
 
                             child: CircleAvatar(
+                              backgroundColor: AppColors.defaultWhite,
                               radius: 50,
                               backgroundImage: selectedPetImage != null
                                   ? FileImage(selectedPetImage!)
                                   : null,
 
                               child: selectedPetImage == null
-                                  ? const Icon(Icons.camera_alt, size: 30)
+                                  ? const Icon(
+                                      Icons.camera_alt,
+                                      size: 30,
+                                      color: AppColors.defaultBlack,
+                                    )
                                   : null,
                             ),
                           ),

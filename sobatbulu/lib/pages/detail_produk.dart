@@ -138,6 +138,7 @@ class DetailProduk extends StatelessWidget {
                           style: AppTextStyle.produkTitle,
                         ),
                         Wrap(
+                          spacing: 5,
                           children: produk.jenisHewan.map((jenis) {
                             return Chip(
                               backgroundColor: AppColors.secondary,
@@ -173,6 +174,7 @@ class DetailProduk extends StatelessWidget {
                           style: AppTextStyle.produkTitle,
                         ),
                         Wrap(
+                          spacing: 5,
                           children: produk.umur.map((umur) {
                             return Chip(
                               backgroundColor: AppColors.secondary,

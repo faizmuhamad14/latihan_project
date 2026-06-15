@@ -121,7 +121,7 @@ class _ProdukPageState extends State<ProdukPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("Produk Makanan"),
+                        Text("Produk"),
                         Text("${filteredProducts.length} Hasil"),
                       ],
                     ),
