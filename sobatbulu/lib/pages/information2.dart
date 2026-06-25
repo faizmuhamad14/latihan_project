@@ -39,9 +39,11 @@ class _InformationKeduaState extends State<InformationKedua> {
                   spacing: 10,
                   children: [
                     Icon(Icons.info_outline_rounded, size: 26),
-                    Text(
-                      "Informasi & Fakta Seru",
-                      style: AppTextStyle.informasiPage,
+                    Expanded(
+                      child: Text(
+                        "Informasi & Fakta Seru",
+                        style: AppTextStyle.informasiPage,
+                      ),
                     ),
                   ],
                 ),
@@ -65,9 +67,11 @@ class _InformationKeduaState extends State<InformationKedua> {
                   spacing: 10,
                   children: [
                     Icon(Icons.location_on_outlined, size: 26),
-                    Text(
-                      "Lokasi Vet & Petshop Terdekat",
-                      style: AppTextStyle.informasiPage,
+                    Expanded(
+                      child: Text(
+                        "Lokasi Vet & Petshop Terdekat",
+                        style: AppTextStyle.informasiPage,
+                      ),
                     ),
                   ],
                 ),

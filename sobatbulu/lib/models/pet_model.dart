@@ -5,9 +5,12 @@ class PetModel {
   String nama;
   String ras;
   String jenis;
-  int isFed;
-  int isDrink;
   String umur;
+  String? gender;
+  int? berat;
+  String? tanggalLahir;
+  String? tanggalAdop;
+  String? catatan;
   String ownerEmail;
   String? gambarPet;
 
@@ -16,10 +19,14 @@ class PetModel {
     required this.ras,
     required this.nama,
     required this.jenis,
-    required this.ownerEmail,
-    this.isFed = 0,
-    this.isDrink = 0,
     required this.umur,
+    this.gender,
+    this.berat,
+    this.tanggalLahir,
+    this.tanggalAdop,
+    this.catatan,
+    required this.ownerEmail,
+
     this.gambarPet,
   });
 
@@ -28,12 +35,15 @@ class PetModel {
       'id': id,
       'nama': nama,
       'jenis': jenis,
-      'isFed': isFed,
-      'isDrink': isDrink,
       'ras': ras,
       'umur': umur,
       'ownerEmail': ownerEmail,
       'gambarPet': gambarPet,
+      'gender': gender,
+      'berat': berat,
+      'tanggalLahir': tanggalLahir,
+      'tanggalAdop': tanggalAdop,
+      'catatan': catatan,
     };
   }
 
@@ -43,11 +53,14 @@ class PetModel {
       nama: map['nama'],
       ras: map['ras'] ?? '',
       jenis: map['jenis'],
-      isFed: map['isFed'] ?? 0,
-      isDrink: map['isDrink'] ?? 0,
       umur: map['umur'] ?? '',
       ownerEmail: map['ownerEmail'] ?? '',
       gambarPet: map['gambarPet'],
+      gender: map['gender'],
+      berat: map['berat'],
+      tanggalLahir: map['tanggalLahir'],
+      tanggalAdop: map['tanggalAdop'],
+      catatan: map['catatan'],
     );
   }
   factory PetModel.fromJson(String source) =>

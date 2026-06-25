@@ -174,7 +174,16 @@ class _ProdukPageState extends State<ProdukPage> {
                                     ),
                                     child: Text(data.kategori),
                                   ),
-                                  Text(data.nama),
+                                  SizedBox(
+                                    child: Expanded(
+                                      child: Text(
+                                        data.nama,
+                                        textAlign: TextAlign.center,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [

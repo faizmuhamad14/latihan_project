@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "482092384268",
+    "project_id": "sobatbulu-e0e95",
+    "storage_bucket": "sobatbulu-e0e95.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:482092384268:android:9157a2665540f3e7012e29",
+        "android_client_info": {
+          "package_name": "com.faizdev.sobatbulu"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGN-58vXeD_DZfe5YQtTiADp3tpTtk4pI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

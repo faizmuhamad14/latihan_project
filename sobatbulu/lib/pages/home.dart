@@ -9,6 +9,7 @@ import 'package:sobatbulu_app/database/db_helper.dart';
 import 'package:sobatbulu_app/database/preference.dart';
 import 'package:sobatbulu_app/models/image_picker.dart';
 import 'package:sobatbulu_app/models/pet_model.dart';
+import 'package:sobatbulu_app/pages/detail_pet.dart';
 
 class HomePageScreen extends StatefulWidget {
   final String nama;
@@ -49,7 +50,8 @@ class _MyWidgetState extends State<HomePageScreen> {
         //   IconButton(onPressed: () {}, icon: Icon(Icons.notifications_none)),
         // ],
       ),
-      body: FutureBuilder<List<PetModel>>(
+      body: 
+      FutureBuilder<List<PetModel>>(
         future: getUserPets(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
@@ -196,7 +198,15 @@ class _MyWidgetState extends State<HomePageScreen> {
                                 Row(
                                   children: [
                                     IconButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                DetailPet(pet: pet),
+                                          ),
+                                        );
+                                      },
                                       style: IconButton.styleFrom(
                                         backgroundColor: AppColors.secondary2,
                                       ),
@@ -467,8 +477,6 @@ class _MyWidgetState extends State<HomePageScreen> {
                                       jenis: selectedJenis ?? "",
                                       umur: selectedUmur ?? "",
                                       ownerEmail: email,
-                                      isFed: pets.isFed,
-                                      isDrink: pets.isDrink,
                                       ras: selectedRas ?? "",
                                       gambarPet: selectedPetImage?.path,
                                     ),

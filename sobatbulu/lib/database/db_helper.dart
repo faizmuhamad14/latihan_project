@@ -39,8 +39,13 @@ class DBHelper {
             jenis TEXT,
             umur TEXT,
             ras TEXT,
-            isFed INTEGER DEFAULT 0,
-            isDrink INTEGER DEFAULT 0,
+
+            gender TEXT,
+            berat INTEGER,
+            tanggalLahir TEXT,
+            tanggalAdop TEXT,
+
+            catatan TEXT,
             ownerEmail TEXT,
             gambarPet TEXT
           )
@@ -141,28 +146,6 @@ class DBHelper {
     final db = await database;
 
     await db.update('pets', {'isDrink': 1}, where: 'id = ?', whereArgs: [id]);
-  }
-
-  Future<void> toggleFeed(PetModel pet) async {
-    final db = await database;
-
-    await db.update(
-      'pets',
-      {'isFed': pet.isFed == 1 ? 0 : 1},
-      where: 'id = ?',
-      whereArgs: [pet.id],
-    );
-  }
-
-  Future<void> toggleDrink(PetModel pet) async {
-    final db = await database;
-
-    await db.update(
-      'pets',
-      {'isDrink': pet.isDrink == 1 ? 0 : 1},
-      where: 'id = ?',
-      whereArgs: [pet.id],
-    );
   }
 
   Future<List<PetModel>> getPetByUser(String email) async {

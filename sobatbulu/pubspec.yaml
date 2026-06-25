@@ -30,6 +30,7 @@ environment:
 dependencies:
   cupertino_icons: ^1.0.8
   dotted_border: ^3.1.0
+  firebase_core: ^4.11.0
   flutter:
     sdk: flutter
   flutter_launcher_icons: ^0.14.4
@@ -44,15 +45,16 @@ dependencies:
   sqflite: ^2.4.2+1
 
 dev_dependencies:
+  dio: ^5.9.2
+  flutter_launcher_icons: ^0.14.4
   flutter_lints: ^6.0.0
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: "^0.14.4"
 
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/images/icon2.png"
+  image_path: "assets/images/IconSobatBulu.jpg"
   min_sdk_android: 21 # android min sdk min:16, default 21
   web:
     generate: true
