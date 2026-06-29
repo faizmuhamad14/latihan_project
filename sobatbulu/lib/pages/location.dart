@@ -1,26 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
-import 'package:sobatbulu_app/constant/text_style.dart';
+import 'package:sobatbulu_app/models/location.dart';
+import 'package:sobatbulu_app/services/location_service.dart';
+import 'package:sobatbulu_app/utils/map_launcher.dart';
 
-class LocationPage extends StatefulWidget {
-  const LocationPage({super.key});
+class LocationPage extends StatelessWidget {
+  LocationPage({super.key});
 
-  @override
-  State<LocationPage> createState() => _LocationPageState();
-}
+  final service = LocationService();
 
-class _LocationPageState extends State<LocationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFFFFFF),
-      appBar: AppBar(backgroundColor: Color(0xffffffff)),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Lottie.asset("assets/lottie/work.json"),
-          Text("Fitur ini sedang dalam pengerjaan", style: AppTextStyle.title),
-        ],
+      appBar: AppBar(title: const Text("Lokasi Petshop")),
+      body: StreamBuilder<List<LocationModel>>(
+        stream: service.getLocations(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          final locations = snapshot.data!;
+
+          return ListView.builder(
+            itemCount: locations.length,
+            itemBuilder: (context, index) {
+              final lokasi = locations[index];
+
+              return Card(
+                margin: const EdgeInsets.all(12),
+                child: ListTile(
+                  onTap: () {
+                    openMap(lokasi.latitude, lokasi.longitude);
+                  },
+                  title: Text(lokasi.nama),
+                  subtitle: Text(lokasi.alamat),
+                  trailing: const Icon(Icons.location_on),
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }

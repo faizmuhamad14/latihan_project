@@ -1,0 +1,125 @@
+[
+  {
+    "nama": "Nature Vet & Petshop",
+    "alamat": "Jl. Tebet Raya No.14, Tebet Barat, Tebet, Jakarta Selatan",
+    "telepon": "(021) 83792692",
+    "latitude": 0,
+    "longitude": 0,
+    "rating": 4.8,
+    "layanan": [
+      "Klinik Hewan",
+      "Pet Shop",
+      "Grooming",
+      "Pet Boarding",
+      "Daycare",
+      "Vaksin"
+    ]
+  },
+  {
+    "nama": "Dolce Pet Shop & Grooming Tebet Raya",
+    "alamat": "Jl. Tebet Raya No.20C, Tebet Barat, Tebet, Jakarta Selatan",
+    "telepon": "08118346789",
+    "latitude": 0,
+    "longitude": 0,
+    "rating": 4.6,
+    "layanan": [
+      "Pet Shop",
+      "Grooming"
+    ]
+  },
+  {
+    "nama": "Pet Kingdom Kemang Village",
+    "alamat": "Lippo Mall Kemang, Bangka, Mampang Prapatan, Jakarta Selatan",
+    "telepon": "081510888824",
+    "latitude": 0,
+    "longitude": 0,
+    "rating": 4.7,
+    "layanan": [
+      "Pet Shop",
+      "Grooming",
+      "Pet Hotel",
+      "Dog Training",
+      "Klinik Hewan"
+    ]
+  },
+  {
+    "nama": "Groovy Vetcare Clinic",
+    "alamat": "Ruko Galeri Niaga, Jl. H. Nawi Raya No.9F-G, Gandaria Selatan, Jakarta Selatan",
+    "telepon": "(021) 72800617",
+    "latitude": 0,
+    "longitude": 0,
+    "rating": 4.5,
+    "layanan": [
+      "Klinik Hewan",
+      "Rawat Inap",
+      "Laboratorium",
+      "Pet Shop"
+    ]
+  },
+  {
+    "nama": "ModernVet Animal Hospital Kemang",
+    "alamat": "Jl. Kemang Timur No.48, Bangka, Mampang Prapatan, Jakarta Selatan",
+    "telepon": "",
+    "latitude": 0,
+    "longitude": 0,
+    "rating": 4.9,
+    "layanan": [
+      "Rumah Sakit Hewan",
+      "Operasi",
+      "Rawat Inap",
+      "Vaksin"
+    ]
+  },
+  {
+    "nama": "My Vets Kemang",
+    "alamat": "Jl. Kemang Selatan VIII No.7A, Cipete Selatan, Cilandak, Jakarta Selatan",
+    "telepon": "(021) 7668241",
+    "latitude": 0,
+    "longitude": 0,
+    "rating": 4.5,
+    "layanan": [
+      "Klinik Hewan",
+      "Operasi",
+      "Vaksin"
+    ]
+  },
+  {
+    "nama": "TWS Petshop and Vet",
+    "alamat": "Jl. Pancoran Barat VIII No.7, Pancoran, Jakarta Selatan",
+    "telepon": "085781158433",
+    "latitude": 0,
+    "longitude": 0,
+    "rating": 4.7,
+    "layanan": [
+      "Pet Shop",
+      "Dokter Hewan",
+      "Grooming"
+    ]
+  },
+  {
+    "nama": "Catty Petshop",
+    "alamat": "Jl. Cikoko Timur Raya No.41, Pancoran, Jakarta Selatan",
+    "telepon": "(021) 79196242",
+    "latitude": 0,
+    "longitude": 0,
+    "rating": 4.3,
+    "layanan": [
+      "Pet Shop",
+      "Grooming"
+    ]
+  },
+  {
+    "nama": "Tebet Pet Care",
+    "alamat": "Jl. Tebet Utara I No.36C, Tebet Timur, Jakarta Selatan",
+    "telepon": "08118448500",
+    "latitude": 0,
+    "longitude": 0,
+    "rating": 4.6,
+    "layanan": [
+      "Pet Shop",
+      "Dokter Hewan",
+      "Grooming",
+      "Vaksin"
+    ]
+  }
+]
