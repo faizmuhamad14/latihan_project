@@ -217,10 +217,11 @@ class _ProfilePageState extends State<ProfilePage> {
     final image = await ImagePickerService.pickImageFromGallery();
 
     if (image != null) {
-      await PreferenceHandler.saveProfileImage(widget.email, image.path);
+      final permanentFile = await ImagePickerService.saveImagePermanently(image, "profile");
+      await PreferenceHandler.saveProfileImage(widget.email, permanentFile.path);
 
       setState(() {
-        selectedImage = image;
+        selectedImage = permanentFile;
       });
     }
   }

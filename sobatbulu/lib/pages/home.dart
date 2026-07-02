@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -50,8 +51,7 @@ class _MyWidgetState extends State<HomePageScreen> {
         //   IconButton(onPressed: () {}, icon: Icon(Icons.notifications_none)),
         // ],
       ),
-      body: 
-      FutureBuilder<List<PetModel>>(
+      body: FutureBuilder<List<PetModel>>(
         future: getUserPets(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
@@ -108,7 +108,10 @@ class _MyWidgetState extends State<HomePageScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
+              // Carousel Banner Section
+              const HomeCarousel(),
+              const SizedBox(height: 15),
               Expanded(
                 child: FutureBuilder<List<PetModel>>(
                   future: getUserPets(),
@@ -130,106 +133,218 @@ class _MyWidgetState extends State<HomePageScreen> {
                     final daftarPengguna = snapshot.data!;
 
                     return ListView.builder(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                       itemCount: daftarPengguna.length,
                       itemBuilder: (context, index) {
                         final pet = daftarPengguna[index];
+
+                        // Dynamic styling based on pet type using theme colors from AppColors
+                        final isCat = pet.jenis.toLowerCase() == 'kucing';
+                        final isDog = pet.jenis.toLowerCase() == 'anjing';
+
+                        final Color accentColor = isCat
+                            ? AppColors.teritary2
+                            : (isDog
+                                  ? AppColors.netral2
+                                  : AppColors.secondary2);
+
+                        final Color cardBgColor = isCat
+                            ? AppColors.teritary.withAlpha(35)
+                            : (isDog
+                                  ? AppColors.primary.withAlpha(35)
+                                  : AppColors.secondary.withAlpha(35));
+
+                        final Color badgeBgColor = isCat
+                            ? AppColors.teritary.withAlpha(70)
+                            : (isDog
+                                  ? AppColors.primary.withAlpha(70)
+                                  : AppColors.secondary.withAlpha(70));
+
+                        final String speciesEmoji = isCat
+                            ? "🐱"
+                            : (isDog ? "🐶" : "🐾");
+
                         return Container(
-                          margin: EdgeInsets.fromLTRB(15, 10, 15, 15),
-                          child: Container(
-                            padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
-                            decoration: BoxDecoration(
-                              color: Color(0xffE8F2FF),
-                              borderRadius: BorderRadius.circular(16),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.shade500,
-                                  blurRadius: 15,
-                                  offset: Offset(3, 4),
-                                ),
-                              ],
+                          margin: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                          decoration: BoxDecoration(
+                            color: cardBgColor,
+                            borderRadius: BorderRadius.circular(24),
+                            border: Border.all(
+                              color: accentColor.withAlpha(35),
+                              width: 1.5,
                             ),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  spacing: 20,
-                                  children: [
-                                    CircleAvatar(
-                                      backgroundColor: AppColors.defaultWhite,
-                                      radius: 40,
-                                      backgroundImage: pet.gambarPet != null
-                                          ? FileImage(File(pet.gambarPet!))
-                                          : null,
-
-                                      child: pet.gambarPet == null
-                                          ? const Icon(
-                                              Icons.pets,
-                                              size: 30,
-                                              color: AppColors.defaultBlack,
-                                            )
-                                          : null,
+                            boxShadow: [
+                              BoxShadow(
+                                color: accentColor.withAlpha(12),
+                                blurRadius: 16,
+                                offset: const Offset(0, 6),
+                              ),
+                            ],
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(24),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DetailPet(pet: pet),
                                     ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          pet.nama,
-                                          style: TextStyle(
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.w600,
-
-                                            color: Color(0xff2C3E50),
+                                  );
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      // Pet Image with dynamic frame border
+                                      Container(
+                                        width: 85,
+                                        height: 85,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(
+                                            18,
                                           ),
-                                        ),
-                                        Text(
-                                          "${pet.jenis} • ${pet.umur}",
-                                          style: TextStyle(fontSize: 16),
-                                        ),
-                                        Text(
-                                          pet.ras,
-                                          style: TextStyle(fontSize: 16),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    IconButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                DetailPet(pet: pet),
+                                          border: Border.all(
+                                            color: accentColor.withAlpha(60),
+                                            width: 2,
                                           ),
-                                        );
-                                      },
-                                      style: IconButton.styleFrom(
-                                        backgroundColor: AppColors.secondary2,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.black.withAlpha(10),
+                                              blurRadius: 4,
+                                              offset: const Offset(0, 2),
+                                            ),
+                                          ],
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                            16,
+                                          ),
+                                          child: pet.gambarPet != null
+                                              ? Image.file(
+                                                  File(pet.gambarPet!),
+                                                  fit: BoxFit.cover,
+                                                )
+                                              : Container(
+                                                  color: badgeBgColor,
+                                                  child: Icon(
+                                                    Icons.pets_rounded,
+                                                    size: 36,
+                                                    color: accentColor,
+                                                  ),
+                                                ),
+                                        ),
                                       ),
-                                      icon: Icon(
-                                        Icons.info_outline_rounded,
-                                        color: AppColors.defaultWhite,
+                                      const SizedBox(width: 16),
+
+                                      // Pet Information Info Section
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              pet.nama,
+                                              style: TextStyle(
+                                                fontSize: 22,
+                                                fontWeight: FontWeight.bold,
+                                                color: AppColors.netral,
+                                                letterSpacing: 0.3,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              pet.ras.isNotEmpty
+                                                  ? pet.ras
+                                                  : 'Campuran',
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w600,
+                                                color: AppColors.netral
+                                                    .withAlpha(160),
+                                              ),
+                                            ),
+                                            const SizedBox(height: 10),
+
+                                            // Modern tags/chips
+                                            Row(
+                                              children: [
+                                                _buildPetBadge(
+                                                  label:
+                                                      "$speciesEmoji ${pet.jenis}",
+                                                  bgColor: badgeBgColor,
+                                                  textColor: accentColor,
+                                                ),
+                                                const SizedBox(width: 8),
+                                                _buildPetBadge(
+                                                  label: "🎂 ${pet.umur}",
+                                                  bgColor: Colors.white,
+                                                  textColor: AppColors.netral
+                                                      .withAlpha(200),
+                                                  hasBorder: true,
+                                                  borderColor: AppColors.netral
+                                                      .withAlpha(30),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    IconButton(
-                                      onPressed: () {
-                                        _showBottomSheet(context, pet);
-                                      },
-                                      style: IconButton.styleFrom(
-                                        backgroundColor: AppColors.netral2,
+
+                                      // Right-side actions (Edit & Chevron)
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          IconButton(
+                                            onPressed: () {
+                                              _showBottomSheet(context, pet);
+                                            },
+                                            icon: Icon(
+                                              Icons.edit_rounded,
+                                              color: accentColor,
+                                              size: 18,
+                                            ),
+                                            style: IconButton.styleFrom(
+                                              backgroundColor: Colors.white,
+                                              padding: const EdgeInsets.all(8),
+                                              minimumSize: const Size(36, 36),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                                side: BorderSide(
+                                                  color: accentColor.withAlpha(
+                                                    50,
+                                                  ),
+                                                  width: 1,
+                                                ),
+                                              ),
+                                              elevation: 1,
+                                              shadowColor: Colors.black
+                                                  .withAlpha(30),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 16),
+                                          Icon(
+                                            Icons.arrow_forward_ios_rounded,
+                                            color: accentColor.withAlpha(120),
+                                            size: 16,
+                                          ),
+                                        ],
                                       ),
-                                      icon: Icon(
-                                        Icons.edit_document,
-                                        color: AppColors.defaultWhite,
-                                      ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ],
+                              ),
                             ),
                           ),
                         );
@@ -249,6 +364,33 @@ class _MyWidgetState extends State<HomePageScreen> {
         onPressed: () => _showBottomSheet(
           context,
           PetModel(ras: '', nama: '', jenis: '', ownerEmail: '', umur: ''),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPetBadge({
+    required String label,
+    required Color bgColor,
+    required Color textColor,
+    bool hasBorder = false,
+    Color? borderColor,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(10),
+        border: hasBorder && borderColor != null
+            ? Border.all(color: borderColor, width: 1)
+            : null,
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 11,
+          fontWeight: FontWeight.bold,
+          color: textColor,
         ),
       ),
     );
@@ -467,6 +609,17 @@ class _MyWidgetState extends State<HomePageScreen> {
                                   return;
                                 }
 
+                                String? finalImagePath = pets.gambarPet;
+                                if (selectedPetImage != null &&
+                                    selectedPetImage!.path != pets.gambarPet) {
+                                  final permanentFile =
+                                      await ImagePickerService.saveImagePermanently(
+                                        selectedPetImage!,
+                                        "pet",
+                                      );
+                                  finalImagePath = permanentFile.path;
+                                }
+
                                 if (isEdit) {
                                   final email =
                                       await PreferenceHandler.getEmail();
@@ -478,7 +631,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                                       umur: selectedUmur ?? "",
                                       ownerEmail: email,
                                       ras: selectedRas ?? "",
-                                      gambarPet: selectedPetImage?.path,
+                                      gambarPet: finalImagePath,
                                     ),
                                   );
                                 } else {
@@ -491,7 +644,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                                       umur: selectedUmur ?? "",
                                       ownerEmail: email,
                                       ras: selectedRas ?? "",
-                                      gambarPet: selectedPetImage?.path,
+                                      gambarPet: finalImagePath,
                                     ),
                                   );
                                 }
@@ -539,6 +692,225 @@ class _MyWidgetState extends State<HomePageScreen> {
           },
         );
       },
+    );
+  }
+}
+
+class HomeCarousel extends StatefulWidget {
+  const HomeCarousel({super.key});
+
+  @override
+  State<HomeCarousel> createState() => _HomeCarouselState();
+}
+
+class _HomeCarouselState extends State<HomeCarousel> {
+  int _currentIndex = 0;
+  late PageController _pageController;
+  Timer? _timer;
+
+  // Placeholder list of image assets (user can replace these later)
+  final List<String> _carouselImages = [
+    "assets/images/carousel1.png",
+    "assets/images/carousel2.png",
+    "assets/images/banner3.jpg",
+  ];
+
+  final List<String> _bannerTitles = [
+    "Edukasi Sobat Bulu",
+    "Promo Makanan Kucing",
+    "Klinik Vet Terdekat",
+  ];
+
+  final List<String> _bannerSubtitles = [
+    "Pelajari tips merawat hewan peliharaan agar selalu sehat.",
+    "Dapatkan diskon hingga 20% untuk makanan kucing premium.",
+    "Temukan rekomendasi klinik dokter hewan terbaik di sekitar Anda.",
+  ];
+
+  final List<Color> _placeholderGradientsStart = [
+    const Color(0xFFaec6cf), // primary pastel blue
+    const Color(0xFFffdab9), // peach
+    const Color(0xFFb2d8b2), // pastel green
+  ];
+
+  final List<Color> _placeholderGradientsEnd = [
+    const Color(0xFF7A9FA9),
+    const Color(0xFFE4A26F),
+    const Color(0xFF75A475),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: 0, viewportFraction: 0.92);
+    _timer = Timer.periodic(const Duration(seconds: 4), (Timer timer) {
+      if (_currentIndex < _carouselImages.length - 1) {
+        _currentIndex++;
+      } else {
+        _currentIndex = 0;
+      }
+      if (_pageController.hasClients) {
+        _pageController.animateToPage(
+          _currentIndex,
+          duration: const Duration(milliseconds: 350),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 120, // Modest size, not too big
+          child: PageView.builder(
+            controller: _pageController,
+            onPageChanged: (index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+            itemCount: _carouselImages.length,
+            itemBuilder: (context, index) {
+              return Container(
+                margin: const EdgeInsets.symmetric(horizontal: 6),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withAlpha(8),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Image.asset(
+                        _carouselImages[index],
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          // Beautiful pastel gradient placeholder if the image file is not found
+                          return Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  _placeholderGradientsStart[index],
+                                  _placeholderGradientsEnd[index],
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                            ),
+                            padding: const EdgeInsets.all(16),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 3,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 8,
+                                          vertical: 4,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white.withAlpha(50),
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          "Info Bulu",
+                                          style: TextStyle(
+                                            fontSize: 9,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        _bannerTitles[index],
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        _bannerSubtitles[index],
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          fontSize: 10,
+                                          color: Colors.white70,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  flex: 1,
+                                  child: Icon(
+                                    index == 0
+                                        ? Icons.library_books_rounded
+                                        : (index == 1
+                                              ? Icons.local_offer_rounded
+                                              : Icons.local_hospital_rounded),
+                                    size: 40,
+                                    color: Colors.white.withAlpha(140),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: 8),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(
+            _carouselImages.length,
+            (index) => AnimatedContainer(
+              duration: const Duration(milliseconds: 250),
+              margin: const EdgeInsets.symmetric(horizontal: 4),
+              height: 6,
+              width: _currentIndex == index ? 16 : 6,
+              decoration: BoxDecoration(
+                color: _currentIndex == index
+                    ? AppColors.primary
+                    : AppColors.netral.withAlpha(30),
+                borderRadius: BorderRadius.circular(3),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
