@@ -5,7 +5,10 @@ import 'package:sobatbulu_app/constant/app_color.dart';
 import 'package:sobatbulu_app/constant/text_style.dart';
 import 'package:sobatbulu_app/database/preference.dart';
 import 'package:sobatbulu_app/models/image_picker.dart';
+import 'package:sobatbulu_app/pages/change_password.dart';
+import 'package:sobatbulu_app/pages/edit_profile.dart';
 import 'package:sobatbulu_app/pages/sign_in.dart';
+import 'package:sobatbulu_app/pages/tentang_kami.dart';
 
 class ProfilePage extends StatefulWidget {
   final String nama;
@@ -18,14 +21,19 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   File? selectedImage;
+  late String _nama;
+  late String _email;
+
   @override
   void initState() {
     super.initState();
+    _nama = widget.nama;
+    _email = widget.email;
     loadProfileImage();
   }
 
   Future<void> loadProfileImage() async {
-    final imagePath = await PreferenceHandler.getProfileImage(widget.email);
+    final imagePath = await PreferenceHandler.getProfileImage(_email);
 
     if (imagePath != null) {
       setState(() {
@@ -74,8 +82,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               as ImageProvider,
                   ),
                 ),
-                Text(widget.nama, style: AppTextStyle.title),
-                Text(widget.email, style: AppTextStyle.subProduk),
+                Text(_nama, style: AppTextStyle.title),
+                Text(_email, style: AppTextStyle.subProduk),
               ],
             ),
             Container(
@@ -96,37 +104,68 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: Column(
                           spacing: 10,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  spacing: 10,
-                                  children: [
-                                    Icon(Icons.person, size: 26),
-                                    Text(
-                                      "Informasi Pribadi",
-                                      style: TextStyle(fontSize: 18),
+                            GestureDetector(
+                              onTap: () async {
+                                final result = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EditProfilePage(
+                                      nama: _nama,
+                                      email: _email,
                                     ),
-                                  ],
-                                ),
-                                Icon(Icons.chevron_right_rounded),
-                              ],
+                                  ),
+                                );
+                                if (result != null && result is Map<String, String>) {
+                                  setState(() {
+                                    _nama = result['nama'] ?? _nama;
+                                    _email = result['email'] ?? _email;
+                                  });
+                                }
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    spacing: 10,
+                                    children: [
+                                      Icon(Icons.person, size: 26),
+                                      Text(
+                                        "Informasi Pribadi",
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                    ],
+                                  ),
+                                  Icon(Icons.chevron_right_rounded),
+                                ],
+                              ),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  spacing: 10,
-                                  children: [
-                                    Icon(Icons.security),
-                                    Text(
-                                      "Keamanan & Kata Sandi",
-                                      style: TextStyle(fontSize: 18),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ChangePasswordPage(
+                                      email: _email,
                                     ),
-                                  ],
-                                ),
-                                Icon(Icons.chevron_right_rounded),
-                              ],
+                                  ),
+                                );
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    spacing: 10,
+                                    children: [
+                                      Icon(Icons.security),
+                                      Text(
+                                        "Keamanan & Kata Sandi",
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                    ],
+                                  ),
+                                  Icon(Icons.chevron_right_rounded),
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -141,21 +180,31 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: Column(
                           spacing: 10,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  spacing: 10,
-                                  children: [
-                                    Icon(Icons.group, size: 26),
-                                    Text(
-                                      "Tentang Kami",
-                                      style: TextStyle(fontSize: 18),
-                                    ),
-                                  ],
-                                ),
-                                Icon(Icons.chevron_right_rounded),
-                              ],
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => TentangKamiPage(),
+                                  ),
+                                );
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    spacing: 10,
+                                    children: [
+                                      Icon(Icons.group, size: 26),
+                                      Text(
+                                        "Tentang Kami",
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                    ],
+                                  ),
+                                  Icon(Icons.chevron_right_rounded),
+                                ],
+                              ),
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -218,7 +267,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
     if (image != null) {
       final permanentFile = await ImagePickerService.saveImagePermanently(image, "profile");
-      await PreferenceHandler.saveProfileImage(widget.email, permanentFile.path);
+      await PreferenceHandler.saveProfileImage(_email, permanentFile.path);
 
       setState(() {
         selectedImage = permanentFile;

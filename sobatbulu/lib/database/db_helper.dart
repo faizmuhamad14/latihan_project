@@ -107,6 +107,41 @@ class DBHelper {
     }
   }
 
+  Future<bool> updateUserByEmail(String oldEmail, {String? nama, String? email, String? password}) async {
+    final db = await database;
+    try {
+      final Map<String, dynamic> updates = {};
+      if (nama != null) updates['nama'] = nama;
+      if (email != null) updates['email'] = email;
+      if (password != null) updates['password'] = password;
+
+      if (updates.isEmpty) return false;
+
+      int count = await db.update(
+        'users',
+        updates,
+        where: 'email = ?',
+        whereArgs: [oldEmail],
+      );
+      return count > 0;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<UserModelSQL?> getUserByEmail(String email) async {
+    final db = await database;
+    final results = await db.query(
+      'users',
+      where: 'email = ?',
+      whereArgs: [email],
+    );
+    if (results.isNotEmpty) {
+      return UserModelSQL.fromMap(results.first);
+    }
+    return null;
+  }
+
   //CRUD Petshop
   Future<int> insertPet(PetModel pet) async {
     print("INSERT DATA = ${pet.toMap()}");

@@ -52,6 +52,16 @@ class PreferenceHandler {
     return prefs.getString('profile_image_$email');
   }
 
+  static Future<void> saveTelepon(String email, String telepon) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('telepon_$email', telepon);
+  }
+
+  static Future<String> getTelepon(String email) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('telepon_$email') ?? '';
+  }
+
   static Future<String> getEmail() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('email') ?? '';

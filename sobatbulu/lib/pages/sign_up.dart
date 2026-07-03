@@ -1,8 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:sobatbulu_app/constant/app_color.dart';
-import 'package:sobatbulu_app/database/db_helper.dart';
-import 'package:sobatbulu_app/models/user_model.dart';
+import 'package:sobatbulu_app/services/auth_service.dart';
 import 'package:sobatbulu_app/pages/sign_in.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -18,42 +17,49 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController kotaController = TextEditingController();
   final TextEditingController namaController = TextEditingController();
+  final AuthService _authService = AuthService();
+  bool _isLoading = false;
+
   void register() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() => _isLoading = true);
+
     final email = emailController.text.trim();
     final pass = passwordController.text;
-    final kota = kotaController.text;
-    final nama = namaController.text;
+    final kota = kotaController.text.trim();
+    final nama = namaController.text.trim();
 
-    if (email.isEmpty || pass.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Isi semua field!')));
-      return;
-    }
-
-    final pengguna = UserModelSQL(
-      nama: nama,
-      email: email,
-      password: pass,
-      kota: kota,
-    );
-
-    bool success = await DBHelper().registerUser(pengguna);
-
-    if (success) {
-      if (!mounted) return;
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => SignInPage()),
+    try {
+      final user = await _authService.register(
+        nama: nama,
+        email: email,
+        password: pass,
+        kota: kota,
       );
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Akun berhasil dibuat')));
-    } else {
+
+      if (!mounted) return;
+
+      if (user != null) {
+        // Logout setelah register agar user login manual
+        await _authService.logout();
+
+        if (!mounted) return;
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => SignInPage()),
+        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Akun berhasil dibuat')));
+      }
+    } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Email sudah terdaftar!')));
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
@@ -259,7 +265,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       side: BorderSide(color: Color(0xFFC2C7CA)),
                       backgroundColor: Color(0xFFAEC6CF),
                     ),
-                    onPressed: register,
+                    onPressed: _isLoading ? null : register,
 
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,

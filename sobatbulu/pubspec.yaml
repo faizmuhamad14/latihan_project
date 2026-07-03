@@ -43,8 +43,9 @@ dependencies:
   shared_preferences: ^2.5.5
   sidebarx: ^0.17.2
   sqflite: ^2.4.2+1
-  cloud_firestore: ^6.0.0
+  cloud_firestore: ^6.6.0
   url_launcher: ^6.3.0
+  firebase_auth: ^6.5.4
 
 dev_dependencies:
   dio: ^5.9.2

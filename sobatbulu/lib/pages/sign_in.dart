@@ -1,9 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:sobatbulu_app/database/db_helper.dart';
 import 'package:sobatbulu_app/database/preference.dart';
 import 'package:sobatbulu_app/pages/main_screen_dpd.dart';
 import 'package:sobatbulu_app/pages/sign_up.dart';
+import 'package:sobatbulu_app/services/auth_service.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -16,32 +16,55 @@ class _SignInPageState extends State<SignInPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController kotaController = TextEditingController();
-  final TextEditingController namaController = TextEditingController();
+  final AuthService _authService = AuthService();
+  bool _isLoading = false;
+
   void login() async {
+    setState(() {
+      _isLoading = true;
+    });
+
     final email = emailController.text.trim();
     final pass = passwordController.text;
 
-    final pengguna = await DBHelper().loginUser(email, pass);
+    try {
+      final pengguna = await _authService.login(
+        email: email,
+        password: pass,
+      );
 
-    if (!mounted) return;
-    if (pengguna != null) {
-      await PreferenceHandler.saveEmail(pengguna.email);
-      await PreferenceHandler.setLogin(true);
-      await PreferenceHandler.saveNama(pengguna.nama);
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) =>
-              MainScreenDpd(nama: pengguna.nama, email: pengguna.email),
-        ),
-      );
-    } else {
+      if (!mounted) return;
+      if (pengguna != null) {
+        await PreferenceHandler.saveEmail(pengguna.email);
+        await PreferenceHandler.setLogin(true);
+        await PreferenceHandler.saveNama(pengguna.nama);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                MainScreenDpd(nama: pengguna.nama, email: pengguna.email),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Email belum terdaftar atau kata sandi salah"),
+          ),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Email belum terdaftar atau kata sandi salah"),
+        SnackBar(
+          content: Text(e.toString()),
         ),
       );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -190,7 +213,7 @@ class _SignInPageState extends State<SignInPage> {
                               },
                             ),
                             SizedBox(height: 5),
-                            ElevatedButton(
+                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadiusGeometry.circular(
@@ -201,25 +224,38 @@ class _SignInPageState extends State<SignInPage> {
                                 side: BorderSide(color: Color(0xFFC2C7CA)),
                                 backgroundColor: Color(0xFFAEC6CF),
                               ),
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  login();
-                                }
-                              },
-                              child: Row(
-                                spacing: 10,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Masuk",
-                                    style: TextStyle(
-                                      color: Color(0xFF091D2E),
-                                      fontSize: 20,
+                              onPressed: _isLoading
+                                  ? null
+                                  : () {
+                                      if (_formKey.currentState!.validate()) {
+                                        login();
+                                      }
+                                    },
+                              child: _isLoading
+                                  ? const SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        valueColor: AlwaysStoppedAnimation<Color>(
+                                          Color(0xFF091D2E),
+                                        ),
+                                      ),
+                                    )
+                                  : Row(
+                                      spacing: 10,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Masuk",
+                                          style: TextStyle(
+                                            color: Color(0xFF091D2E),
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                        Icon(Icons.login, color: Color(0xFF091D2E)),
+                                      ],
                                     ),
-                                  ),
-                                  Icon(Icons.login, color: Color(0xFF091D2E)),
-                                ],
-                              ),
                             ),
                           ],
                         ),
