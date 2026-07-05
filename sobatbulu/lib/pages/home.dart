@@ -60,6 +60,10 @@ class _MyWidgetState extends State<HomePageScreen> {
           final pets = snapshot.data!;
           return Column(
             children: [
+              const SizedBox(height: 15),
+              // Carousel Banner Section
+              const HomeCarousel(),
+              const SizedBox(height: 15),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
@@ -84,12 +88,12 @@ class _MyWidgetState extends State<HomePageScreen> {
                                   "Kamu belum menambahkan Pet apapun.",
                                   style: AppTextStyle.subtitle,
                                 ),
-                                SizedBox(height: 150),
+                                const SizedBox(height: 40),
                                 Center(
                                   child: Lottie.asset(
                                     "assets/lottie/addPet.json",
-                                    width: 300,
-                                    height: 300,
+                                    width: 250,
+                                    height: 250,
                                   ),
                                 ),
                               ],
@@ -108,9 +112,6 @@ class _MyWidgetState extends State<HomePageScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 15),
-              // Carousel Banner Section
-              const HomeCarousel(),
               const SizedBox(height: 15),
               Expanded(
                 child: FutureBuilder<List<PetModel>>(
@@ -708,41 +709,35 @@ class _HomeCarouselState extends State<HomeCarousel> {
   late PageController _pageController;
   Timer? _timer;
 
-  // Placeholder list of image assets (user can replace these later)
   final List<String> _carouselImages = [
     "assets/images/carousel1.png",
     "assets/images/carousel2.png",
-    "assets/images/banner3.jpg",
   ];
 
   final List<String> _bannerTitles = [
     "Edukasi Sobat Bulu",
     "Promo Makanan Kucing",
-    "Klinik Vet Terdekat",
   ];
 
   final List<String> _bannerSubtitles = [
     "Pelajari tips merawat hewan peliharaan agar selalu sehat.",
     "Dapatkan diskon hingga 20% untuk makanan kucing premium.",
-    "Temukan rekomendasi klinik dokter hewan terbaik di sekitar Anda.",
   ];
 
   final List<Color> _placeholderGradientsStart = [
     const Color(0xFFaec6cf), // primary pastel blue
     const Color(0xFFffdab9), // peach
-    const Color(0xFFb2d8b2), // pastel green
   ];
 
   final List<Color> _placeholderGradientsEnd = [
     const Color(0xFF7A9FA9),
     const Color(0xFFE4A26F),
-    const Color(0xFF75A475),
   ];
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: 0, viewportFraction: 0.92);
+    _pageController = PageController(initialPage: 0, viewportFraction: 1.0);
     _timer = Timer.periodic(const Duration(seconds: 4), (Timer timer) {
       if (_currentIndex < _carouselImages.length - 1) {
         _currentIndex++;
@@ -768,149 +763,149 @@ class _HomeCarouselState extends State<HomeCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 120, // Modest size, not too big
-          child: PageView.builder(
-            controller: _pageController,
-            onPageChanged: (index) {
-              setState(() {
-                _currentIndex = index;
-              });
-            },
-            itemCount: _carouselImages.length,
-            itemBuilder: (context, index) {
-              return Container(
-                margin: const EdgeInsets.symmetric(horizontal: 6),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withAlpha(8),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      Image.asset(
-                        _carouselImages[index],
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          // Beautiful pastel gradient placeholder if the image file is not found
-                          return Container(
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  _placeholderGradientsStart[index],
-                                  _placeholderGradientsEnd[index],
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      child: Column(
+        children: [
+          SizedBox(
+            height: 140, // Elegant height for banner
+            child: PageView.builder(
+              controller: _pageController,
+              onPageChanged: (index) {
+                setState(() {
+                  _currentIndex = index;
+                });
+              },
+              itemCount: _carouselImages.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withAlpha(8),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        Image.asset(
+                          _carouselImages[index],
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            // Beautiful pastel gradient placeholder if the image file is not found
+                            return Container(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    _placeholderGradientsStart[index],
+                                    _placeholderGradientsEnd[index],
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
                               ),
-                            ),
-                            padding: const EdgeInsets.all(16),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  flex: 3,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 8,
-                                          vertical: 4,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white.withAlpha(50),
-                                          borderRadius: BorderRadius.circular(
-                                            8,
+                              padding: const EdgeInsets.all(16),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 3,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 8,
+                                            vertical: 4,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white.withAlpha(50),
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
+                                          ),
+                                          child: const Text(
+                                            "Info Bulu",
+                                            style: TextStyle(
+                                              fontSize: 9,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                            ),
                                           ),
                                         ),
-                                        child: const Text(
-                                          "Info Bulu",
-                                          style: TextStyle(
-                                            fontSize: 9,
+                                        const SizedBox(height: 8),
+                                        Text(
+                                          _bannerTitles[index],
+                                          style: const TextStyle(
+                                            fontSize: 16,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white,
                                           ),
                                         ),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        _bannerTitles[index],
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          _bannerSubtitles[index],
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                            fontSize: 10,
+                                            color: Colors.white70,
+                                          ),
                                         ),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        _bannerSubtitles[index],
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(
-                                          fontSize: 10,
-                                          color: Colors.white70,
-                                        ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(width: 8),
-                                Expanded(
-                                  flex: 1,
-                                  child: Icon(
-                                    index == 0
-                                        ? Icons.library_books_rounded
-                                        : (index == 1
-                                              ? Icons.local_offer_rounded
-                                              : Icons.local_hospital_rounded),
-                                    size: 40,
-                                    color: Colors.white.withAlpha(140),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Icon(
+                                      index == 0
+                                          ? Icons.library_books_rounded
+                                          : Icons.local_offer_rounded,
+                                      size: 40,
+                                      color: Colors.white.withAlpha(140),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    ],
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
-        ),
-        const SizedBox(height: 8),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(
-            _carouselImages.length,
-            (index) => AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
-              margin: const EdgeInsets.symmetric(horizontal: 4),
-              height: 6,
-              width: _currentIndex == index ? 16 : 6,
-              decoration: BoxDecoration(
-                color: _currentIndex == index
-                    ? AppColors.primary
-                    : AppColors.netral.withAlpha(30),
-                borderRadius: BorderRadius.circular(3),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(
+              _carouselImages.length,
+              (index) => AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                height: 6,
+                width: _currentIndex == index ? 16 : 6,
+                decoration: BoxDecoration(
+                  color: _currentIndex == index
+                      ? AppColors.primary
+                      : AppColors.netral.withAlpha(30),
+                  borderRadius: BorderRadius.circular(3),
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
