@@ -22,14 +22,15 @@ class DBHelper {
 
     return await openDatabase(
       path,
-      version: 3,
+      version: 4,
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE users(
             nama TEXT,
             email TEXT UNIQUE,
             password TEXT,
-            kota TEXT
+            kota TEXT,
+            noTelp TEXT DEFAULT ''
           )
         ''');
         await db.execute('''
@@ -50,6 +51,13 @@ class DBHelper {
             gambarPet TEXT
           )
         ''');
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < 4) {
+          await db.execute(
+            "ALTER TABLE users ADD COLUMN noTelp TEXT DEFAULT ''",
+          );
+        }
       },
     );
   }
@@ -158,5 +166,74 @@ class DBHelper {
     );
 
     return result.map((e) => PetModel.fromMap(e)).toList();
+  }
+
+  // Personal Info
+  Future<UserModelSQL?> getUserByEmail(String email) async {
+    final db = await database;
+
+    final results = await db.query(
+      'users',
+      where: 'email = ?',
+      whereArgs: [email],
+    );
+
+    if (results.isNotEmpty) {
+      return UserModelSQL.fromMap(results.first);
+    }
+    return null;
+  }
+
+  Future<bool> updateUserInfo({
+    required String email,
+    required String nama,
+    required String kota,
+    required String noTelp,
+  }) async {
+    final db = await database;
+
+    try {
+      final count = await db.update(
+        'users',
+        {'nama': nama, 'kota': kota, 'noTelp': noTelp},
+        where: 'email = ?',
+        whereArgs: [email],
+      );
+      return count > 0;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // Password
+  Future<String> updatePassword({
+    required String email,
+    required String oldPassword,
+    required String newPassword,
+  }) async {
+    final db = await database;
+
+    // Verifikasi password lama
+    final results = await db.query(
+      'users',
+      where: 'email = ? AND password = ?',
+      whereArgs: [email, oldPassword],
+    );
+
+    if (results.isEmpty) {
+      return 'wrong_password';
+    }
+
+    try {
+      final count = await db.update(
+        'users',
+        {'password': newPassword},
+        where: 'email = ?',
+        whereArgs: [email],
+      );
+      return count > 0 ? 'success' : 'failed';
+    } catch (e) {
+      return 'failed';
+    }
   }
 }

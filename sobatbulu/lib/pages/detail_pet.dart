@@ -16,147 +16,340 @@ class DetailPet extends StatefulWidget {
 class _DetailPetState extends State<DetailPet> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        margin: EdgeInsets.fromLTRB(16, 28, 16, 10),
-        child: Container(
-          color: AppColors.defaultWhite,
-          child: Column(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadiusGeometry.only(
-                  topLeft: Radius.circular(16),
-                  topRight: Radius.circular(16),
-                ),
-                child: widget.pet.gambarPet != null
-                    ? Image.file(
-                        File(widget.pet.gambarPet!),
-                        width: double.infinity,
-                        height: 200,
-                        fit: BoxFit.cover,
-                      )
-                    : const Icon(Icons.pets, size: 100),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Informasi"),
-                  TextButton(
-                    onPressed: _showEditDetailPet,
-                    child: Text("Edit"),
-                  ),
-                ],
-              ),
-              Column(
-                spacing: 20,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [Text("Nama"), Text(widget.pet.nama)],
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [Text("Jenis"), Text(widget.pet.jenis)],
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [Text("Umur"), Text(widget.pet.umur)],
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [Text("Ras"), Text(widget.pet.ras)],
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Gender"),
-                            Text(
-                              widget.pet.gender == null
-                                  ? "-"
-                                  : "${widget.pet.gender}",
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Berat"),
-                            Text(
-                              widget.pet.berat == null
-                                  ? "-"
-                                  : "${widget.pet.berat}",
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+    final pet = widget.pet;
+    final isCat = pet.jenis.toLowerCase() == 'kucing';
+    final isDog = pet.jenis.toLowerCase() == 'anjing';
 
+    final Color accentColor = isCat
+        ? AppColors.teritary2
+        : (isDog ? AppColors.netral2 : AppColors.secondary2);
+
+    final Color accentBg = isCat
+        ? AppColors.teritary.withAlpha(50)
+        : (isDog
+              ? AppColors.primary.withAlpha(50)
+              : AppColors.secondary.withAlpha(50));
+
+    final String speciesEmoji = isCat ? "🐱" : (isDog ? "🐶" : "🐾");
+
+    return Scaffold(
+      backgroundColor: const Color(0xFFFFFFFF),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // --- Hero Image Section ---
+            _buildHeroImage(pet, accentColor, speciesEmoji),
+
+            // --- Info Section ---
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 30),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Header
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Tanggal Lahir"),
-                            Text(
-                              widget.pet.tanggalLahir == null
-                                  ? "-"
-                                  : "${widget.pet.tanggalLahir}",
-                            ),
-                          ],
+                      const Text(
+                        "Informasi",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.netral,
                         ),
                       ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Tanggal Adop"),
-                            Text(
-                              widget.pet.tanggalAdop == null
-                                  ? "-"
-                                  : "${widget.pet.tanggalAdop}",
-                            ),
-                          ],
+                      TextButton.icon(
+                        onPressed: _showEditDetailPet,
+                        icon: Icon(
+                          Icons.edit_rounded,
+                          size: 18,
+                          color: accentColor,
+                        ),
+                        label: Text(
+                          "Edit",
+                          style: TextStyle(
+                            color: accentColor,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ],
                   ),
+                  const SizedBox(height: 12),
+
+                  // Info cards grid
+                  _buildInfoRow([
+                    _buildInfoCard(
+                      icon: Icons.pets_rounded,
+                      label: "Nama",
+                      value: pet.nama,
+                      accentColor: accentColor,
+                      accentBg: accentBg,
+                    ),
+                    _buildInfoCard(
+                      icon: Icons.category_rounded,
+                      label: "Jenis",
+                      value: pet.jenis,
+                      accentColor: accentColor,
+                      accentBg: accentBg,
+                    ),
+                  ]),
+                  const SizedBox(height: 12),
+                  _buildInfoRow([
+                    _buildInfoCard(
+                      icon: Icons.cake_rounded,
+                      label: "Umur",
+                      value: pet.umur,
+                      accentColor: accentColor,
+                      accentBg: accentBg,
+                    ),
+                    _buildInfoCard(
+                      icon: Icons.star_rounded,
+                      label: "Ras",
+                      value: pet.ras.isNotEmpty ? pet.ras : "-",
+                      accentColor: accentColor,
+                      accentBg: accentBg,
+                    ),
+                  ]),
+                  const SizedBox(height: 12),
+                  _buildInfoRow([
+                    _buildInfoCard(
+                      icon: pet.gender == "Jantan"
+                          ? Icons.male_rounded
+                          : Icons.female_rounded,
+                      label: "Gender",
+                      value: pet.gender ?? "-",
+                      accentColor: accentColor,
+                      accentBg: accentBg,
+                    ),
+                    _buildInfoCard(
+                      icon: Icons.monitor_weight_rounded,
+                      label: "Berat",
+                      value: pet.berat != null ? "${pet.berat} Kg" : "-",
+                      accentColor: accentColor,
+                      accentBg: accentBg,
+                    ),
+                  ]),
+                  const SizedBox(height: 12),
+                  _buildInfoRow([
+                    _buildInfoCard(
+                      icon: Icons.calendar_month_rounded,
+                      label: "Tanggal Lahir",
+                      value: pet.tanggalLahir != null &&
+                              pet.tanggalLahir!.isNotEmpty
+                          ? pet.tanggalLahir!
+                          : "-",
+                      accentColor: accentColor,
+                      accentBg: accentBg,
+                    ),
+                    _buildInfoCard(
+                      icon: Icons.home_rounded,
+                      label: "Tanggal Adopsi",
+                      value: pet.tanggalAdop != null &&
+                              pet.tanggalAdop!.isNotEmpty
+                          ? pet.tanggalAdop!
+                          : "-",
+                      accentColor: accentColor,
+                      accentBg: accentBg,
+                    ),
+                  ]),
                 ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
+
+  // --- Widget Builders ---
+
+  Widget _buildHeroImage(PetModel pet, Color accentColor, String emoji) {
+    return Stack(
+      children: [
+        // Image
+        Container(
+          width: double.infinity,
+          height: 320,
+          decoration: BoxDecoration(
+            color: AppColors.backgroundItem,
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(28),
+              bottomRight: Radius.circular(28),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withAlpha(15),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(28),
+              bottomRight: Radius.circular(28),
+            ),
+            child: pet.gambarPet != null
+                ? Image.file(
+                    File(pet.gambarPet!),
+                    width: double.infinity,
+                    height: 320,
+                    fit: BoxFit.cover,
+                  )
+                : Center(
+                    child: Icon(
+                      Icons.pets_rounded,
+                      size: 80,
+                      color: accentColor.withAlpha(100),
+                    ),
+                  ),
+          ),
+        ),
+
+        // Gradient overlay at bottom
+        Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: Container(
+            height: 100,
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(28),
+                bottomRight: Radius.circular(28),
+              ),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.transparent,
+                  Colors.black.withAlpha(140),
+                ],
+              ),
+            ),
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+            alignment: Alignment.bottomLeft,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        pet.nama,
+                        style: const TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                          letterSpacing: 0.3,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        "$emoji ${pet.jenis} • ${pet.ras.isNotEmpty ? pet.ras : 'Campuran'}",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white.withAlpha(200),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        // Back button
+        Positioned(
+          top: MediaQuery.of(context).padding.top + 8,
+          left: 12,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.black.withAlpha(50),
+              shape: BoxShape.circle,
+            ),
+            child: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(
+                Icons.arrow_back_ios_rounded,
+                color: Colors.white,
+                size: 20,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInfoRow(List<Widget> children) {
+    return Row(
+      children: children
+          .map(
+            (child) => Expanded(child: child),
+          )
+          .expand(
+            (widget) => [widget, const SizedBox(width: 12)],
+          )
+          .toList()
+        ..removeLast(),
+    );
+  }
+
+  Widget _buildInfoCard({
+    required IconData icon,
+    required String label,
+    required String value,
+    required Color accentColor,
+    required Color accentBg,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: accentBg,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: accentColor.withAlpha(30),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, size: 16, color: accentColor),
+              const SizedBox(width: 6),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: accentColor.withAlpha(180),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: AppColors.netral,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
+    );
+  }
+
 
   void _showEditDetailPet() {
     String? selectedGender = widget.pet.gender;

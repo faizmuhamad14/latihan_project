@@ -6,12 +6,14 @@ class UserModelSQL {
   final String email;
   final String password;
   final String kota;
+  final String noTelp;
 
   UserModelSQL({
     required this.nama,
     required this.email,
     required this.password,
     required this.kota,
+    this.noTelp = '',
   });
 
   Map<String, dynamic> toMap() {
@@ -20,6 +22,7 @@ class UserModelSQL {
       'email': email,
       'password': password,
       'kota': kota,
+      'noTelp': noTelp,
     };
   }
 
@@ -28,7 +31,8 @@ class UserModelSQL {
       nama: map['nama'] as String,
       email: map['email'] as String,
       password: map['password'] as String,
-      kota: map['kota'] as String,
+      kota: map['kota'] ?? '',
+      noTelp: map['noTelp'] ?? '',
     );
   }
 

@@ -5,6 +5,10 @@ import 'package:sobatbulu_app/constant/app_color.dart';
 import 'package:sobatbulu_app/constant/text_style.dart';
 import 'package:sobatbulu_app/database/preference.dart';
 import 'package:sobatbulu_app/models/image_picker.dart';
+import 'package:sobatbulu_app/pages/about_us_page.dart';
+import 'package:sobatbulu_app/pages/personal_info.dart';
+import 'package:sobatbulu_app/pages/privacy_policy_page.dart';
+import 'package:sobatbulu_app/pages/security_page.dart';
 import 'package:sobatbulu_app/pages/sign_in.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -96,37 +100,66 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: Column(
                           spacing: 10,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  spacing: 10,
-                                  children: [
-                                    Icon(Icons.person, size: 26),
-                                    Text(
-                                      "Informasi Pribadi",
-                                      style: TextStyle(fontSize: 18),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PersonalInfoPage(
+                                      email: widget.email,
                                     ),
-                                  ],
-                                ),
-                                Icon(Icons.chevron_right_rounded),
-                              ],
+                                  ),
+                                ).then((_) {
+                                  // Refresh halaman profile saat kembali
+                                  setState(() {});
+                                });
+                              },
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    spacing: 10,
+                                    children: [
+                                      Icon(Icons.person, size: 26),
+                                      Text(
+                                        "Informasi Pribadi",
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                    ],
+                                  ),
+                                  Icon(Icons.chevron_right_rounded),
+                                ],
+                              ),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  spacing: 10,
-                                  children: [
-                                    Icon(Icons.security),
-                                    Text(
-                                      "Keamanan & Kata Sandi",
-                                      style: TextStyle(fontSize: 18),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SecurityPage(
+                                      email: widget.email,
                                     ),
-                                  ],
-                                ),
-                                Icon(Icons.chevron_right_rounded),
-                              ],
+                                  ),
+                                );
+                              },
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    spacing: 10,
+                                    children: [
+                                      Icon(Icons.security),
+                                      Text(
+                                        "Keamanan & Kata Sandi",
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                    ],
+                                  ),
+                                  Icon(Icons.chevron_right_rounded),
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -141,37 +174,60 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: Column(
                           spacing: 10,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  spacing: 10,
-                                  children: [
-                                    Icon(Icons.group, size: 26),
-                                    Text(
-                                      "Tentang Kami",
-                                      style: TextStyle(fontSize: 18),
-                                    ),
-                                  ],
-                                ),
-                                Icon(Icons.chevron_right_rounded),
-                              ],
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const AboutUsPage(),
+                                  ),
+                                );
+                              },
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    spacing: 10,
+                                    children: [
+                                      Icon(Icons.group, size: 26),
+                                      Text(
+                                        "Tentang Kami",
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                    ],
+                                  ),
+                                  Icon(Icons.chevron_right_rounded),
+                                ],
+                              ),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  spacing: 10,
-                                  children: [
-                                    Icon(Icons.question_answer_rounded),
-                                    Text(
-                                      "Kebijakan Privasi",
-                                      style: TextStyle(fontSize: 18),
-                                    ),
-                                  ],
-                                ),
-                                Icon(Icons.chevron_right_rounded),
-                              ],
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const PrivacyPolicyPage(),
+                                  ),
+                                );
+                              },
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    spacing: 10,
+                                    children: [
+                                      Icon(Icons.question_answer_rounded),
+                                      Text(
+                                        "Kebijakan Privasi",
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                    ],
+                                  ),
+                                  Icon(Icons.chevron_right_rounded),
+                                ],
+                              ),
                             ),
                           ],
                         ),
