@@ -9,6 +9,8 @@ import 'package:sobatbulu_app/pages/change_password.dart';
 import 'package:sobatbulu_app/pages/edit_profile.dart';
 import 'package:sobatbulu_app/pages/sign_in.dart';
 import 'package:sobatbulu_app/pages/tentang_kami.dart';
+import 'package:sobatbulu_app/pages/kebijakan_privasi.dart';
+
 
 class ProfilePage extends StatefulWidget {
   final String nama;
@@ -206,21 +208,31 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ],
                               ),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  spacing: 10,
-                                  children: [
-                                    Icon(Icons.question_answer_rounded),
-                                    Text(
-                                      "Kebijakan Privasi",
-                                      style: TextStyle(fontSize: 18),
-                                    ),
-                                  ],
-                                ),
-                                Icon(Icons.chevron_right_rounded),
-                              ],
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const KebijakanPrivasiPage(),
+                                  ),
+                                );
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    spacing: 10,
+                                    children: [
+                                      const Icon(Icons.question_answer_rounded),
+                                      const Text(
+                                        "Kebijakan Privasi",
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                    ],
+                                  ),
+                                  const Icon(Icons.chevron_right_rounded),
+                                ],
+                              ),
                             ),
                           ],
                         ),

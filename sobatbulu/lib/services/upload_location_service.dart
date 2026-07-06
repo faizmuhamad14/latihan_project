@@ -6,24 +6,28 @@ import 'package:flutter/services.dart';
 class UploadLocationService {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  Future<void> uploadLocations() async {
+  Future<int> uploadLocations() async {
     final check = await firestore.collection('location').get();
 
     if (check.docs.isNotEmpty) {
-      print("Data sudah ada");
-      return;
+      return 0;
     }
 
     final jsonString = await rootBundle.loadString(
-      'assets/data/locations.json',
+      'assets/data/location.json',
     );
 
     final List data = json.decode(jsonString);
 
+    final WriteBatch batch = firestore.batch();
+
     for (var item in data) {
-      await firestore.collection('location').add(item);
+      final docRef = firestore.collection('location').doc();
+      batch.set(docRef, Map<String, dynamic>.from(item));
     }
 
-    print("Upload selesai");
+    await batch.commit();
+
+    return data.length;
   }
 }

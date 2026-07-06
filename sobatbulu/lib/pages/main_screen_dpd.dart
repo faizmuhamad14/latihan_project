@@ -58,7 +58,21 @@ class _MainScreenDpd extends State<MainScreenDpd> {
       ],
       navBarBuilder: (navBarConfig) => Style2BottomNavBar(
         navBarConfig: navBarConfig,
-        navBarDecoration: NavBarDecoration(),
+        height: 72,
+        navBarDecoration: NavBarDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.08),
+              blurRadius: 10,
+              offset: const Offset(0, -3),
+            ),
+          ],
+        ),
       ),
     );
   }

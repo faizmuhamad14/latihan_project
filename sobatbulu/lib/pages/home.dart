@@ -796,7 +796,7 @@ class _HomeCarouselState extends State<HomeCarousel> {
                       children: [
                         Image.asset(
                           _carouselImages[index],
-                          fit: BoxFit.cover,
+                          fit: BoxFit.fill,
                           errorBuilder: (context, error, stackTrace) {
                             // Beautiful pastel gradient placeholder if the image file is not found
                             return Container(
