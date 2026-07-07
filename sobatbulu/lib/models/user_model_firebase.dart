@@ -9,6 +9,7 @@ class UserModelFirebase {
   final String password;
   final String kota;
   final DateTime createdAt;
+  final String role;
 
   UserModelFirebase({
     required this.uid,
@@ -17,6 +18,7 @@ class UserModelFirebase {
     required this.password,
     required this.kota,
     required this.createdAt,
+    this.role = 'user',
   });
 
   Map<String, dynamic> toMap() {
@@ -27,6 +29,7 @@ class UserModelFirebase {
       'password': password,
       'kota': kota,
       'createdAt': createdAt,
+      'role': role,
     };
   }
 
@@ -40,6 +43,7 @@ class UserModelFirebase {
       createdAt: map['createdAt'] is Timestamp
           ? (map['createdAt'] as Timestamp).toDate()
           : DateTime.tryParse(map['createdAt'].toString()) ?? DateTime.now(),
+      role: map['role'] as String? ?? 'user',
     );
   }
 

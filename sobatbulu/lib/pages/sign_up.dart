@@ -256,34 +256,36 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
                   SizedBox(height: 10),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadiusGeometry.circular(8),
-                      ),
-                      elevation: 0,
-                      side: BorderSide(color: Color(0xFFC2C7CA)),
-                      backgroundColor: Color(0xFFAEC6CF),
-                    ),
-                    onPressed: _isLoading ? null : register,
-
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Daftar",
-                          style: TextStyle(
-                            color: AppColors.defaultBlack,
-                            fontSize: 16,
-                          ),
-                        ),
-                        Icon(
-                          Icons.arrow_right_alt_sharp,
-                          color: AppColors.defaultBlack,
-                        ),
-                      ],
-                    ),
-                  ),
+                   SizedBox(
+                     width: double.infinity,
+                     child: ElevatedButton(
+                       style: ElevatedButton.styleFrom(
+                         shape: RoundedRectangleBorder(
+                           borderRadius: BorderRadiusGeometry.circular(8),
+                         ),
+                         elevation: 0,
+                         side: BorderSide(color: Color(0xFFC2C7CA)),
+                         backgroundColor: Color(0xFFAEC6CF),
+                       ),
+                       onPressed: _isLoading ? null : register,
+                       child: Row(
+                         mainAxisAlignment: MainAxisAlignment.center,
+                         children: [
+                           Text(
+                             "Daftar",
+                             style: TextStyle(
+                               color: AppColors.defaultBlack,
+                               fontSize: 16,
+                             ),
+                           ),
+                           Icon(
+                             Icons.arrow_right_alt_sharp,
+                             color: AppColors.defaultBlack,
+                           ),
+                         ],
+                       ),
+                     ),
+                   ),
                   SizedBox(height: 10),
                   Text.rich(
                     TextSpan(

@@ -213,50 +213,53 @@ class _SignInPageState extends State<SignInPage> {
                               },
                             ),
                             SizedBox(height: 5),
-                             ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadiusGeometry.circular(
-                                    8,
-                                  ),
-                                ),
-                                elevation: 0,
-                                side: BorderSide(color: Color(0xFFC2C7CA)),
-                                backgroundColor: Color(0xFFAEC6CF),
-                              ),
-                              onPressed: _isLoading
-                                  ? null
-                                  : () {
-                                      if (_formKey.currentState!.validate()) {
-                                        login();
-                                      }
-                                    },
-                              child: _isLoading
-                                  ? const SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        valueColor: AlwaysStoppedAnimation<Color>(
-                                          Color(0xFF091D2E),
-                                        ),
-                                      ),
-                                    )
-                                  : Row(
-                                      spacing: 10,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "Masuk",
-                                          style: TextStyle(
-                                            color: Color(0xFF091D2E),
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                        Icon(Icons.login, color: Color(0xFF091D2E)),
-                                      ],
-                                    ),
-                            ),
+                             SizedBox(
+                               width: double.infinity,
+                               child: ElevatedButton(
+                                 style: ElevatedButton.styleFrom(
+                                   shape: RoundedRectangleBorder(
+                                     borderRadius: BorderRadiusGeometry.circular(
+                                       8,
+                                     ),
+                                   ),
+                                   elevation: 0,
+                                   side: BorderSide(color: Color(0xFFC2C7CA)),
+                                   backgroundColor: Color(0xFFAEC6CF),
+                                 ),
+                                 onPressed: _isLoading
+                                     ? null
+                                     : () {
+                                         if (_formKey.currentState!.validate()) {
+                                           login();
+                                         }
+                                       },
+                                 child: _isLoading
+                                     ? const SizedBox(
+                                         height: 20,
+                                         width: 20,
+                                         child: CircularProgressIndicator(
+                                           strokeWidth: 2,
+                                           valueColor: AlwaysStoppedAnimation<Color>(
+                                             Color(0xFF091D2E),
+                                           ),
+                                         ),
+                                       )
+                                     : Row(
+                                         spacing: 10,
+                                         mainAxisAlignment: MainAxisAlignment.center,
+                                         children: [
+                                           Text(
+                                             "Masuk",
+                                             style: TextStyle(
+                                               color: Color(0xFF091D2E),
+                                               fontSize: 20,
+                                             ),
+                                           ),
+                                           Icon(Icons.login, color: Color(0xFF091D2E)),
+                                         ],
+                                       ),
+                               ),
+                             ),
                           ],
                         ),
                       ),

@@ -10,6 +10,14 @@ import 'package:sobatbulu_app/pages/edit_profile.dart';
 import 'package:sobatbulu_app/pages/sign_in.dart';
 import 'package:sobatbulu_app/pages/tentang_kami.dart';
 import 'package:sobatbulu_app/pages/kebijakan_privasi.dart';
+import 'package:sobatbulu_app/pages/add_product_page.dart';
+import 'package:sobatbulu_app/pages/add_article_page.dart';
+import 'package:sobatbulu_app/services/auth_service.dart';
+import 'package:sobatbulu_app/pages/manage_products_page.dart';
+import 'package:sobatbulu_app/pages/manage_articles_page.dart';
+import 'package:sobatbulu_app/data/list_data_map.dart';
+import 'package:sobatbulu_app/models/model_data.dart';
+import 'package:sobatbulu_app/services/product_service.dart';
 
 
 class ProfilePage extends StatefulWidget {
@@ -25,6 +33,52 @@ class _ProfilePageState extends State<ProfilePage> {
   File? selectedImage;
   late String _nama;
   late String _email;
+  String _role = 'user';
+  bool _isMigrating = false;
+
+  Future<void> _migrateMockData() async {
+    setState(() {
+      _isMigrating = true;
+    });
+
+    try {
+      final service = ProductService();
+      int count = 0;
+      for (final mockProduct in produkPetshop) {
+        final productToUpload = ProdukPetshop(
+          nama: mockProduct.nama,
+          kategori: mockProduct.kategori,
+          harga: mockProduct.harga,
+          gambar: mockProduct.gambar, // Menggunakan gambar bawaan lokal
+          rate: mockProduct.rate,
+          jenisHewan: mockProduct.jenisHewan,
+          umur: mockProduct.umur,
+          ras: mockProduct.ras,
+          deskripsi: mockProduct.deskripsi,
+        );
+        await service.addProduct(productToUpload);
+        count++;
+      }
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Migrasi berhasil! $count produk diunggah dengan gambar bawaan.')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Gagal migrasi: $e')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isMigrating = false;
+        });
+      }
+    }
+  }
 
   @override
   void initState() {
@@ -32,6 +86,16 @@ class _ProfilePageState extends State<ProfilePage> {
     _nama = widget.nama;
     _email = widget.email;
     loadProfileImage();
+    _loadUserRole();
+  }
+
+  Future<void> _loadUserRole() async {
+    final user = await AuthService().getUserByEmail(_email);
+    if (user != null && mounted) {
+      setState(() {
+        _role = user.role;
+      });
+    }
   }
 
   Future<void> loadProfileImage() async {
@@ -64,11 +128,12 @@ class _ProfilePageState extends State<ProfilePage> {
         //   IconButton(onPressed: () {}, icon: Icon(Icons.notifications_none)),
         // ],
       ),
-      body: Container(
-        margin: EdgeInsets.only(top: 10),
-        child: Column(
-          spacing: 10,
-          children: [
+      body: SingleChildScrollView(
+        child: Container(
+          margin: const EdgeInsets.only(top: 10),
+          child: Column(
+            spacing: 10,
+            children: [
             Column(
               spacing: 5,
               children: [
@@ -172,6 +237,150 @@ class _ProfilePageState extends State<ProfilePage> {
                           ],
                         ),
                       ),
+                      if (_role == 'admin') ...[
+                        const Text("Manajemen Konten", style: TextStyle(fontSize: 18)),
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black, width: 1),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Column(
+                            spacing: 10,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const AddProductPage(),
+                                    ),
+                                  );
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      spacing: 10,
+                                      children: const [
+                                        Icon(Icons.add_shopping_cart_rounded, size: 26),
+                                        Text(
+                                          "Tambah Produk",
+                                          style: TextStyle(fontSize: 18),
+                                        ),
+                                      ],
+                                    ),
+                                    const Icon(Icons.chevron_right_rounded),
+                                  ],
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const AddArticlePage(),
+                                    ),
+                                  );
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      spacing: 10,
+                                      children: const [
+                                        Icon(Icons.add_box_rounded, size: 26),
+                                        Text(
+                                          "Tambah Artikel",
+                                          style: TextStyle(fontSize: 18),
+                                        ),
+                                      ],
+                                    ),
+                                    const Icon(Icons.chevron_right_rounded),
+                                  ],
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const ManageProductsPage(),
+                                    ),
+                                  );
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      spacing: 10,
+                                      children: const [
+                                        Icon(Icons.edit_note_rounded, size: 26),
+                                        Text(
+                                          "Kelola Produk",
+                                          style: TextStyle(fontSize: 18),
+                                        ),
+                                      ],
+                                    ),
+                                    const Icon(Icons.chevron_right_rounded),
+                                  ],
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const ManageArticlesPage(),
+                                    ),
+                                  );
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      spacing: 10,
+                                      children: const [
+                                        Icon(Icons.edit_calendar_rounded, size: 26),
+                                        Text(
+                                          "Kelola Artikel",
+                                          style: TextStyle(fontSize: 18),
+                                        ),
+                                      ],
+                                    ),
+                                    const Icon(Icons.chevron_right_rounded),
+                                  ],
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: _isMigrating ? null : _migrateMockData,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      spacing: 10,
+                                      children: [
+                                        const Icon(Icons.cloud_upload_rounded, size: 26),
+                                        Text(
+                                          _isMigrating ? "Mengunggah..." : "Migrasi Data Bawaan",
+                                          style: const TextStyle(fontSize: 18),
+                                        ),
+                                      ],
+                                    ),
+                                    _isMigrating
+                                        ? const SizedBox(
+                                            width: 20,
+                                            height: 20,
+                                            child: CircularProgressIndicator(strokeWidth: 2),
+                                          )
+                                        : const Icon(Icons.chevron_right_rounded),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                       Text("Dukungan", style: TextStyle(fontSize: 18)),
                       Container(
                         padding: EdgeInsets.all(10),
@@ -271,8 +480,9 @@ class _ProfilePageState extends State<ProfilePage> {
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   Future<void> pickImage() async {
     final image = await ImagePickerService.pickImageFromGallery();

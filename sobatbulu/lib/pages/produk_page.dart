@@ -1,10 +1,12 @@
+import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:sobatbulu_app/constant/app_color.dart';
-import 'package:sobatbulu_app/data/list_data_map.dart';
 import 'package:sobatbulu_app/data/list_map.dart';
 import 'package:sobatbulu_app/models/model_data.dart';
 import 'package:sobatbulu_app/models/rupiah.dart';
 import 'package:sobatbulu_app/pages/detail_produk.dart';
+import 'package:sobatbulu_app/services/product_service.dart';
 
 class ProdukPage extends StatefulWidget {
   const ProdukPage({super.key});
@@ -28,8 +30,31 @@ class _ProdukPageState extends State<ProdukPage> {
     "Mainan",
     "Kandang",
   ];
+
+  late final StreamSubscription<List<ProdukPetshop>> _productSubscription;
+  List<ProdukPetshop> _firestoreProducts = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _productSubscription = ProductService().getProducts().listen((products) {
+      if (mounted) {
+        setState(() {
+          _firestoreProducts = products;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _productSubscription.cancel();
+    super.dispose();
+  }
+
   List<ProdukPetshop> get filteredProducts {
-    return produkPetshop.where((product) {
+    final List<ProdukPetshop> allProducts = _firestoreProducts;
+    return allProducts.where((product) {
       final matchCategory =
           selectedCategory == "Semua" || product.kategori == selectedCategory;
 
@@ -205,12 +230,26 @@ class _ProdukPageState extends State<ProdukPage> {
                                       topLeft: Radius.circular(15),
                                       topRight: Radius.circular(15),
                                     ),
-                                    child: Image.asset(
-                                      data.gambar,
-                                      width: double.infinity,
-                                      height: 140,
-                                      fit: BoxFit.cover,
-                                    ),
+                                    child: data.gambar.startsWith('http')
+                                        ? Image.network(
+                                            data.gambar,
+                                            width: double.infinity,
+                                            height: 140,
+                                            fit: BoxFit.cover,
+                                          )
+                                        : data.gambar.startsWith('assets')
+                                            ? Image.asset(
+                                                data.gambar,
+                                                width: double.infinity,
+                                                height: 140,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : Image.file(
+                                                File(data.gambar),
+                                                width: double.infinity,
+                                                height: 140,
+                                                fit: BoxFit.cover,
+                                              ),
                                   ),
                                   Expanded(
                                     child: Padding(

@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:sobatbulu_app/constant/app_color.dart';
 import 'package:sobatbulu_app/constant/text_style.dart';
 import 'package:sobatbulu_app/data/list_model_berita.dart';
 import 'package:sobatbulu_app/models/info_model.dart';
 import 'package:sobatbulu_app/pages/berita.dart';
+import 'package:sobatbulu_app/services/article_service.dart';
 
 class InformationPage extends StatefulWidget {
   const InformationPage({super.key});
@@ -15,8 +17,31 @@ class InformationPage extends StatefulWidget {
 class _InformationPageState extends State<InformationPage> {
   String selectedKategori = "Semua";
   final categories = ["Semua", "Artikel", "FunFact"];
+
+  late final StreamSubscription<List<InfoModel>> _articleSubscription;
+  List<InfoModel> _firestoreArticles = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _articleSubscription = ArticleService().getArticles().listen((articles) {
+      if (mounted) {
+        setState(() {
+          _firestoreArticles = articles;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _articleSubscription.cancel();
+    super.dispose();
+  }
+
   List<InfoModel> get filteredBerita {
-    return infoBerita.where((berita) {
+    final allBerita = [...infoBerita, ..._firestoreArticles];
+    return allBerita.where((berita) {
       final matchCategory =
           selectedKategori == "Semua" || berita.kategori == selectedKategori;
 

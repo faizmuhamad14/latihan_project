@@ -43,6 +43,7 @@ class AuthService {
         password: password,
         kota: kota,
         createdAt: DateTime.now(),
+        role: 'user',
       );
 
       await _usersCollection.doc(user.uid).set(userModel.toMap());
