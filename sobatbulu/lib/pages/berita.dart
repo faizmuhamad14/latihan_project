@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,6 +6,7 @@ import 'package:sobatbulu_app/constant/text_style.dart';
 import 'package:sobatbulu_app/models/info_model.dart';
 import 'package:sobatbulu_app/pages/edit_article_page.dart';
 import 'package:sobatbulu_app/services/article_service.dart';
+import 'package:sobatbulu_app/models/image_picker.dart';
 
 class BeritaPage extends StatefulWidget {
   final InfoModel infoBerita;
@@ -127,11 +127,10 @@ class _BeritaPageState extends State<BeritaPage> {
               SizedBox(
                 width: double.infinity,
                 height: 290,
-                child: _currentArticle.gambar.startsWith('http')
-                    ? Image.network(_currentArticle.gambar, fit: BoxFit.cover)
-                    : _currentArticle.gambar.startsWith('assets')
-                        ? Image.asset(_currentArticle.gambar)
-                        : Image.file(File(_currentArticle.gambar), fit: BoxFit.cover),
+                child: ImagePickerService.buildImage(
+                  _currentArticle.gambar,
+                  fit: BoxFit.cover,
+                ),
               ),
               Text(_currentArticle.deskripsi, style: AppTextStyle.subProduk),
             ],

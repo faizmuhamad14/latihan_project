@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sobatbulu_app/constant/app_color.dart';
 import 'package:sobatbulu_app/database/db_helper.dart';
+import 'package:sobatbulu_app/services/auth_service.dart';
 
 class ChangePasswordPage extends StatefulWidget {
   final String email;
@@ -39,45 +40,27 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     final newPass = newPasswordController.text;
 
     try {
-      // Verifikasi kata sandi lama
-      final user = await DBHelper().loginUser(widget.email, oldPass);
-
-      if (!mounted) return;
-
-      if (user == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Row(
-              children: [
-                Icon(Icons.error_outline, color: Colors.white, size: 20),
-                SizedBox(width: 8),
-                Text('Kata sandi lama salah'),
-              ],
-            ),
-            backgroundColor: Colors.red[600],
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-        );
-        setState(() => _isLoading = false);
-        return;
-      }
-
-      // Update password
-      final success = await DBHelper().updateUserByEmail(
-        widget.email,
-        password: newPass,
+      // Verifikasi dan update kata sandi melalui Firebase
+      final success = await AuthService().updatePassword(
+        oldPassword: oldPass,
+        newPassword: newPass,
       );
 
       if (!mounted) return;
 
       if (success) {
+        // Juga update di SQLite lokal sebagai sinkronisasi
+        await DBHelper().updateUserByEmail(
+          widget.email,
+          password: newPass,
+        );
+
+        if (!mounted) return;
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Row(
-              children: [
+              children: const [
                 Icon(Icons.check_circle, color: Colors.white, size: 20),
                 SizedBox(width: 8),
                 Text('Kata sandi berhasil diubah'),
@@ -95,7 +78,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Row(
-              children: [
+              children: const [
                 Icon(Icons.error_outline, color: Colors.white, size: 20),
                 SizedBox(width: 8),
                 Text('Gagal mengubah kata sandi'),
@@ -113,8 +96,18 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Terjadi kesalahan: $e'),
+          content: Row(
+            children: [
+              const Icon(Icons.error_outline, color: Colors.white, size: 20),
+              const SizedBox(width: 8),
+              Expanded(child: Text(e.toString().replaceAll('Exception: ', ''))),
+            ],
+          ),
           backgroundColor: Colors.red[600],
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
         ),
       );
     } finally {

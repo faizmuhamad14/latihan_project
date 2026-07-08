@@ -40,7 +40,6 @@ class AuthService {
         uid: user.uid,
         nama: nama,
         email: email,
-        password: password,
         kota: kota,
         createdAt: DateTime.now(),
         role: 'user',
@@ -129,11 +128,13 @@ class AuthService {
     required String uid,
     String? nama,
     String? kota,
+    String? telepon,
   }) async {
     try {
       final Map<String, dynamic> updates = {};
       if (nama != null) updates['nama'] = nama;
       if (kota != null) updates['kota'] = kota;
+      if (telepon != null) updates['telepon'] = telepon;
 
       if (updates.isEmpty) return false;
 
@@ -188,9 +189,6 @@ class AuthService {
 
       // Update password
       await user.updatePassword(newPassword);
-
-      // Update di Firestore
-      await _usersCollection.doc(user.uid).update({'password': newPassword});
 
       return true;
     } on FirebaseAuthException catch (e) {

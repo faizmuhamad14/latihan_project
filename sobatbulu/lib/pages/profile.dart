@@ -18,6 +18,8 @@ import 'package:sobatbulu_app/pages/manage_articles_page.dart';
 import 'package:sobatbulu_app/data/list_data_map.dart';
 import 'package:sobatbulu_app/models/model_data.dart';
 import 'package:sobatbulu_app/services/product_service.dart';
+import 'package:sobatbulu_app/pages/add_location_page.dart';
+import 'package:sobatbulu_app/pages/manage_locations_page.dart';
 
 
 class ProfilePage extends StatefulWidget {
@@ -344,6 +346,58 @@ class _ProfilePageState extends State<ProfilePage> {
                                         Icon(Icons.edit_calendar_rounded, size: 26),
                                         Text(
                                           "Kelola Artikel",
+                                          style: TextStyle(fontSize: 18),
+                                        ),
+                                      ],
+                                    ),
+                                    const Icon(Icons.chevron_right_rounded),
+                                  ],
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const AddLocationPage(),
+                                    ),
+                                  );
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      spacing: 10,
+                                      children: const [
+                                        Icon(Icons.add_location_alt_rounded, size: 26),
+                                        Text(
+                                          "Tambah Lokasi",
+                                          style: TextStyle(fontSize: 18),
+                                        ),
+                                      ],
+                                    ),
+                                    const Icon(Icons.chevron_right_rounded),
+                                  ],
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const ManageLocationsPage(),
+                                    ),
+                                  );
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      spacing: 10,
+                                      children: const [
+                                        Icon(Icons.edit_location_alt_rounded, size: 26),
+                                        Text(
+                                          "Kelola Lokasi",
                                           style: TextStyle(fontSize: 18),
                                         ),
                                       ],

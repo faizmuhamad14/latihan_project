@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:sobatbulu_app/constant/app_color.dart';
 import 'package:sobatbulu_app/models/location.dart';
 import 'package:sobatbulu_app/services/location_service.dart';
-import 'package:sobatbulu_app/services/upload_location_service.dart';
-import 'package:sobatbulu_app/pages/upload_success_page.dart';
 import 'package:sobatbulu_app/utils/map_launcher.dart';
 
 class LocationPage extends StatelessWidget {
@@ -11,60 +9,13 @@ class LocationPage extends StatelessWidget {
 
   final service = LocationService();
 
-  Future<void> _handleUpload(BuildContext context) async {
-    // Show a loading dialog
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => const Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
-
-    try {
-      final uploadCount = await UploadLocationService().uploadLocations();
-      
-      if (context.mounted) {
-        // Pop loading dialog
-        Navigator.pop(context);
-        
-        // Navigate to success page
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => UploadSuccessPage(count: uploadCount),
-          ),
-        );
-      }
-    } catch (e) {
-      if (context.mounted) {
-        // Pop loading dialog
-        Navigator.pop(context);
-        
-        // Show error snackbar
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Gagal mengunggah data: $e"),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
       appBar: AppBar(
         title: const Text("Lokasi Petshop"),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.cloud_upload_rounded),
-            tooltip: "Unggah Data Lokasi",
-            onPressed: () => _handleUpload(context),
-          ),
-        ],
+        centerTitle: true,
       ),
       body: StreamBuilder<List<LocationModel>>(
         stream: service.getLocations(),
@@ -104,27 +55,13 @@ class LocationPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      "Data lokasi petshop di database masih kosong. Ketuk tombol di bawah untuk mengunggah data dari file local JSON sekali jalan.",
+                      "Data lokasi petshop di database masih kosong. Silakan hubungi admin untuk menambahkan lokasi.",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.grey[500],
                         height: 1.5,
                       ),
-                    ),
-                    const SizedBox(height: 24),
-                    ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      onPressed: () => _handleUpload(context),
-                      icon: const Icon(Icons.cloud_upload_rounded),
-                      label: const Text("Unggah Data Sekarang"),
                     ),
                   ],
                 ),
@@ -179,8 +116,8 @@ class LocationPage extends StatelessWidget {
                               lokasi.rating.toString(),
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                                color: AppColors.netral2,
+                                  fontSize: 15,
+                                  color: AppColors.netral2,
                               ),
                             ),
                           ],

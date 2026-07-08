@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sobatbulu_app/constant/app_color.dart';
 import 'package:sobatbulu_app/database/db_helper.dart';
 import 'package:sobatbulu_app/database/preference.dart';
+import 'package:sobatbulu_app/services/auth_service.dart';
 
 class EditProfilePage extends StatefulWidget {
   final String nama;
@@ -31,6 +32,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Future<void> _loadPhone() async {
+    final currentUser = AuthService().currentUser;
+    if (currentUser != null) {
+      final user = await AuthService().getUserByUid(currentUser.uid);
+      if (user != null && user.telepon.isNotEmpty) {
+        setState(() {
+          teleponController.text = user.telepon;
+        });
+        return;
+      }
+    }
     final phone = await PreferenceHandler.getTelepon(widget.email);
     if (phone.isNotEmpty) {
       setState(() {
@@ -57,6 +68,27 @@ class _EditProfilePageState extends State<EditProfilePage> {
     final newTelepon = teleponController.text.trim();
 
     try {
+      // 1. Update in Firebase
+      final currentUser = AuthService().currentUser;
+      bool firebaseSuccess = false;
+
+      if (currentUser != null) {
+        await AuthService().updateProfile(
+          uid: currentUser.uid,
+          nama: newNama,
+          telepon: newTelepon,
+        );
+
+        if (newEmail != widget.email) {
+          await AuthService().updateEmail(
+            newEmail: newEmail,
+            uid: currentUser.uid,
+          );
+        }
+        firebaseSuccess = true;
+      }
+
+      // 2. Update in SQLite
       final success = await DBHelper().updateUserByEmail(
         widget.email,
         nama: newNama,
@@ -65,7 +97,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
       if (!mounted) return;
 
-      if (success) {
+      if (firebaseSuccess || success) {
         // Update SharedPreferences
         await PreferenceHandler.saveNama(newNama);
         if (newEmail != widget.email) {
@@ -76,7 +108,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Row(
-              children: [
+              children: const [
                 Icon(Icons.check_circle, color: Colors.white, size: 20),
                 SizedBox(width: 8),
                 Text('Profil berhasil diperbarui'),
@@ -98,7 +130,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Row(
-              children: [
+              children: const [
                 Icon(Icons.error_outline, color: Colors.white, size: 20),
                 SizedBox(width: 8),
                 Text('Gagal memperbarui profil'),

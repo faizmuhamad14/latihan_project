@@ -20,6 +20,7 @@ class _SignInPageState extends State<SignInPage> {
   bool _isLoading = false;
 
   void login() async {
+
     setState(() {
       _isLoading = true;
     });
@@ -212,7 +213,7 @@ class _SignInPageState extends State<SignInPage> {
                                 return null;
                               },
                             ),
-                            SizedBox(height: 5),
+                            SizedBox(height: 10),
                              SizedBox(
                                width: double.infinity,
                                child: ElevatedButton(
