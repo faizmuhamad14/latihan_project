@@ -514,7 +514,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                           onPressed: () {
-                            isLogout();
+                            _showLogoutConfirmationDialog();
                           },
                           child: Row(
                             spacing: 10,
@@ -549,6 +549,75 @@ class _ProfilePageState extends State<ProfilePage> {
         selectedImage = permanentFile;
       });
     }
+  }
+
+  void _showLogoutConfirmationDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Row(
+            children: [
+              Icon(Icons.exit_to_app_rounded, color: AppColors.logoutText),
+              const SizedBox(width: 8),
+              const Text(
+                "Konfirmasi Keluar",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+            ],
+          ),
+          content: const Text(
+            "Apakah Anda yakin ingin keluar dari akun?",
+            style: TextStyle(fontSize: 16),
+          ),
+          actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                "Batal",
+                style: TextStyle(
+                  color: AppColors.textBttn,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.logout,
+                foregroundColor: AppColors.logoutText,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  side: const BorderSide(color: AppColors.logoutText),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close dialog
+                isLogout();
+              },
+              child: const Text(
+                "Keluar",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void isLogout() async {
