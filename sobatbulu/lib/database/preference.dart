@@ -1,7 +1,9 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class PreferenceHandler {
   static late SharedPreferences _prefs;
+  static const FlutterSecureStorage _secureStorage = FlutterSecureStorage();
 
   static Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
@@ -19,51 +21,42 @@ class PreferenceHandler {
 
   static Future<void> logout() async {
     await _prefs.remove(_keyIsLogin);
-    await _prefs.remove('nama');
+    await _secureStorage.deleteAll();
     print("LOGOUT DIPANGGIL");
     print("isLogin = ${_prefs.getBool(_keyIsLogin)}");
-    print("nama = ${_prefs.getString('nama')}");
   }
 
   static Future<void> saveNama(String nama) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('nama', nama);
+    await _secureStorage.write(key: 'nama', value: nama);
   }
 
   static Future<String> getNama() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('nama') ?? '';
+    return await _secureStorage.read(key: 'nama') ?? '';
   }
 
   static Future<void> saveEmail(String email) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('email', email);
+    await _secureStorage.write(key: 'email', value: email);
   }
 
   static Future<void> saveProfileImage(String email, String path) async {
     final prefs = await SharedPreferences.getInstance();
-
     await prefs.setString('profile_image_$email', path);
   }
 
   static Future<String?> getProfileImage(String email) async {
     final prefs = await SharedPreferences.getInstance();
-
     return prefs.getString('profile_image_$email');
   }
 
   static Future<void> saveTelepon(String email, String telepon) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('telepon_$email', telepon);
+    await _secureStorage.write(key: 'telepon_$email', value: telepon);
   }
 
   static Future<String> getTelepon(String email) async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('telepon_$email') ?? '';
+    return await _secureStorage.read(key: 'telepon_$email') ?? '';
   }
 
   static Future<String> getEmail() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('email') ?? '';
+    return await _secureStorage.read(key: 'email') ?? '';
   }
 }

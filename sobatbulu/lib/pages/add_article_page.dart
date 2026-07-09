@@ -1,10 +1,11 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
+
 import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/material.dart';
 import 'package:sobatbulu_app/constant/app_color.dart';
+import 'package:sobatbulu_app/models/image_picker.dart';
 import 'package:sobatbulu_app/models/info_model.dart';
 import 'package:sobatbulu_app/services/article_service.dart';
-import 'package:sobatbulu_app/models/image_picker.dart';
 
 class AddArticlePage extends StatefulWidget {
   const AddArticlePage({super.key});
@@ -27,7 +28,10 @@ class _AddArticlePageState extends State<AddArticlePage> {
   Future<void> _pickImage() async {
     final image = await ImagePickerService.pickImageFromGallery();
     if (image != null) {
-      final savedImage = await ImagePickerService.saveImagePermanently(image, "article");
+      final savedImage = await ImagePickerService.saveImagePermanently(
+        image,
+        "article",
+      );
       setState(() {
         _selectedImage = savedImage;
       });
@@ -45,9 +49,11 @@ class _AddArticlePageState extends State<AddArticlePage> {
 
     setState(() => _isLoading = true);
 
-    // Upload to public storage first
+    // Upload ke public storage first
     String imageUrl = _selectedImage!.path;
-    final publicUrl = await ImagePickerService.uploadToPublicStorage(_selectedImage!);
+    final publicUrl = await ImagePickerService.uploadToPublicStorage(
+      _selectedImage!,
+    );
     if (publicUrl != null) {
       imageUrl = publicUrl;
     }
@@ -104,7 +110,10 @@ class _AddArticlePageState extends State<AddArticlePage> {
                   children: [
                     const Text(
                       "Gambar Artikel",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     GestureDetector(
@@ -157,7 +166,10 @@ class _AddArticlePageState extends State<AddArticlePage> {
                     const SizedBox(height: 16),
                     const Text(
                       "Judul Artikel",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     TextFormField(
@@ -176,7 +188,10 @@ class _AddArticlePageState extends State<AddArticlePage> {
                     const SizedBox(height: 16),
                     const Text(
                       "Kategori",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     DropdownButtonFormField<String>(
@@ -185,10 +200,7 @@ class _AddArticlePageState extends State<AddArticlePage> {
                         border: OutlineInputBorder(),
                       ),
                       items: _categories.map((cat) {
-                        return DropdownMenuItem(
-                          value: cat,
-                          child: Text(cat),
-                        );
+                        return DropdownMenuItem(value: cat, child: Text(cat));
                       }).toList(),
                       onChanged: (value) {
                         if (value != null) {
@@ -201,7 +213,10 @@ class _AddArticlePageState extends State<AddArticlePage> {
                     const SizedBox(height: 16),
                     const Text(
                       "Konten/Deskripsi Artikel",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     TextFormField(
@@ -233,7 +248,10 @@ class _AddArticlePageState extends State<AddArticlePage> {
                         onPressed: _saveArticle,
                         child: const Text(
                           "Simpan Artikel",
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
