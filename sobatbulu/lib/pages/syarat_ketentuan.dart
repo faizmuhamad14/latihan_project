@@ -10,7 +10,7 @@ class SyaratKetentuanPage extends StatelessWidget {
       backgroundColor: const Color(0xFFFFFFFF),
       appBar: AppBar(
         elevation: 0,
-        title: const Text(
+        title: Text(
           "Syarat & Ketentuan",
           style: TextStyle(
             fontSize: 20,
@@ -20,7 +20,7 @@ class SyaratKetentuanPage extends StatelessWidget {
         ),
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: AppColors.textBttn),
+          icon: Icon(Icons.arrow_back_ios_new, color: AppColors.textBttn),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -61,7 +61,7 @@ class SyaratKetentuanPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 14),
-                  const Text(
+                  Text(
                     "Syarat & Ketentuan Layanan",
                     style: TextStyle(
                       fontSize: 22,
@@ -87,7 +87,7 @@ class SyaratKetentuanPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     "Ketentuan Penggunaan Aplikasi",
                     style: TextStyle(
                       fontSize: 18,
@@ -106,7 +106,7 @@ class SyaratKetentuanPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 24),
 
-                  const Text(
+                  Text(
                     "Poin Penting Ketentuan",
                     style: TextStyle(
                       fontSize: 18,
@@ -175,7 +175,7 @@ class SyaratKetentuanPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           "Punya Pertanyaan?",
                           style: TextStyle(
                             fontSize: 16,
@@ -269,7 +269,7 @@ class SyaratKetentuanPage extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
                     color: AppColors.netral,

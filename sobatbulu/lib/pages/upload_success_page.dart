@@ -58,7 +58,7 @@ class UploadSuccessPage extends StatelessWidget {
               Text(
                 isAlreadyUploaded ? "Data Sudah Sinkron" : "Unggah Data Berhasil!",
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w800,
                   color: AppColors.netral,

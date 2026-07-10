@@ -1,11 +1,12 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
+
 import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/material.dart';
 import 'package:sobatbulu_app/constant/app_color.dart';
+import 'package:sobatbulu_app/data/list_map.dart';
+import 'package:sobatbulu_app/models/image_picker.dart';
 import 'package:sobatbulu_app/models/model_data.dart';
 import 'package:sobatbulu_app/services/product_service.dart';
-import 'package:sobatbulu_app/models/image_picker.dart';
-import 'package:sobatbulu_app/data/list_map.dart';
 
 class AddProductPage extends StatefulWidget {
   const AddProductPage({super.key});
@@ -56,7 +57,10 @@ class _AddProductPageState extends State<AddProductPage> {
   Future<void> _pickImage() async {
     final image = await ImagePickerService.pickImageFromGallery();
     if (image != null) {
-      final savedImage = await ImagePickerService.saveImagePermanently(image, "product");
+      final savedImage = await ImagePickerService.saveImagePermanently(
+        image,
+        "product",
+      );
       setState(() {
         _selectedImage = savedImage;
       });
@@ -73,13 +77,17 @@ class _AddProductPageState extends State<AddProductPage> {
     }
     if (_selectedJenis.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Pilih minimal satu rekomendasi jenis hewan')),
+        const SnackBar(
+          content: Text('Pilih minimal satu rekomendasi jenis hewan'),
+        ),
       );
       return;
     }
     if (_selectedUmur.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Pilih minimal satu rekomendasi umur hewan')),
+        const SnackBar(
+          content: Text('Pilih minimal satu rekomendasi umur hewan'),
+        ),
       );
       return;
     }
@@ -88,7 +96,9 @@ class _AddProductPageState extends State<AddProductPage> {
 
     // Upload to public storage first
     String imageUrl = _selectedImage!.path;
-    final publicUrl = await ImagePickerService.uploadToPublicStorage(_selectedImage!);
+    final publicUrl = await ImagePickerService.uploadToPublicStorage(
+      _selectedImage!,
+    );
     if (publicUrl != null) {
       imageUrl = publicUrl;
     }
@@ -98,7 +108,7 @@ class _AddProductPageState extends State<AddProductPage> {
       kategori: _selectedCategory,
       harga: int.tryParse(_priceController.text) ?? 0,
       gambar: imageUrl,
-      rate: double.tryParse(_rateController.text) ?? 4.8,
+      rate: double.tryParse(_rateController.text) ?? 0,
       jenisHewan: _selectedJenis,
       umur: _selectedUmur,
       ras: _selectedRas,
@@ -115,9 +125,9 @@ class _AddProductPageState extends State<AddProductPage> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Gagal menambahkan produk: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Gagal menambahkan produk: $e')));
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -152,7 +162,10 @@ class _AddProductPageState extends State<AddProductPage> {
                   children: [
                     const Text(
                       "Gambar Produk",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     GestureDetector(
@@ -205,7 +218,10 @@ class _AddProductPageState extends State<AddProductPage> {
                     const SizedBox(height: 16),
                     const Text(
                       "Nama Produk",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     TextFormField(
@@ -224,7 +240,10 @@ class _AddProductPageState extends State<AddProductPage> {
                     const SizedBox(height: 16),
                     const Text(
                       "Kategori",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     DropdownButtonFormField<String>(
@@ -233,10 +252,7 @@ class _AddProductPageState extends State<AddProductPage> {
                         border: OutlineInputBorder(),
                       ),
                       items: _categories.map((cat) {
-                        return DropdownMenuItem(
-                          value: cat,
-                          child: Text(cat),
-                        );
+                        return DropdownMenuItem(value: cat, child: Text(cat));
                       }).toList(),
                       onChanged: (value) {
                         if (value != null) {
@@ -249,7 +265,10 @@ class _AddProductPageState extends State<AddProductPage> {
                     const SizedBox(height: 16),
                     const Text(
                       "Harga (Rp)",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     TextFormField(
@@ -272,12 +291,17 @@ class _AddProductPageState extends State<AddProductPage> {
                     const SizedBox(height: 16),
                     const Text(
                       "Rating Produk (0.0 - 5.0)",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     TextFormField(
                       controller: _rateController,
-                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
                       decoration: const InputDecoration(
                         hintText: "Contoh: 4.8",
                         border: OutlineInputBorder(),
@@ -296,7 +320,10 @@ class _AddProductPageState extends State<AddProductPage> {
                     const SizedBox(height: 16),
                     const Text(
                       "Rekomendasi Jenis Hewan",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Wrap(
@@ -315,7 +342,9 @@ class _AddProductPageState extends State<AddProductPage> {
                                 _selectedJenis.remove(jenis);
                                 // Clear selected breeds that are no longer available
                                 final allowedBreeds = _getAvailableRas();
-                                _selectedRas.removeWhere((ras) => !allowedBreeds.contains(ras));
+                                _selectedRas.removeWhere(
+                                  (ras) => !allowedBreeds.contains(ras),
+                                );
                               }
                             });
                           },
@@ -325,7 +354,10 @@ class _AddProductPageState extends State<AddProductPage> {
                     const SizedBox(height: 16),
                     const Text(
                       "Rekomendasi Umur Hewan",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Wrap(
@@ -351,13 +383,19 @@ class _AddProductPageState extends State<AddProductPage> {
                     const SizedBox(height: 16),
                     const Text(
                       "Rekomendasi Ras Hewan",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     _getAvailableRas().isEmpty
                         ? const Text(
                             "Pilih Rekomendasi Jenis Hewan terlebih dahulu untuk melihat pilihan ras",
-                            style: TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontStyle: FontStyle.italic,
+                            ),
                           )
                         : Wrap(
                             spacing: 8,
@@ -383,14 +421,18 @@ class _AddProductPageState extends State<AddProductPage> {
                     const SizedBox(height: 16),
                     const Text(
                       "Deskripsi Produk",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     TextFormField(
                       controller: _descriptionController,
                       maxLines: 4,
                       decoration: const InputDecoration(
-                        hintText: "Masukkan deskripsi lengkap mengenai produk ini...",
+                        hintText:
+                            "Masukkan deskripsi lengkap mengenai produk ini...",
                         border: OutlineInputBorder(),
                       ),
                       validator: (value) {
@@ -415,7 +457,10 @@ class _AddProductPageState extends State<AddProductPage> {
                         onPressed: _saveProduct,
                         child: const Text(
                           "Simpan Produk",
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),

@@ -10,7 +10,7 @@ class KebijakanPrivasiPage extends StatelessWidget {
       backgroundColor: const Color(0xFFFFFFFF),
       appBar: AppBar(
         elevation: 0,
-        title: const Text(
+        title: Text(
           "Kebijakan Privasi",
           style: TextStyle(
             fontSize: 20,
@@ -20,7 +20,7 @@ class KebijakanPrivasiPage extends StatelessWidget {
         ),
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: AppColors.textBttn),
+          icon: Icon(Icons.arrow_back_ios_new, color: AppColors.textBttn),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -61,7 +61,7 @@ class KebijakanPrivasiPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 14),
-                  const Text(
+                  Text(
                     "Privasi & Keamanan Anda",
                     style: TextStyle(
                       fontSize: 22,
@@ -88,7 +88,7 @@ class KebijakanPrivasiPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Deskripsi Singkat
-                  const Text(
+                  Text(
                     "Komitmen Kami",
                     style: TextStyle(
                       fontSize: 18,
@@ -108,7 +108,7 @@ class KebijakanPrivasiPage extends StatelessWidget {
                   const SizedBox(height: 24),
 
                   // Poin-poin Kebijakan
-                  const Text(
+                  Text(
                     "Detail Kebijakan",
                     style: TextStyle(
                       fontSize: 18,
@@ -177,7 +177,7 @@ class KebijakanPrivasiPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           "Hubungi Kami",
                           style: TextStyle(
                             fontSize: 16,
@@ -186,7 +186,7 @@ class KebijakanPrivasiPage extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        const Text(
+                        Text(
                           "Jika Anda memiliki pertanyaan, keluhan, atau kekhawatiran tentang privasi data Anda, silakan hubungi tim dukungan kami melalui kontak di bawah ini.",
                           style: TextStyle(
                             fontSize: 13,
@@ -270,7 +270,7 @@ class KebijakanPrivasiPage extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
                     color: AppColors.netral,
@@ -303,7 +303,7 @@ class KebijakanPrivasiPage extends StatelessWidget {
         const SizedBox(width: 10),
         Text(
           text,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 14,
             color: AppColors.textBttn,
           ),

@@ -228,7 +228,7 @@ class _InformationPageState extends State<InformationPage> {
                   const SizedBox(height: 6),
                   Text(
                     info.title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                       color: AppColors.netral,
@@ -339,7 +339,7 @@ class _InformationPageState extends State<InformationPage> {
           // Articles List
           Expanded(
             child: _isLoading
-                ? const Center(
+                ? Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

@@ -477,7 +477,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                                   : null,
 
                               child: selectedPetImage == null
-                                  ? const Icon(
+                                  ? Icon(
                                       Icons.camera_alt,
                                       size: 30,
                                       color: AppColors.defaultBlack,
@@ -673,11 +673,11 @@ class _MyWidgetState extends State<HomePageScreen> {
 
                                   setState(() {});
                                 },
-                                icon: const Icon(
+                                icon: Icon(
                                   Icons.delete,
                                   color: AppColors.teksButton,
                                 ),
-                                label: const Text(
+                                label: Text(
                                   "Delete Pet Profile",
                                   style: TextStyle(color: AppColors.teksButton),
                                 ),

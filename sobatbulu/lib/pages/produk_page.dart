@@ -249,7 +249,7 @@ class _ProdukPageState extends State<ProdukPage> {
             // Results Info & Grid List
             Expanded(
               child: _isLoading
-                  ? const Center(
+                  ? Center(
                       child: CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(
                           AppColors.teritary2,
@@ -473,7 +473,7 @@ class _ProdukPageState extends State<ProdukPage> {
                                                             MainAxisAlignment
                                                                 .center,
                                                         children: [
-                                                          const Icon(
+                                                          Icon(
                                                             Icons.star_rounded,
                                                             color: AppColors
                                                                 .altTeritary,
@@ -500,7 +500,7 @@ class _ProdukPageState extends State<ProdukPage> {
                                                             CurrencyHelper.format(
                                                               data.harga,
                                                             ),
-                                                            style: const TextStyle(
+                                                            style: TextStyle(
                                                               fontSize: 14,
                                                               fontWeight:
                                                                   FontWeight
@@ -545,7 +545,7 @@ class _ProdukPageState extends State<ProdukPage> {
                                                                   ),
                                                                 );
                                                               },
-                                                              child: const Text(
+                                                              child: Text(
                                                                 "Lihat Detail",
                                                                 style: TextStyle(
                                                                   color: AppColors

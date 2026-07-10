@@ -100,7 +100,7 @@ class LocationPage extends StatelessWidget {
                         Expanded(
                           child: Text(
                             lokasi.nama,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                               color: AppColors.netral,
@@ -114,7 +114,7 @@ class LocationPage extends StatelessWidget {
                             const SizedBox(width: 4),
                             Text(
                               lokasi.rating.toString(),
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                   fontSize: 15,
                                   color: AppColors.netral2,
@@ -128,7 +128,7 @@ class LocationPage extends StatelessWidget {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.location_on_outlined,
                           color: AppColors.primary,
                           size: 20,
@@ -137,7 +137,7 @@ class LocationPage extends StatelessWidget {
                         Expanded(
                           child: Text(
                             lokasi.alamat,
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: AppColors.textcard,
                               fontSize: 14,
                               height: 1.4,
@@ -151,7 +151,7 @@ class LocationPage extends StatelessWidget {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Icon(
+                          Icon(
                             Icons.phone_outlined,
                             color: AppColors.primary,
                             size: 20,
@@ -160,7 +160,7 @@ class LocationPage extends StatelessWidget {
                           Expanded(
                             child: Text(
                               lokasi.telepon,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: AppColors.textcard,
                                 fontSize: 14,
                               ),
@@ -186,7 +186,7 @@ class LocationPage extends StatelessWidget {
                             ),
                             child: Text(
                               layanan,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500,
                                 color: AppColors.teksButton,
@@ -202,7 +202,7 @@ class LocationPage extends StatelessWidget {
                       child: OutlinedButton.icon(
                         style: OutlinedButton.styleFrom(
                           foregroundColor: AppColors.teksButton,
-                          side: const BorderSide(color: AppColors.primary),
+                          side: BorderSide(color: AppColors.primary),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),

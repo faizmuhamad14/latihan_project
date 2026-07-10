@@ -10,6 +10,7 @@ class PreferenceHandler {
   }
 
   static const String _keyIsLogin = 'isLogin';
+  static const String _keyIsDarkMode = 'isDarkMode';
 
   static Future<void> setLogin(bool value) async {
     await _prefs.setBool(_keyIsLogin, value);
@@ -17,6 +18,14 @@ class PreferenceHandler {
 
   static bool get isLogin {
     return _prefs.getBool(_keyIsLogin) ?? false;
+  }
+
+  static Future<void> setDarkMode(bool value) async {
+    await _prefs.setBool(_keyIsDarkMode, value);
+  }
+
+  static bool get isDarkMode {
+    return _prefs.getBool(_keyIsDarkMode) ?? false;
   }
 
   static Future<void> logout() async {

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sobatbulu_app/constant/app_color.dart';
 import 'package:sobatbulu_app/database/db_helper.dart';
+import 'package:sobatbulu_app/database/preference.dart';
+import 'package:sobatbulu_app/pages/sign_in.dart';
 import 'package:sobatbulu_app/services/auth_service.dart';
 
 class ChangePasswordPage extends StatefulWidget {
@@ -345,6 +347,28 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 30),
+                const Divider(),
+                const SizedBox(height: 15),
+                Center(
+                  child: TextButton.icon(
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.red[800],
+                    ),
+                    onPressed: () {
+                      _showDeleteAccountDialog();
+                    },
+                    icon: const Icon(Icons.delete_forever_rounded, size: 20),
+                    label: const Text(
+                      "Hapus Akun SobatBulu Anda",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -393,6 +417,167 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         borderRadius: BorderRadius.circular(10),
       ),
       contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+    );
+  }
+
+  void _showDeleteAccountDialog() {
+    final passwordController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+    bool isDeleting = false;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              title: Row(
+                children: const [
+                  Icon(Icons.warning_amber_rounded, color: Colors.red, size: 28),
+                  SizedBox(width: 8),
+                  Text(
+                    "Hapus Akun",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Colors.red,
+                    ),
+                  ),
+                ],
+              ),
+              content: Form(
+                key: formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Apakah Anda yakin ingin menghapus akun Anda secara permanen? Semua data Anda akan dihapus dan tindakan ini tidak dapat dibatalkan.",
+                      style: TextStyle(fontSize: 14),
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      "Masukkan Kata Sandi Anda untuk konfirmasi:",
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    TextFormField(
+                      controller: passwordController,
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                        labelText: "Kata Sandi",
+                        prefixIcon: Icon(Icons.lock_outline),
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return "Kata sandi tidak boleh kosong";
+                        }
+                        return null;
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              actions: [
+                TextButton(
+                  onPressed: isDeleting
+                      ? null
+                      : () {
+                          Navigator.of(context).pop();
+                        },
+                  child: Text(
+                    "Batal",
+                    style: TextStyle(
+                      color: AppColors.textBttn,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red[800],
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  onPressed: isDeleting
+                      ? null
+                      : () async {
+                          if (!formKey.currentState!.validate()) return;
+
+                          setDialogState(() {
+                            isDeleting = true;
+                          });
+
+                          try {
+                            final success = await AuthService().deleteAccount(
+                              passwordController.text,
+                            );
+
+                            if (success) {
+                              await PreferenceHandler.logout();
+
+                              if (context.mounted) {
+                                Navigator.of(context).pop(); // Close dialog
+                                Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+                                  MaterialPageRoute(builder: (context) => SignInPage()),
+                                  (route) => false,
+                                );
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Akun Anda berhasil dihapus secara permanen.'),
+                                    backgroundColor: Colors.green,
+                                  ),
+                                );
+                              }
+                            } else {
+                              throw 'Gagal menghapus akun.';
+                            }
+                          } catch (e) {
+                            setDialogState(() {
+                              isDeleting = false;
+                            });
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(e.toString()),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
+                          }
+                        },
+                  child: isDeleting
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        )
+                      : const Text(
+                          "Hapus Akun",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                ),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 }

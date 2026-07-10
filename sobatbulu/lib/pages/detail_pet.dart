@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sobatbulu_app/constant/app_color.dart';
 import 'package:sobatbulu_app/database/db_helper.dart';
 import 'package:sobatbulu_app/models/pet_model.dart';
@@ -33,7 +34,7 @@ class _DetailPetState extends State<DetailPet> {
               child: CircleAvatar(
                 backgroundColor: Colors.white.withValues(alpha: 0.8),
                 child: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios_new, color: AppColors.textBttn, size: 18),
+                  icon: Icon(Icons.arrow_back_ios_new, color: AppColors.textBttn, size: 18),
                   onPressed: () => Navigator.pop(context),
                 ),
               ),
@@ -44,7 +45,7 @@ class _DetailPetState extends State<DetailPet> {
                 child: CircleAvatar(
                   backgroundColor: Colors.white.withValues(alpha: 0.8),
                   child: IconButton(
-                    icon: const Icon(Icons.edit_rounded, color: AppColors.textBttn, size: 20),
+                    icon: Icon(Icons.edit_rounded, color: AppColors.textBttn, size: 20),
                     onPressed: _showEditDetailPet,
                   ),
                 ),
@@ -79,7 +80,7 @@ class _DetailPetState extends State<DetailPet> {
                       ],
                     )
                   : Container(
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [AppColors.primary, Color(0xFF9CB8C1)],
                           begin: Alignment.topLeft,
@@ -121,7 +122,7 @@ class _DetailPetState extends State<DetailPet> {
                           children: [
                             Text(
                               pet.nama,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 26,
                                 fontWeight: FontWeight.w800,
                                 color: AppColors.netral,
@@ -187,7 +188,7 @@ class _DetailPetState extends State<DetailPet> {
                   const SizedBox(height: 28),
 
                   // main info cards
-                  const Text(
+                  Text(
                     "Informasi Utama",
                     style: TextStyle(
                       fontSize: 18,
@@ -213,7 +214,7 @@ class _DetailPetState extends State<DetailPet> {
                   const SizedBox(height: 28),
 
                   // Detail Dates section
-                  const Text(
+                  Text(
                     "Detail Tanggal & Riwayat",
                     style: TextStyle(
                       fontSize: 18,
@@ -247,7 +248,7 @@ class _DetailPetState extends State<DetailPet> {
                   const SizedBox(height: 28),
 
                   // Catatan Pemilik section
-                  const Text(
+                  Text(
                     "Catatan Pemilik",
                     style: TextStyle(
                       fontSize: 18,
@@ -267,7 +268,7 @@ class _DetailPetState extends State<DetailPet> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(Icons.note_alt_outlined, color: AppColors.teritary2),
+                        Icon(Icons.note_alt_outlined, color: AppColors.teritary2),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
@@ -331,7 +332,7 @@ class _DetailPetState extends State<DetailPet> {
                   value,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: AppColors.netral,
@@ -358,7 +359,7 @@ class _DetailPetState extends State<DetailPet> {
           const SizedBox(width: 12),
           Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w500,
               color: AppColors.netral,
@@ -397,6 +398,50 @@ class _DetailPetState extends State<DetailPet> {
       text: widget.pet.catatan ?? "",
     );
 
+    Future<void> selectDate(BuildContext context, TextEditingController controller) async {
+      DateTime initialDate = DateTime.now();
+      if (controller.text.isNotEmpty) {
+        try {
+          initialDate = DateFormat('yyyy-MM-dd').parse(controller.text);
+        } catch (_) {
+          // If parsing fails, fall back to current date
+        }
+      }
+      final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: initialDate,
+        firstDate: DateTime(1990),
+        lastDate: DateTime.now(),
+        builder: (BuildContext context, Widget? child) {
+          return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: ColorScheme.light(
+                primary: AppColors.primary, // Header background & selected day circle
+                onPrimary: AppColors.textBttn, // Header text & selected day text
+                surface: Colors.white, // Background of dialog
+                onSurface: AppColors.netral, // Text color inside dialog
+              ),
+              datePickerTheme: DatePickerThemeData(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+              ),
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                  foregroundColor: AppColors.textBttn, // OK/Cancel button color
+                  textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            child: child!,
+          );
+        },
+      );
+      if (picked != null) {
+        controller.text = DateFormat('yyyy-MM-dd').format(picked);
+      }
+    }
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -433,7 +478,7 @@ class _DetailPetState extends State<DetailPet> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    const Text(
+                    Text(
                       "Edit Informasi Hewan",
                       style: TextStyle(
                         fontSize: 20,
@@ -443,7 +488,7 @@ class _DetailPetState extends State<DetailPet> {
                     ),
                     const SizedBox(height: 20),
 
-                    const Text(
+                    Text(
                       "Gender",
                       style: TextStyle(
                         fontSize: 14,
@@ -508,6 +553,8 @@ class _DetailPetState extends State<DetailPet> {
 
                     TextFormField(
                       controller: tanggalLahirController,
+                      readOnly: true,
+                      onTap: () => selectDate(context, tanggalLahirController),
                       decoration: InputDecoration(
                         labelText: "Tanggal Lahir",
                         prefixIcon: const Icon(Icons.cake_outlined),
@@ -524,6 +571,8 @@ class _DetailPetState extends State<DetailPet> {
 
                     TextFormField(
                       controller: tanggalAdopController,
+                      readOnly: true,
+                      onTap: () => selectDate(context, tanggalAdopController),
                       decoration: InputDecoration(
                         labelText: "Tanggal Adopsi",
                         prefixIcon: const Icon(Icons.home_outlined),

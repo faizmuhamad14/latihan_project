@@ -129,7 +129,7 @@ class DetailProduk extends StatelessWidget {
                     ),
                     child: Text(
                       produk.kategori,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.textBttn,
                         fontWeight: FontWeight.bold,
                         fontSize: 11,
@@ -149,7 +149,7 @@ class DetailProduk extends StatelessWidget {
                   const SizedBox(height: 10),
                   Text(
                     CurrencyHelper.format(produk.harga),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: AppColors.secondary2,

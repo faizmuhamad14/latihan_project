@@ -235,10 +235,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                   Icon(Icons.chevron_right_rounded),
                                 ],
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
+                             ),
+                           ],
+                         ),
+                       ),
                       if (_role == 'admin') ...[
                         const Text("Manajemen Konten", style: TextStyle(fontSize: 18)),
                         Container(
@@ -583,7 +583,7 @@ class _ProfilePageState extends State<ProfilePage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text(
+              child: Text(
                 "Batal",
                 style: TextStyle(
                   color: AppColors.textBttn,
@@ -598,7 +598,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 foregroundColor: AppColors.logoutText,
                 elevation: 0,
                 shape: RoundedRectangleBorder(
-                  side: const BorderSide(color: AppColors.logoutText),
+                  side: BorderSide(color: AppColors.logoutText),
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),

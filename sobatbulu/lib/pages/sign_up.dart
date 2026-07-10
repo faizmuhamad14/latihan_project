@@ -290,7 +290,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 children: [
                                   TextSpan(
                                     text: "Syarat & Ketentuan",
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: AppColors.primary,
                                       decoration: TextDecoration.underline,
@@ -308,7 +308,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                   const TextSpan(text: " dan "),
                                   TextSpan(
                                     text: "Kebijakan Privasi",
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: AppColors.primary,
                                       decoration: TextDecoration.underline,
